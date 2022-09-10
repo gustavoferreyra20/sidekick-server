@@ -10,6 +10,8 @@ const sequelize = new Sequelize('sidekickdb', 'root', '', {
 
 const modelDefiners = [
 	require('./models/game.model'),
+	require('./models/user.model'),
+	require('./models/post.model'),
 	// Add more models here...
 	// require('./models/item'),
 ];

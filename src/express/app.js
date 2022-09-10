@@ -5,7 +5,9 @@ const cors = require('cors');
 const helmet = require('helmet');
 
 const routes = {
-	game: require('./routes/game')
+	game: require('./routes/game'),
+	user: require('./routes/user'),
+	post: require('./routes/post')
 	// Add more routes here...
 	// items: require('./routes/items'),
 };
@@ -37,11 +39,6 @@ function makeHandlerAwareOfAsyncErrors(handler) {
 		}
 	};
 }
-
-// We provide a root route just as an example
-app.get('/', (req, res) => {
-	res.json({"Title": "Hello World"})
-});
 
 // We define the standard REST APIs for each route (if they exist).
 for (const [routeName, routeController] of Object.entries(routes)) {

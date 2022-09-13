@@ -9,7 +9,7 @@ async function getAll(req, res) {
 async function getById(req, res) {
 	const id = getIdParam(req);
 	const post = await models.anuncio.findByPk(id);
-	if (post) {
+	if (post[0]) {
 		res.status(200).json(post);
 	} else {
 		res.status(404).send('404 - Not found');

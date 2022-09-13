@@ -48,10 +48,10 @@ for (const [routeName, routeController] of Object.entries(routes)) {
 			makeHandlerAwareOfAsyncErrors(routeController.getAll)
 		);
 	}
-	if (routeController.getById) {
+	if (routeController.getBo) {
 		app.get(
-			`/api/${routeName}/:id`,
-			makeHandlerAwareOfAsyncErrors(routeController.getById)
+			`/api/${routeName}/bo`,
+			makeHandlerAwareOfAsyncErrors(routeController.getBo)
 		);
 	}
 	if (routeController.create) {

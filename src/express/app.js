@@ -5,9 +5,9 @@ const cors = require('cors');
 const helmet = require('helmet');
 
 const routes = {
-	game: require('./routes/game'),
-	user: require('./routes/user'),
-	post: require('./routes/post')
+	games: require('./routes/games'),
+	users: require('./routes/users'),
+	posts: require('./routes/posts')
 	// Add more routes here...
 	// items: require('./routes/items'),
 };

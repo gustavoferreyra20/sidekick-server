@@ -2,15 +2,15 @@ const { models } = require('../../sequelize/index');
 const { getIdParam } = require('../helpers');
 
 async function getAll(req, res) {
-	const users = await models.usuarios.findAll( );
-	res.status(200).json(users);
+	const games = await models.games.findAll( );
+	res.status(200).json(games);
 };
 
 async function getBo(req, res) {
 	let myBo = (req.query);
-	const user = await models.usuarios.findAll({ where: myBo } );
-	if (user[0]) {
-		res.status(200).json(user);
+	const games = await models.games.findAll({ where: myBo } );
+	if (games[0]) {
+		res.status(200).json(games);
 	} else {
 		res.status(404).send('404 - Not found');
 	}
@@ -18,26 +18,25 @@ async function getBo(req, res) {
 
 async function create(req, res) {
 	let myBo = (req.query);
-	const user = await models.usuarios.create(myBo);
-	res.status(200).json(user); 
+	const game = await models.games.create(myBo);
+	res.status(200).json(game); 
 	
 };
 
 async function update(req, res) {
 	let myBo = (req.query);
-	console.log( JSON.parse(myBo.values),   JSON.parse(myBo.cond))
-	const user = await models.usuarios.update( JSON.parse(myBo.values), {
+	const games = await models.games.update( JSON.parse(myBo.values), {
 		where: JSON.parse(myBo.cond)
 	  })
-	res.status(200).json(user); 
+	res.status(200).json(games); 
 };
 
 async function removeBo(req, res) {
 	let myBo = (req.query);
-	const user = await models.usuarios.destroy({
+	const games = await models.games.destroy({
 		where: myBo
 	  });
-	res.status(200).json(user); 
+	res.status(200).json(games); 
 };
 
 module.exports = {

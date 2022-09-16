@@ -32,9 +32,18 @@ async function update(req, res) {
 	res.status(200).json(user); 
 };
 
+async function removeBo(req, res) {
+	let myBo = (req.query);
+	const user = await models.usuarios.destroy({
+		where: myBo
+	  });
+	res.status(200).json(user); 
+};
+
 module.exports = {
 	getAll,
 	getBo,
 	create,
-	update
+	update,
+	removeBo
 };

@@ -66,18 +66,6 @@ for (const [routeName, routeController] of Object.entries(routes)) {
 			makeHandlerAwareOfAsyncErrors(routeController.update)
 		);
 	}
-	if (routeController.update) {
-		app.put(
-			`/api/${routeName}/bo`,
-			makeHandlerAwareOfAsyncErrors(routeController.updateBo)
-		);
-	}
-	if (routeController.remove) {
-		app.delete(
-			`/api/${routeName}`,
-			makeHandlerAwareOfAsyncErrors(routeController.remove)
-		);
-	}
 	if (routeController.removeBo) {
 		app.delete(
 			`/api/${routeName}/bo`,

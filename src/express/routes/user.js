@@ -16,7 +16,25 @@ async function getBo(req, res) {
 	}
 };
 
+async function create(req, res) {
+	let myBo = (req.query);
+	const user = await models.usuarios.create(myBo);
+	res.status(200).json(user); 
+	
+};
+
+async function update(req, res) {
+	let myBo = (req.query);
+	console.log( JSON.parse(myBo.values),   JSON.parse(myBo.cond))
+	const user = await models.usuarios.update( JSON.parse(myBo.values), {
+		where: JSON.parse(myBo.cond)
+	  })
+	res.status(200).json(user); 
+};
+
 module.exports = {
 	getAll,
-	getBo
+	getBo,
+	create,
+	update
 };

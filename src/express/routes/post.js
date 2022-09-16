@@ -6,19 +6,18 @@ async function getAll(req, res) {
 	res.status(200).json(posts);
 };
 
-async function getById(req, res) {
-	const id = getIdParam(req);
-	const post = await models.anuncio.findByPk(id);
-	if (post[0]) {
-		res.status(200).json(post);
+async function getBo(req, res) {
+	let myBo = (req.query);
+	const user = await models.anuncio.findAll({ where: myBo } );
+	if (user[0]) {
+		res.status(200).json(user);
 	} else {
 		res.status(404).send('404 - Not found');
 	}
 };
 
 
-
 module.exports = {
 	getAll,
-	getById
+	getBo
 };

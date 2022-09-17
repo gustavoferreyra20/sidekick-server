@@ -10,8 +10,14 @@ const sequelize = new Sequelize('sidekickdb', 'root', '', {
 
 const modelDefiners = [
 	require('./models/games.model'),
-	require('./models/users.model'),
+	require('./models/genres.model'),
+	require('./models/medals.model'),
+	require('./models/platforms_games.model'),
+	require('./models/platforms.model'),
 	require('./models/posts.model'),
+	require('./models/reviews.model'),
+	require('./models/tokens.model'),
+	require('./models/users.model')
 	// Add more models here...
 	// require('./models/item'),
 ];

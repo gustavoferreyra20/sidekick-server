@@ -6,8 +6,14 @@ const helmet = require('helmet');
 
 const routes = {
 	games: require('./routes/games'),
-	users: require('./routes/users'),
-	posts: require('./routes/posts')
+	genres: require('./routes/genres'),
+	medals: require('./routes/medals'),
+	platforms_games: require('./routes/platforms_games'),
+	platforms: require('./routes/platforms'),
+	posts: require('./routes/posts'),
+	reviews: require('./routes/reviews'),
+	tokens: require('./routes/tokens'),
+	users: require('./routes/users')
 	// Add more routes here...
 	// items: require('./routes/items'),
 };
@@ -42,30 +48,35 @@ function makeHandlerAwareOfAsyncErrors(handler) {
 
 // We define the standard REST APIs for each route (if they exist).
 for (const [routeName, routeController] of Object.entries(routes)) {
+	// get all elements
 	if (routeController.getAll) {
 		app.get(
 			`/api/${routeName}`,
 			makeHandlerAwareOfAsyncErrors(routeController.getAll)
 		);
 	}
+	// get specific objects which matches
 	if (routeController.getBo) {
 		app.get(
 			`/api/${routeName}/bo`,
 			makeHandlerAwareOfAsyncErrors(routeController.getBo)
 		);
 	}
+	// create an object
 	if (routeController.create) {
 		app.post(
 			`/api/${routeName}`,
 			makeHandlerAwareOfAsyncErrors(routeController.create)
 		);
 	}
+	// updates objects which matches
 	if (routeController.update) {
 		app.put(
 			`/api/${routeName}`,
 			makeHandlerAwareOfAsyncErrors(routeController.update)
 		);
 	}
+	// remove objects which matches
 	if (routeController.removeBo) {
 		app.delete(
 			`/api/${routeName}/bo`,

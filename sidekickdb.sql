@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 16-09-2022 a las 23:15:35
+-- Tiempo de generación: 17-09-2022 a las 23:40:10
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `games` (
   `name` varchar(45) NOT NULL,
   `img` varchar(45) NOT NULL,
   PRIMARY KEY (`id_game`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `games`
@@ -54,7 +54,7 @@ INSERT INTO `games` (`id_game`, `name`, `img`) VALUES
 DROP TABLE IF EXISTS `genres`;
 CREATE TABLE IF NOT EXISTS `genres` (
   `id_genre` int(11) NOT NULL AUTO_INCREMENT,
-  `genre` varchar(45) NOT NULL,
+  `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id_genre`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -101,22 +101,22 @@ CREATE TABLE IF NOT EXISTS `medals` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `plataforms`
+-- Estructura de tabla para la tabla `platforms`
 --
 
-DROP TABLE IF EXISTS `plataforms`;
-CREATE TABLE IF NOT EXISTS `plataforms` (
+DROP TABLE IF EXISTS `platforms`;
+CREATE TABLE IF NOT EXISTS `platforms` (
   `id_platform` int(11) NOT NULL AUTO_INCREMENT,
-  `platform` varchar(45) NOT NULL,
+  `name` varchar(45) NOT NULL,
   `img` varchar(45) NOT NULL,
   PRIMARY KEY (`id_platform`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `plataforms`
+-- Volcado de datos para la tabla `platforms`
 --
 
-INSERT INTO `plataforms` (`id_platform`, `platform`, `img`) VALUES
+INSERT INTO `platforms` (`id_platform`, `name`, `img`) VALUES
 (1, 'PlayStation 4', ''),
 (2, 'PlayStation 5', ''),
 (3, 'XBOX', ''),
@@ -256,7 +256,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `description`, `img`) VALUES
 (3, 'awrwarwar', 'awrawrwar', 'awrawrwarwar', NULL, NULL),
-(5, 'test', '', 'awdwadwadwad', 'ciruja', NULL),
+(5, 'xd', '', 'awdwadwadwad', 'ciruja', 'xd'),
 (74, 'mariano', 'mariano@gmail.com', '$2a$10$rHI2bW0GyFZZf1K8MepjuOttVaQOkHAVuJiXCE2cox5VQ5WY2ZK9u', NULL, NULL),
 (53, 'goofy', 'goofy@gmail.com', '$2a$10$z7I.x8HUcfmznZJtJcoQbez7qpvwqA8NVTCcmIVKcM7NrzwTuz7rW', NULL, NULL),
 (54, 'joe', 'joe@gmail.com', '$2a$10$zpz0k2n1kMoWzt06tt8Xt.cL7pLW/brgDjdqajAduBnsOKRfD.CyW', NULL, NULL),
@@ -291,11 +291,11 @@ INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `description`, `img
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `users_plataforms`
+-- Estructura de tabla para la tabla `users_platforms`
 --
 
-DROP TABLE IF EXISTS `users_plataforms`;
-CREATE TABLE IF NOT EXISTS `users_plataforms` (
+DROP TABLE IF EXISTS `users_platforms`;
+CREATE TABLE IF NOT EXISTS `users_platforms` (
   `id_user` int(11) NOT NULL,
   `id_platform` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;

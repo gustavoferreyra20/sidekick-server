@@ -1,5 +1,4 @@
 const { models } = require('../../sequelize/index');
-const { getIdParam } = require('../helpers');
 
 async function getAll(req, res) {
 	const posts = await models.posts.findAll( );

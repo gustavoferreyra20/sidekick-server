@@ -70,7 +70,7 @@ for (const [routeName, routeController] of Object.entries(routes)) {
 		);
 	}
 	// updates objects which matches
-	// recive value and condition as json string
+	// recive value and condition as json strings
 	if (routeController.update) {
 		app.put(
 			`/api/${routeName}`,

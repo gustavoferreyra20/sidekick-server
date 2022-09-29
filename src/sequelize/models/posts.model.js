@@ -7,13 +7,13 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
 	sequelize.define('posts', {
 		id_post: {type:DataTypes.INTEGER, primaryKey:true},
-		id_originalPoster: DataTypes.STRING,
+		id_user: DataTypes.STRING,
         id_game: DataTypes.INTEGER,
         id_platform	: DataTypes.INTEGER,
         requiredUsers: DataTypes.INTEGER,
         actualUsers: DataTypes.INTEGER,
         title: DataTypes.STRING,
-        desciption: DataTypes.STRING,
+        description: DataTypes.STRING,
         date: DataTypes.TIME,
 }, {
     freezeTableName: true,

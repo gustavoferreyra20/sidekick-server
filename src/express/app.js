@@ -62,6 +62,13 @@ for (const [routeName, routeController] of Object.entries(routes)) {
 			makeHandlerAwareOfAsyncErrors(routeController.getBo)
 		);
 	}
+	// get specific objects which matches
+	if (routeController.join) {
+		app.get(
+			`/api/${routeName}/join`,
+			makeHandlerAwareOfAsyncErrors(routeController.join)
+		);
+	}
 	// create an object
 	if (routeController.create) {
 		app.post(

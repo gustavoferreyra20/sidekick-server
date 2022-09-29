@@ -38,10 +38,23 @@ async function removeBo(req, res) {
 	res.status(200).json(platforms); 
 };
 
+async function join(req, res) {
+	let myBo = (req.query);
+	models.games.belongsToMany(models.platforms, {through: 'platforms_games', foreignKey: 'id_game' })
+	models.platforms.belongsToMany(models.games, {through: 'platforms_games', foreignKey: 'id_platform' })
+
+	const gamePlatforms = await models.games.findOne({ 
+		where: myBo,
+		include: [ models.platforms ]
+	})
+	res.status(200).json(gamePlatforms.platforms); 
+};
+
 module.exports = {
 	getAll,
 	getBo,
 	create,
 	update,
-	removeBo
+	removeBo,
+	join
 };

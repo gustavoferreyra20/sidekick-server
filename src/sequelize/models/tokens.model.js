@@ -8,7 +8,6 @@ module.exports = (sequelize) => {
 	sequelize.define('tokens', {
 		session: {type:DataTypes.STRING, primaryKey:true},
 		token: DataTypes.STRING,
-        user: DataTypes.STRING,
         expire: DataTypes.DATE,
 }, {
     freezeTableName: true,

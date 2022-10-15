@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
+var multer = require('multer');
 
 const routes = {
 	games: require('./routes/games'),
@@ -46,6 +47,27 @@ function makeHandlerAwareOfAsyncErrors(handler) {
 	};
 }
 
+var storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+	  cb(null, './uploads')      //you tell where to upload the files,
+	},
+	filename: function (req, file, cb) {
+	  cb(null, file.fieldname + '-' + Date.now() + '.png')
+	}
+  })
+
+  var upload = multer({storage: storage,
+    onFileUploadStart: function (file) {
+      console.log(file.originalname + ' is starting ...')
+    },
+});
+
+
+app.post(`/api/imageupload`,upload.single('file'),function(req,res){
+    //req.file will now be available as a json object, save to mongodb, re: filename, path etc
+	console.log(req.file)
+    res.send(req.file)
+})
 // We define the standard REST APIs for each route (if they exist).
 for (const [routeName, routeController] of Object.entries(routes)) {
 	// get all elements

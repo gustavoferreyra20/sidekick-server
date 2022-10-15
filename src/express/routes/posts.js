@@ -16,7 +16,7 @@ async function getBo(req, res) {
 };
 
 async function create(req, res) {
-	let myBo = (req.query);
+	let myBo = (req.body);
 	const post = await models.posts.create(myBo);
 	res.status(200).json(post); 
 	

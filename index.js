@@ -21,7 +21,7 @@ async function init() {
 
     // starting the server
 	app.listen(PORT, () => {
-		console.log(`Express server started on port ${PORT}. Try some routes, such as '/api/game'.`);
+		console.log(`Express server started on port ${PORT}. Try some routes, such as '/api/games'.`);
 	});
 }
 

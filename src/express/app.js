@@ -14,7 +14,8 @@ const routes = {
 	posts: require('./routes/posts'),
 	reviews: require('./routes/reviews'),
 	tokens: require('./routes/tokens'),
-	users: require('./routes/users')
+	users: require('./routes/users'),
+	modes: require('./routes/modes')
 	// Add more routes here...
 	// items: require('./routes/items'),
 };
@@ -56,12 +57,7 @@ var storage = multer.diskStorage({
 	}
   })
 
-  var upload = multer({storage: storage,
-    onFileUploadStart: function (file) {
-      console.log(file.originalname + ' is starting ...')
-    },
-});
-
+var upload = multer({storage: storage});
 
 app.post(`/api/imageupload`,upload.single('file'),function(req,res){
     //req.file will now be available as a json object, save to mongodb, re: filename, path etc

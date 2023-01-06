@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 17-09-2022 a las 23:40:10
+-- Tiempo de generación: 06-01-2023 a las 00:43:54
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -33,17 +33,19 @@ CREATE TABLE IF NOT EXISTS `games` (
   `id_game` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `img` varchar(45) NOT NULL,
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updatedAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_game`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `games`
 --
 
-INSERT INTO `games` (`id_game`, `name`, `img`) VALUES
-(1, 'Fortnite', '../img/games/Fortnite.jpg'),
-(2, 'CSGO', '../img/games/CSGO.jpg'),
-(3, 'MultiVersus', '../img/games/MultiVersus.jpg');
+INSERT INTO `games` (`id_game`, `name`, `img`, `createdAt`, `updatedAt`) VALUES
+(1, 'Fortnite', '../img/games/Fortnite.jpg', '2022-09-18 01:49:18', '0000-00-00 00:00:00'),
+(2, 'CSGO', '../img/games/CSGO.jpg', '2022-09-18 01:49:18', '0000-00-00 00:00:00'),
+(3, 'MultiVersus', '../img/games/MultiVersus.jpg', '2022-09-18 01:49:18', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -101,6 +103,29 @@ CREATE TABLE IF NOT EXISTS `medals` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `modes`
+--
+
+DROP TABLE IF EXISTS `modes`;
+CREATE TABLE IF NOT EXISTS `modes` (
+  `id_mode` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  PRIMARY KEY (`id_mode`)
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `modes`
+--
+
+INSERT INTO `modes` (`id_mode`, `name`) VALUES
+(1, 'casual'),
+(2, 'competitivo'),
+(3, 'raid'),
+(4, 'cazador de trofeos');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `platforms`
 --
 
@@ -120,8 +145,7 @@ INSERT INTO `platforms` (`id_platform`, `name`, `img`) VALUES
 (1, 'PlayStation 4', ''),
 (2, 'PlayStation 5', ''),
 (3, 'XBOX', ''),
-(4, 'Steam', ''),
-(5, 'Epic', '');
+(4, 'PC', '');
 
 -- --------------------------------------------------------
 
@@ -160,26 +184,30 @@ INSERT INTO `platforms_games` (`id_game`, `id_platform`) VALUES
 DROP TABLE IF EXISTS `posts`;
 CREATE TABLE IF NOT EXISTS `posts` (
   `id_post` int(11) NOT NULL AUTO_INCREMENT,
-  `id_originalPoster` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
   `id_game` int(11) NOT NULL,
   `id_platform` int(11) NOT NULL,
   `requiredUsers` int(11) NOT NULL,
   `actualUsers` int(11) NOT NULL DEFAULT 1,
   `title` varchar(45) NOT NULL,
-  `desciption` varchar(280) NOT NULL,
+  `description` varchar(280) NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id_post`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `posts`
 --
 
-INSERT INTO `posts` (`id_post`, `id_originalPoster`, `id_game`, `id_platform`, `requiredUsers`, `actualUsers`, `title`, `desciption`, `date`) VALUES
+INSERT INTO `posts` (`id_post`, `id_user`, `id_game`, `id_platform`, `requiredUsers`, `actualUsers`, `title`, `description`, `date`) VALUES
 (1, 66, 2, 4, 2, 1, 'example', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2022-08-11 03:00:00'),
 (9, 75, 2, 4, 1, 1, 'testing get user', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2022-09-04 02:52:37'),
 (8, 75, 1, 4, 1, 1, 'testing popup', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2022-08-27 23:15:44'),
-(6, 66, 1, 1, 1, 1, 'testing get user', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2022-08-27 22:46:39');
+(6, 66, 1, 1, 1, 1, 'testing get user', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2022-08-27 22:46:39'),
+(13, 119, 3, 4, 1, 1, 'testing axios', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2022-11-16 19:08:44'),
+(12, 103, 2, 4, 1, 1, 'create post with api', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2022-10-06 02:32:00'),
+(14, 119, 2, 4, 1, 1, 'testing neew post', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2022-11-17 23:34:40'),
+(15, 119, 2, 4, 1, 1, 'test mode', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-06 00:36:41');
 
 -- --------------------------------------------------------
 
@@ -221,7 +249,6 @@ DROP TABLE IF EXISTS `tokens`;
 CREATE TABLE IF NOT EXISTS `tokens` (
   `session` varchar(300) NOT NULL,
   `token` varchar(300) NOT NULL,
-  `user` varchar(300) NOT NULL,
   `expire` date NOT NULL,
   PRIMARY KEY (`session`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -230,8 +257,8 @@ CREATE TABLE IF NOT EXISTS `tokens` (
 -- Volcado de datos para la tabla `tokens`
 --
 
-INSERT INTO `tokens` (`session`, `token`, `user`, `expire`) VALUES
-('baf262b5b445d33a8bb1c97198495cb71f1fe476', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzUsImlhdCI6MTY2MTY0MjQ3NH0.rwoc5TDsHvtcaSScvcdTTcokzT9woMPIogquqqBxCKQ', 'c29873cd736dd5e02cb949b3fd478a6cd4aafc54', '2022-11-25');
+INSERT INTO `tokens` (`session`, `token`, `expire`) VALUES
+('d76c6a96cbfbe816f9136463e8ba5a8d702d4985', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTE5LCJpYXQiOjE2Njg3ODMwMTd9.QpMRXXrkOHzQ8BrpSr5nxMPEspOfY_eT-gYLjnAKErI', '2023-02-16');
 
 -- --------------------------------------------------------
 
@@ -248,7 +275,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `description` varchar(280) DEFAULT NULL,
   `img` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id_user`)
-) ENGINE=MyISAM AUTO_INCREMENT=88 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=125 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `users`
@@ -256,7 +283,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `description`, `img`) VALUES
 (3, 'awrwarwar', 'awrawrwar', 'awrawrwarwar', NULL, NULL),
-(5, 'xd', '', 'awdwadwadwad', 'ciruja', 'xd'),
+(5, 'xd', '', 'awdwadwadwad', 'ciruja', 'new xd'),
 (74, 'mariano', 'mariano@gmail.com', '$2a$10$rHI2bW0GyFZZf1K8MepjuOttVaQOkHAVuJiXCE2cox5VQ5WY2ZK9u', NULL, NULL),
 (53, 'goofy', 'goofy@gmail.com', '$2a$10$z7I.x8HUcfmznZJtJcoQbez7qpvwqA8NVTCcmIVKcM7NrzwTuz7rW', NULL, NULL),
 (54, 'joe', 'joe@gmail.com', '$2a$10$zpz0k2n1kMoWzt06tt8Xt.cL7pLW/brgDjdqajAduBnsOKRfD.CyW', NULL, NULL),
@@ -286,7 +313,28 @@ INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `description`, `img
 (71, 'harry', 'harry@gmail.com', '$2a$10$N7m/36dQ0xP4SPTuOJct..dO9EirrEQvlyA8MbJr10WDhMa9jIK1a', NULL, NULL),
 (72, 'walter', 'walter@gmail.com', '$2a$10$SrK/o2SqhSCNCfu7VeD45O4pWfgCBiyjqHL1QiVh7gzw6aox9aCmm', NULL, NULL),
 (73, 'topa', 'topa@gmail.com', '$2a$10$Y7uNjZt.Waohle8zph6YJumrdAtoVwT8ARdgMQN.2ccoC5NoNsAZe', NULL, NULL),
-(75, 'brad', 'brad@gmail.com', '$2a$10$/1HYP0a/1iOSQ3MeReA4J.Lrfs6XPbYLzbkvK6Etyll4kCy6py2A2', NULL, NULL);
+(75, 'brad', 'brad@gmail.com', '$2a$10$/1HYP0a/1iOSQ3MeReA4J.Lrfs6XPbYLzbkvK6Etyll4kCy6py2A2', NULL, NULL),
+(88, 'iiiiii', 'ae', '$2a$10$TNhq5harAb7Bsaiq45iGD.q3THjH5q9ODhXrkMhqY8HGRoY2MXx7W', 'iiiiii', 'ee'),
+(90, 'undefined', 'joel@gmail.com', '$2a$10$o3xWibl.I6BO/f64M6P4ketSDPb.PI5rUxVt16DR7a9UvPlyxzSRm', NULL, NULL),
+(91, 'undefined', 'guillo@gmail.com', '$2a$10$L2LPW5vzq/yZ5iXBFYu/jeMWAUVtImgJwS/hJGP3cVWMJVM9ADD4e', NULL, NULL),
+(92, 'helado', 'helado@gmail.com', '$2a$10$HBshxrqOGucneuj1N/sK0eKRlG2Od4hBO94q7bI8Fzi0IjHCK5ivS', NULL, NULL),
+(93, 'luke', 'luke@gmail.com', '$2a$10$wOCtMtYGPg4/n6Np1YCSTutqTyttsrNWzQoM2y89L58gkRKltu3bO', NULL, NULL),
+(96, 'afwafwafawf', 'luke@gmail.com', '$2a$10$/VKBBGGpdkjIA3p2EVrGs.zyUKYjnmV8apXGY2keKlHK8jQZlOWka', NULL, NULL),
+(95, 'luke2', 'luke2@gmail.com', '$2a$10$Kx4CrcQFvlsawOQxtvhW/enUZGXozEcTklI5Egpa16qGdpSkDqMy6', NULL, NULL),
+(97, 'awfawfwafawf', 'luke@gmail.com', '$2a$10$jo6afh.s1E7nGUsjjcEzd.uWfjzc9JXP3VDDFex6x/dgRulBY96eq', NULL, NULL),
+(98, 'luke3', 'luke3@gmail.com', '$2a$10$NZlkM7uTW2PQyVdnG/4r/eLjH8CSY5.V.OOfbKL9e0lcBSZwZYIUS', NULL, NULL),
+(99, 'messi', 'messi@gmail.com', '$2a$10$/Er55uTq5P8b8AJY4m/TV.KePJS2e0xy2HgREDHrZVXoEOOu0DkEK', NULL, NULL),
+(100, 'leo', 'leo@gmail.com', '$2a$10$.j0zNpfPfbtQpjn0DAyM3utYRkYkZ7zZDtLgPnImqL9DVx8CaenRq', NULL, NULL),
+(104, 'morrisey', 'morrisey@gmail.com', '$2a$10$FgfBwj7tXQqOFxl.ih0oBe.yxrrkmdZzH.X5clJmbFaZhzdV.eAsK', NULL, NULL),
+(102, 'goofy2', 'goofy@gmail.com', '$2a$10$6HY72BtVZiyNGQZaXlLtI.OwHaH3NNtG9zYuZLyFGn5Zb78F7aHO2', NULL, NULL),
+(103, 'david', 'david@gmail.com', '$2a$10$tGBBfdEVwA947WjVWDDhCejs1eBilRQhBZI7L15MCBCptfu3OVlL6', NULL, NULL),
+(107, 'text area', 'text@gmail.com', '$2a$10$AiQj8V7lyE2tOQxrZliMgupsIgardAr74MW/Pt08vCT6FClPEo4b2', 'testing text area', NULL),
+(124, 'axi', 'axi@gmail.com', '$2a$10$FZinRDJOOTtFbhnzVqFj3.UvfzsmyPuZoisC92a8DHVF6L0rYPe1e', '', NULL),
+(118, 'artyiom', 'artyiom@gmail.com', '$2a$10$gg0sNl0wPrABRU5SAgNcSecL75edLtzrHHp5M0ESxq9q0MxbPLYF.', '', 'uploads\\file-1665959320637.png'),
+(119, 'test images2', 'images2@gmail.com', '$2a$10$d8oit8vIm3LjPrIp8savGu6dCYx/95kPZb9EZ8cCF09GTDxRhueo6', '', 'uploads\\file-1668613614142.png'),
+(115, 'awfawf', 'awawf@waffw', '$2a$10$JCATRniA4xjPDLwY6HX4AOE.XcZYaEmHaB68fYJfaHHOEgFKfE7GW', '', '\\uploads\\file-1665795770383.png'),
+(116, 'awfawff', 'fafwa@fafw', '$2a$10$SS3bht4mDKntJObdc4Al1uy1JtJuclAz.gZvZV2YEI8vewwKJ3gvK', 'afkjjhawf', '\\uploads\\file-1665795813643.png'),
+(117, 'testing multer', 'multer@gmail.com', '$2a$10$fWlfboAnbNrRLkxB4kL2Y.viRf5jIqM7gvUWepnAjB9qb2n8yvqTm', '', 'uploads\\file-1665797001578.png');
 
 -- --------------------------------------------------------
 

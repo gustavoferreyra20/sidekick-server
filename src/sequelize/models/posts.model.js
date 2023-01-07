@@ -10,6 +10,7 @@ module.exports = (sequelize) => {
 		id_user: DataTypes.STRING,
         id_game: DataTypes.INTEGER,
         id_platform	: DataTypes.INTEGER,
+        id_mode	: DataTypes.INTEGER,
         requiredUsers: DataTypes.INTEGER,
         actualUsers: DataTypes.INTEGER,
         title: DataTypes.STRING,

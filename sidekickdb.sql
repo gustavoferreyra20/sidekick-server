@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 06-01-2023 a las 00:43:54
+-- Tiempo de generación: 08-01-2023 a las 19:30:01
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -120,7 +120,6 @@ CREATE TABLE IF NOT EXISTS `modes` (
 INSERT INTO `modes` (`id_mode`, `name`) VALUES
 (1, 'casual'),
 (2, 'competitivo'),
-(3, 'raid'),
 (4, 'cazador de trofeos');
 
 -- --------------------------------------------------------
@@ -187,27 +186,24 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `id_user` int(11) NOT NULL,
   `id_game` int(11) NOT NULL,
   `id_platform` int(11) NOT NULL,
+  `id_mode` int(11) NOT NULL,
   `requiredUsers` int(11) NOT NULL,
   `actualUsers` int(11) NOT NULL DEFAULT 1,
   `title` varchar(45) NOT NULL,
   `description` varchar(280) NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id_post`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `posts`
 --
 
-INSERT INTO `posts` (`id_post`, `id_user`, `id_game`, `id_platform`, `requiredUsers`, `actualUsers`, `title`, `description`, `date`) VALUES
-(1, 66, 2, 4, 2, 1, 'example', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2022-08-11 03:00:00'),
-(9, 75, 2, 4, 1, 1, 'testing get user', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2022-09-04 02:52:37'),
-(8, 75, 1, 4, 1, 1, 'testing popup', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2022-08-27 23:15:44'),
-(6, 66, 1, 1, 1, 1, 'testing get user', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2022-08-27 22:46:39'),
-(13, 119, 3, 4, 1, 1, 'testing axios', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2022-11-16 19:08:44'),
-(12, 103, 2, 4, 1, 1, 'create post with api', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2022-10-06 02:32:00'),
-(14, 119, 2, 4, 1, 1, 'testing neew post', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2022-11-17 23:34:40'),
-(15, 119, 2, 4, 1, 1, 'test mode', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-06 00:36:41');
+INSERT INTO `posts` (`id_post`, `id_user`, `id_game`, `id_platform`, `id_mode`, `requiredUsers`, `actualUsers`, `title`, `description`, `date`) VALUES
+(21, 93, 3, 1, 2, 2, 0, 'test review stats', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-08 18:54:00'),
+(20, 103, 2, 4, 1, 2, 0, 'test', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-07 18:48:08'),
+(19, 103, 3, 1, 4, 1, 0, 'test search bar', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-07 18:05:04'),
+(18, 119, 2, 4, 2, 3, 0, 'test mode id', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-07 14:25:58');
 
 -- --------------------------------------------------------
 
@@ -225,7 +221,16 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   `karmaScore` int(11) NOT NULL,
   `comment` varchar(280) NOT NULL,
   PRIMARY KEY (`id_review`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `reviews`
+--
+
+INSERT INTO `reviews` (`id_review`, `id_writerUser`, `id_reviewedUser`, `id_post`, `abilityScore`, `karmaScore`, `comment`) VALUES
+(1, 93, 103, 20, 80, 90, 'comment'),
+(3, 64, 103, 19, 37, 45, 'comment'),
+(4, 64, 103, 19, 40, 20, 'comment');
 
 -- --------------------------------------------------------
 
@@ -258,7 +263,7 @@ CREATE TABLE IF NOT EXISTS `tokens` (
 --
 
 INSERT INTO `tokens` (`session`, `token`, `expire`) VALUES
-('d76c6a96cbfbe816f9136463e8ba5a8d702d4985', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTE5LCJpYXQiOjE2Njg3ODMwMTd9.QpMRXXrkOHzQ8BrpSr5nxMPEspOfY_eT-gYLjnAKErI', '2023-02-16');
+('1d3557fe81396b1760981f5047e3f08fa65a4851', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTMsImlhdCI6MTY3MzIwMzA5MH0.X3Kd_2_i-aZhDA-D1DsZuRgCFi4r2tlEl-o863eE9Ow', '2023-04-08');
 
 -- --------------------------------------------------------
 
@@ -327,7 +332,7 @@ INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `description`, `img
 (100, 'leo', 'leo@gmail.com', '$2a$10$.j0zNpfPfbtQpjn0DAyM3utYRkYkZ7zZDtLgPnImqL9DVx8CaenRq', NULL, NULL),
 (104, 'morrisey', 'morrisey@gmail.com', '$2a$10$FgfBwj7tXQqOFxl.ih0oBe.yxrrkmdZzH.X5clJmbFaZhzdV.eAsK', NULL, NULL),
 (102, 'goofy2', 'goofy@gmail.com', '$2a$10$6HY72BtVZiyNGQZaXlLtI.OwHaH3NNtG9zYuZLyFGn5Zb78F7aHO2', NULL, NULL),
-(103, 'david', 'david@gmail.com', '$2a$10$tGBBfdEVwA947WjVWDDhCejs1eBilRQhBZI7L15MCBCptfu3OVlL6', NULL, NULL),
+(103, 'david', 'david@gmail.com', '$2a$10$tGBBfdEVwA947WjVWDDhCejs1eBilRQhBZI7L15MCBCptfu3OVlL6', 'description', NULL),
 (107, 'text area', 'text@gmail.com', '$2a$10$AiQj8V7lyE2tOQxrZliMgupsIgardAr74MW/Pt08vCT6FClPEo4b2', 'testing text area', NULL),
 (124, 'axi', 'axi@gmail.com', '$2a$10$FZinRDJOOTtFbhnzVqFj3.UvfzsmyPuZoisC92a8DHVF6L0rYPe1e', '', NULL),
 (118, 'artyiom', 'artyiom@gmail.com', '$2a$10$gg0sNl0wPrABRU5SAgNcSecL75edLtzrHHp5M0ESxq9q0MxbPLYF.', '', 'uploads\\file-1665959320637.png'),

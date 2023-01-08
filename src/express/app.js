@@ -64,6 +64,12 @@ app.post(`/api/imageupload`,upload.single('file'),function(req,res){
 	console.log(req.file)
     res.send(req.file)
 })
+
+app.get(
+	`/api/reviews/avg`,
+	makeHandlerAwareOfAsyncErrors(routes.reviews.getAvg)
+);
+
 // We define the standard REST APIs for each route (if they exist).
 for (const [routeName, routeController] of Object.entries(routes)) {
 	// get all elements

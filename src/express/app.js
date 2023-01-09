@@ -15,7 +15,8 @@ const routes = {
 	reviews: require('./routes/reviews'),
 	tokens: require('./routes/tokens'),
 	users: require('./routes/users'),
-	modes: require('./routes/modes')
+	modes: require('./routes/modes'),
+	applications: require('./routes/applications')
 	// Add more routes here...
 	// items: require('./routes/items'),
 };

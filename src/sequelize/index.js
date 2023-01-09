@@ -18,7 +18,8 @@ const modelDefiners = [
 	require('./models/reviews.model'),
 	require('./models/tokens.model'),
 	require('./models/users.model'),
-	require('./models/modes.model')
+	require('./models/modes.model'),
+	require('./models/applications.model')
 
 	// Add more models here...
 	// require('./models/item'),

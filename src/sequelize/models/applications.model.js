@@ -8,7 +8,8 @@ module.exports = (sequelize) => {
 	sequelize.define('applications', {
 		id_application: {type:DataTypes.INTEGER, primaryKey:true},
         id_post: DataTypes.INTEGER,
-		id_userApplicant: DataTypes.INTEGER,
+		id_user: DataTypes.INTEGER,
+		status: DataTypes.STRING
 }, {
     freezeTableName: true,
 	timestamps: false

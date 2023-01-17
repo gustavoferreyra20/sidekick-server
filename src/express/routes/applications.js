@@ -38,10 +38,27 @@ async function removeBo(req, res) {
 	res.status(200).json(applications); 
 };
 
+async function join(req, res) {
+	let myBo = (req.query);
+	models.users.belongsToMany(models.posts, { through: 'applications', foreignKey: 'id_user' })
+	models.posts.belongsToMany(models.users, {through: 'applications', foreignKey: 'id_post' })
+
+	const usersPosts = await models.posts.findAll({ 
+		where: myBo,
+		include: [{ 
+			model: models.users,
+			attributes:{ exclude: ['password']}
+		 }]
+		
+	})
+	res.status(200).json(usersPosts); 
+};
+
 module.exports = {
 	getAll,
 	getBo,
 	create,
 	update,
-	removeBo
+	removeBo,
+	join
 };

@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
 	sequelize.define('reviews', {
 		id_review: {type:DataTypes.INTEGER, primaryKey:true},
 		id_writerUser: DataTypes.INTEGER,
-        id_reviewedUser: DataTypes.INTEGER,
+        id_user: DataTypes.INTEGER,
         id_post	: DataTypes.INTEGER,
         abilityScore: DataTypes.INTEGER,
         karmaScore: DataTypes.INTEGER,

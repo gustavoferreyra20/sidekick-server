@@ -1,5 +1,6 @@
 const { models } = require('../../sequelize/index');
 var Sequelize = require("sequelize");
+
 async function getAll(req, res) {
 	const review = await models.reviews.findAll( );
 	res.status(200).json(review);
@@ -48,11 +49,28 @@ async function getAvg(req, res) {
 	}
 };
 
+async function join(req, res) {
+	let myBo = (req.query);
+	models.users.hasMany(models.reviews, {foreignKey: 'id_writerUser' })
+	models.reviews.belongsTo(models.users, {foreignKey: 'id_writerUser' })
+
+	const usersPosts = await models.reviews.findAll({ 
+		where: myBo,
+		include: [{ 
+			model: models.users,
+			attributes:{ exclude: ['password']}
+		 }]
+		
+	})
+	res.status(200).json(usersPosts); 
+};
+
 module.exports = {
 	getAll,
 	getBo,
 	create,
 	update,
 	removeBo,
-	getAvg
+	getAvg,
+	join
 };

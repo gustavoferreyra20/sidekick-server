@@ -23,9 +23,9 @@ async function create(req, res) {
 };
 
 async function update(req, res) {
-	let myBo = (req.query);
-	const applications = await models.applications.update( JSON.parse(myBo.values), {
-		where: JSON.parse(myBo.cond)
+	let myBo = (req.body);
+	const applications = await models.applications.update(myBo.values, {
+		where: myBo.cond
 	  })
 	res.status(200).json(applications); 
 };

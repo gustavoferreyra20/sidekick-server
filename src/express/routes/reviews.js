@@ -9,11 +9,7 @@ async function getAll(req, res) {
 async function getBo(req, res) {
 	let myBo = (req.query);
 	const review = await models.reviews.findAll({ where: myBo } );
-	if (review[0]) {
-		res.status(200).json(review);
-	} else {
-		res.status(404).send('404 - Not found');
-	}
+	res.status(200).json(review);
 };
 
 async function create(req, res) {

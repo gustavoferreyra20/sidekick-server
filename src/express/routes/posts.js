@@ -8,11 +8,7 @@ async function getAll(req, res) {
 async function getBo(req, res) {
 	let myBo = (req.query);
 	const posts = await models.posts.findAll({ where: myBo } );
-	if (posts[0]) {
-		res.status(200).json(posts);
-	} else {
-		res.status(404).send('404 - Not found');
-	}
+	res.status(200).json(posts);
 };
 
 async function create(req, res) {

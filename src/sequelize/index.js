@@ -11,7 +11,7 @@ const sequelize = new Sequelize('sidekickdb', 'root', '', {
 const modelDefiners = [
 	require('./models/games.model'),
 	require('./models/genres.model'),
-	require('./models/medals.model'),
+	require('./models/rewards.model'),
 	require('./models/platforms_games.model'),
 	require('./models/platforms.model'),
 	require('./models/posts.model'),

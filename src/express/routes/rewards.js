@@ -1,15 +1,15 @@
 const { models } = require('../../sequelize/index');
 
 async function getAll(req, res) {
-	const medals = await models.medals.findAll( );
-	res.status(200).json(medals);
+	const rewards = await models.rewards.findAll( );
+	res.status(200).json(rewards);
 };
 
 async function getBo(req, res) {
 	let myBo = (req.query);
-	const medals = await models.medals.findAll({ where: myBo } );
-	if (medals[0]) {
-		res.status(200).json(medals);
+	const rewards = await models.rewards.findAll({ where: myBo } );
+	if (rewards[0]) {
+		res.status(200).json(rewards);
 	} else {
 		res.status(404).send('404 - Not found');
 	}
@@ -17,25 +17,25 @@ async function getBo(req, res) {
 
 async function create(req, res) {
 	let myBo = (req.query);
-	const medal = await models.medals.create(myBo);
-	res.status(200).json(medal); 
+	const reward = await models.rewards.create(myBo);
+	res.status(200).json(reward); 
 	
 };
 
 async function update(req, res) {
 	let myBo = (req.query);
-	const medals = await models.medals.update( JSON.parse(myBo.values), {
+	const rewards = await models.rewards.update( JSON.parse(myBo.values), {
 		where: JSON.parse(myBo.cond)
 	  })
-	res.status(200).json(medals); 
+	res.status(200).json(rewards); 
 };
 
 async function removeBo(req, res) {
 	let myBo = (req.query);
-	const medals = await models.medals.destroy({
+	const rewards = await models.rewards.destroy({
 		where: myBo
 	  });
-	res.status(200).json(medals); 
+	res.status(200).json(rewards); 
 };
 
 module.exports = {

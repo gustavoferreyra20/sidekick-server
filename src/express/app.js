@@ -8,7 +8,7 @@ var multer = require('multer');
 const routes = {
 	games: require('./routes/games'),
 	genres: require('./routes/genres'),
-	medals: require('./routes/medals'),
+	rewards: require('./routes/rewards'),
 	platforms_games: require('./routes/platforms_games'),
 	platforms: require('./routes/platforms'),
 	posts: require('./routes/posts'),

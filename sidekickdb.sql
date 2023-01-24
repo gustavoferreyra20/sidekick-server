@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 08-01-2023 a las 19:30:01
+-- Tiempo de generación: 24-01-2023 a las 16:24:47
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -21,6 +21,33 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `sidekickdb`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `applications`
+--
+
+DROP TABLE IF EXISTS `applications`;
+CREATE TABLE IF NOT EXISTS `applications` (
+  `id_application` int(11) NOT NULL AUTO_INCREMENT,
+  `id_post` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `status` varchar(45) NOT NULL DEFAULT 'pending',
+  PRIMARY KEY (`id_application`)
+) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `applications`
+--
+
+INSERT INTO `applications` (`id_application`, `id_post`, `id_user`, `status`) VALUES
+(4, 21, 32, 'pending'),
+(9, 21, 93, 'accepted'),
+(8, 20, 93, 'pending'),
+(28, 24, 103, 'pending'),
+(40, 21, 103, 'accepted'),
+(42, 22, 64, 'pending');
 
 -- --------------------------------------------------------
 
@@ -82,22 +109,6 @@ DROP TABLE IF EXISTS `genres_posts`;
 CREATE TABLE IF NOT EXISTS `genres_posts` (
   `id_post` int(11) NOT NULL,
   `id_genre` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `medals`
---
-
-DROP TABLE IF EXISTS `medals`;
-CREATE TABLE IF NOT EXISTS `medals` (
-  `id_medal` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `description` varchar(280) NOT NULL,
-  `price` decimal(19,4) NOT NULL,
-  `img` varchar(45) NOT NULL,
-  PRIMARY KEY (`id_medal`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -193,16 +204,18 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `description` varchar(280) NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id_post`)
-) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `posts`
 --
 
 INSERT INTO `posts` (`id_post`, `id_user`, `id_game`, `id_platform`, `id_mode`, `requiredUsers`, `actualUsers`, `title`, `description`, `date`) VALUES
-(21, 93, 3, 1, 2, 2, 0, 'test review stats', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-08 18:54:00'),
+(22, 93, 1, 1, 1, 1, 0, 'awwafwaffw', '', '2023-01-10 17:58:21'),
+(23, 93, 2, 4, 4, 2, 0, 'test', 'seagfwaegawgwgg', '2023-01-10 17:58:56'),
+(24, 93, 1, 1, 1, 1, 0, 'ttttttttttttttt', '', '2023-01-10 18:12:28'),
+(21, 103, 3, 1, 2, 2, 0, 'test review stats', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-08 18:54:00'),
 (20, 103, 2, 4, 1, 2, 0, 'test', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-07 18:48:08'),
-(19, 103, 3, 1, 4, 1, 0, 'test search bar', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-07 18:05:04'),
 (18, 119, 2, 4, 2, 3, 0, 'test mode id', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-07 14:25:58');
 
 -- --------------------------------------------------------
@@ -215,7 +228,7 @@ DROP TABLE IF EXISTS `reviews`;
 CREATE TABLE IF NOT EXISTS `reviews` (
   `id_review` int(11) NOT NULL AUTO_INCREMENT,
   `id_writerUser` int(11) NOT NULL,
-  `id_reviewedUser` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
   `id_post` int(11) NOT NULL,
   `abilityScore` int(11) NOT NULL,
   `karmaScore` int(11) NOT NULL,
@@ -227,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `reviews` (
 -- Volcado de datos para la tabla `reviews`
 --
 
-INSERT INTO `reviews` (`id_review`, `id_writerUser`, `id_reviewedUser`, `id_post`, `abilityScore`, `karmaScore`, `comment`) VALUES
+INSERT INTO `reviews` (`id_review`, `id_writerUser`, `id_user`, `id_post`, `abilityScore`, `karmaScore`, `comment`) VALUES
 (1, 93, 103, 20, 80, 90, 'comment'),
 (3, 64, 103, 19, 37, 45, 'comment'),
 (4, 64, 103, 19, 40, 20, 'comment');
@@ -235,14 +248,42 @@ INSERT INTO `reviews` (`id_review`, `id_writerUser`, `id_reviewedUser`, `id_post
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `reviews_medals`
+-- Estructura de tabla para la tabla `reviews_reward`
 --
 
-DROP TABLE IF EXISTS `reviews_medals`;
-CREATE TABLE IF NOT EXISTS `reviews_medals` (
+DROP TABLE IF EXISTS `reviews_reward`;
+CREATE TABLE IF NOT EXISTS `reviews_reward` (
   `id_review` int(11) NOT NULL,
-  `id_medal` int(11) NOT NULL
+  `id_reward` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `rewards`
+--
+
+DROP TABLE IF EXISTS `rewards`;
+CREATE TABLE IF NOT EXISTS `rewards` (
+  `id_reward` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `description` varchar(280) NOT NULL,
+  `price` decimal(19,4) NOT NULL,
+  `img` varchar(45) NOT NULL,
+  PRIMARY KEY (`id_reward`)
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `rewards`
+--
+
+INSERT INTO `rewards` (`id_reward`, `name`, `description`, `price`, `img`) VALUES
+(1, 'gold', 'Medalla de oro', '600.0000', '../img/rewards/gold.png'),
+(2, 'silver', 'Medalla de plata', '400.0000', '../img/rewards/silver.png'),
+(3, 'bronze', 'Medalla de bronce', '200.0000', '../img/rewards/bronze.png'),
+(4, 'sports', 'Medalla', '100.0000', '../img/rewards/sports.png'),
+(5, 'military', 'Medalla de honor', '300.0000', '../img/rewards/military.png'),
+(6, 'trophy', 'Copa', '1000.0000', '../img/rewards/trophy.png');
 
 -- --------------------------------------------------------
 
@@ -263,7 +304,9 @@ CREATE TABLE IF NOT EXISTS `tokens` (
 --
 
 INSERT INTO `tokens` (`session`, `token`, `expire`) VALUES
-('1d3557fe81396b1760981f5047e3f08fa65a4851', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTMsImlhdCI6MTY3MzIwMzA5MH0.X3Kd_2_i-aZhDA-D1DsZuRgCFi4r2tlEl-o863eE9Ow', '2023-04-08');
+('1817d3bbe280a5b5b2185f3f1f2aae28a0faf4d4', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAzLCJpYXQiOjE2NzQ0ODk0NjF9.fxux1OPfVMS-0wR9CsGwiEBvae4oAWNmjvaHg8HbgXE', '2023-04-23'),
+('a621895d63fd5588e4338a7f7a7b383251ecff47', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAzLCJpYXQiOjE2NzM0NTQ3NTV9.1CswVnuf9NOec9uKbzgToUo4DOHqrk7RuyirCWSMtS4', '2023-04-11'),
+('0ca123177a1d350ed7f26501951862f11ac12983', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAzLCJpYXQiOjE2NzMzNzQ2NjN9.lup2tmP6Pd_Oq82YMsE2XzwZiprUuBMMiaeQKx6lHh0', '2023-04-10');
 
 -- --------------------------------------------------------
 

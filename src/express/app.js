@@ -9,7 +9,6 @@ const routes = {
 	games: require('./routes/games'),
 	genres: require('./routes/genres'),
 	rewards: require('./routes/rewards'),
-	platforms_games: require('./routes/platforms_games'),
 	platforms: require('./routes/platforms'),
 	posts: require('./routes/posts'),
 	reviews: require('./routes/reviews'),

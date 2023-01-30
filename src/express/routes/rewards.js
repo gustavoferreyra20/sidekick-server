@@ -49,7 +49,7 @@ async function join(req, res) {
 			{
 			  model: models.rewards,
 			  through: {
-				attributes: []
+				attributes: ['amount']
 			  }
 			}
 		  ]

@@ -38,10 +38,33 @@ async function removeBo(req, res) {
 	res.status(200).json(rewards); 
 };
 
+async function join(req, res) {
+	let myBo = (req.query);
+	models.rewards.belongsToMany(models.users, {through: 'users_rewards', foreignKey: 'id_reward' })
+	models.users.belongsToMany(models.rewards, {through: 'users_rewards', foreignKey: 'id_user' })
+
+	const usersRewards = await models.users.findOne({ 
+		where: myBo,
+		include: [
+			{
+			  model: models.rewards,
+			  through: {
+				attributes: []
+			  }
+			}
+		  ]
+	
+	})
+
+	res.status(200).json(usersRewards.rewards); 
+};
+
+
 module.exports = {
 	getAll,
 	getBo,
 	create,
 	update,
-	removeBo
+	removeBo,
+	join
 };

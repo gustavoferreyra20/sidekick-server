@@ -45,7 +45,14 @@ async function join(req, res) {
 
 	const gamePlatforms = await models.games.findOne({ 
 		where: myBo,
-		include: [ models.platforms ]
+		include: [
+			{
+			  model: models.platforms,
+			  through: {
+				attributes: []
+			  }
+			}
+		  ]
 	})
 	res.status(200).json(gamePlatforms.platforms); 
 };

@@ -6,7 +6,7 @@ const { DataTypes } = require('sequelize');
 // This function will automatically receive as parameter the Sequelize connection object.
 module.exports = (sequelize) => {
 	sequelize.define('tokens', {
-		session: {type:DataTypes.STRING, primaryKey:true},
+		session: {type:DataTypes.STRING, autoIncrement: true, primaryKey:true},
 		token: DataTypes.STRING,
         expire: DataTypes.DATE,
 }, {

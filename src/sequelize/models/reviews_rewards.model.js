@@ -5,12 +5,9 @@ const { DataTypes } = require('sequelize');
 // We export a function that defines the model.
 // This function will automatically receive as parameter the Sequelize connection object.
 module.exports = (sequelize) => {
-	sequelize.define('rewards', {
-		id_reward: {type:DataTypes.INTEGER, autoIncrement: true, primaryKey:true},
-		name: DataTypes.STRING,
-        description: DataTypes.STRING,
-        price: DataTypes.DECIMAL,
-        img: DataTypes.TIME,
+	sequelize.define('reviews_rewards', {
+		id_review: DataTypes.INTEGER,
+		id_reward: DataTypes.INTEGER
 }, {
     freezeTableName: true,
 	timestamps: false

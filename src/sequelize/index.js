@@ -20,7 +20,8 @@ const modelDefiners = [
 	require('./models/users.model'),
 	require('./models/modes.model'),
 	require('./models/applications.model'),
-	require('./models/users_rewards.model')
+	require('./models/users_rewards.model'),
+	require('./models/reviews_rewards.model')
 
 	// Add more models here...
 	// require('./models/item'),

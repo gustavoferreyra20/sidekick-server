@@ -93,6 +93,13 @@ for (const [routeName, routeController] of Object.entries(routes)) {
 			makeHandlerAwareOfAsyncErrors(routeController.join)
 		);
 	}
+	// get specific objects which matches
+	if (routeController.joinDelete) {
+		app.delete(
+			`/api/${routeName}/join`,
+			makeHandlerAwareOfAsyncErrors(routeController.joinDelete)
+		);
+	}
 	// create an object
 	if (routeController.create) {
 		app.post(

@@ -6,7 +6,7 @@ const { DataTypes } = require('sequelize');
 // This function will automatically receive as parameter the Sequelize connection object.
 module.exports = (sequelize) => {
 	sequelize.define('applications', {
-		id_application: {type:DataTypes.INTEGER, primaryKey:true},
+		id_application: {type:DataTypes.INTEGER, autoIncrement: true, primaryKey:true},
         id_post: DataTypes.INTEGER,
 		id_user: DataTypes.INTEGER,
 		status: DataTypes.STRING

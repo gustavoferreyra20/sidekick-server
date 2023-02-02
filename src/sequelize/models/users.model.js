@@ -7,7 +7,7 @@ const bcryptjs = require('bcryptjs');
 // This function will automatically receive as parameter the Sequelize connection object.
 module.exports = (sequelize) => {
 	sequelize.define('users', {
-		id_user: {type:DataTypes.INTEGER, primaryKey:true},
+		id_user: {type:DataTypes.INTEGER, autoIncrement: true,primaryKey:true},
 		name: DataTypes.STRING,
         email: DataTypes.STRING,
         password: DataTypes.STRING,

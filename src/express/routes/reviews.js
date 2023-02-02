@@ -15,6 +15,16 @@ async function getBo(req, res) {
 async function create(req, res) {
 	let myBo = (req.body);
 	const review = await models.reviews.create(myBo);
+	if(myBo.reward != undefined){
+		models.rewards.belongsToMany(models.reviews, { through: 'reviews_rewards', foreignKey: 'id_reward' });
+		models.reviews.belongsToMany(models.rewards, { through: 'reviews_rewards', foreignKey: 'id_review' });
+
+		try{
+			await review.addReward(myBo.reward);
+        }catch(e){
+            console.error(e);
+        }
+	  }
 	res.status(200).json(review); 
 	
 };

@@ -43,20 +43,36 @@ async function join(req, res) {
 	models.rewards.belongsToMany(models.users, {through: 'users_rewards', foreignKey: 'id_reward' })
 	models.users.belongsToMany(models.rewards, {through: 'users_rewards', foreignKey: 'id_user' })
 
-	const usersRewards = await models.users.findOne({ 
-		where: myBo,
-		include: [
-			{
-			  model: models.rewards,
-			  through: {
-				attributes: ['amount']
-			  }
-			}
-		  ]
-	
+	const user = await models.users.findOne({ where: myBo })
+	const rewards = await user.getRewards({ joinTableAttributes: ['amount'] });
+
+	res.status(200).json(rewards); 
+};
+
+async function joinDelete(req, res) {
+	let myBo = (req.query);
+	models.rewards.belongsToMany(models.users, {through: 'users_rewards', foreignKey: 'id_reward'})
+	models.users.belongsToMany(models.rewards, {through: 'users_rewards', foreignKey: 'id_user'})
+
+	const user = await models.users.findOne({ 
+		where: {id_user: myBo.id_user},
+		attributes:{ exclude: ['password']}		
 	})
 
-	res.status(200).json(usersRewards.rewards); 
+	const reward = await models.rewards.findOne({ 
+		where: {id_reward: myBo.id_reward}		
+	})
+	
+	
+	try{
+		var previousAmount = (await user.getRewards({where: {id_reward: myBo.id_reward}}))[0];
+		( typeof  previousAmount !== "undefined") ? previousAmount = previousAmount['users_rewards']['dataValues']['amount'] : previousAmount = 0;
+		res.status(200).json(await user.addRewards(reward,{through: {amount: (previousAmount > 0) ? previousAmount - 1 : 0}})); 
+	}catch(e){
+		console.error(e);
+	} 
+		
+
 };
 
 
@@ -66,5 +82,6 @@ module.exports = {
 	create,
 	update,
 	removeBo,
-	join
+	join,
+	joinDelete
 };

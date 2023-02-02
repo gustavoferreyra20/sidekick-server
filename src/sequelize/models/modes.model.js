@@ -6,7 +6,7 @@ const { DataTypes } = require('sequelize');
 // This function will automatically receive as parameter the Sequelize connection object.
 module.exports = (sequelize) => {
 	sequelize.define('modes', {
-		id_mode: {type:DataTypes.INTEGER, primaryKey:true},
+		id_mode: {type:DataTypes.INTEGER, autoIncrement: true, primaryKey:true},
 		name: DataTypes.STRING,
 }, {
     freezeTableName: true,

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 24-01-2023 a las 16:24:47
+-- Tiempo de generación: 02-02-2023 a las 03:04:04
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -35,19 +35,18 @@ CREATE TABLE IF NOT EXISTS `applications` (
   `id_user` int(11) NOT NULL,
   `status` varchar(45) NOT NULL DEFAULT 'pending',
   PRIMARY KEY (`id_application`)
-) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=48 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `applications`
 --
 
 INSERT INTO `applications` (`id_application`, `id_post`, `id_user`, `status`) VALUES
-(4, 21, 32, 'pending'),
+(4, 21, 32, 'accepted'),
 (9, 21, 93, 'accepted'),
-(8, 20, 93, 'pending'),
-(28, 24, 103, 'pending'),
+(8, 20, 93, 'accepted'),
 (40, 21, 103, 'accepted'),
-(42, 22, 64, 'pending');
+(42, 22, 64, 'accepted');
 
 -- --------------------------------------------------------
 
@@ -232,30 +231,89 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   `id_post` int(11) NOT NULL,
   `abilityScore` int(11) NOT NULL,
   `karmaScore` int(11) NOT NULL,
-  `comment` varchar(280) NOT NULL,
+  `comment` varchar(280) DEFAULT NULL,
   PRIMARY KEY (`id_review`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=64 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `reviews`
 --
 
 INSERT INTO `reviews` (`id_review`, `id_writerUser`, `id_user`, `id_post`, `abilityScore`, `karmaScore`, `comment`) VALUES
-(1, 93, 103, 20, 80, 90, 'comment'),
-(3, 64, 103, 19, 37, 45, 'comment'),
-(4, 64, 103, 19, 40, 20, 'comment');
+(27, 103, 103, 21, 50, 50, NULL),
+(26, 103, 103, 21, 74, 73, NULL),
+(25, 103, 32, 21, 85, 25, NULL),
+(24, 103, 93, 21, 50, 84, NULL),
+(23, 103, 103, 21, 50, 50, NULL),
+(22, 103, 32, 21, 50, 50, NULL),
+(21, 103, 93, 21, 50, 50, NULL),
+(20, 103, 103, 21, 50, 50, NULL),
+(19, 103, 32, 21, 50, 50, NULL),
+(18, 103, 93, 21, 50, 50, NULL),
+(17, 103, 103, 21, 50, 50, NULL),
+(16, 103, 103, 21, 50, 50, NULL),
+(15, 103, 103, 21, 50, 50, NULL),
+(28, 103, 32, 21, 50, 50, NULL),
+(29, 103, 93, 20, 50, 50, NULL),
+(30, 103, 32, 21, 50, 78, NULL),
+(31, 103, 32, 21, 50, 19, NULL),
+(32, 103, 32, 21, 50, 50, NULL),
+(33, 103, 32, 21, 50, 50, NULL),
+(34, 103, 32, 21, 50, 50, NULL),
+(35, 103, 32, 21, 50, 50, NULL),
+(36, 103, 32, 21, 50, 50, NULL),
+(37, 103, 32, 21, 50, 50, NULL),
+(38, 103, 32, 21, 50, 50, NULL),
+(39, 103, 32, 21, 50, 50, NULL),
+(40, 103, 32, 21, 50, 50, NULL),
+(41, 103, 32, 21, 50, 50, NULL),
+(42, 103, 32, 21, 76, 50, NULL),
+(43, 103, 32, 21, 50, 50, NULL),
+(44, 103, 32, 21, 50, 50, NULL),
+(45, 103, 32, 21, 50, 50, NULL),
+(46, 103, 93, 21, 50, 50, NULL),
+(47, 103, 93, 21, 50, 50, NULL),
+(48, 103, 32, 21, 50, 50, NULL),
+(49, 103, 32, 21, 50, 50, NULL),
+(50, 103, 32, 21, 50, 50, NULL),
+(51, 103, 32, 21, 50, 50, NULL),
+(52, 103, 32, 21, 50, 50, NULL),
+(53, 103, 32, 21, 50, 50, NULL),
+(54, 103, 32, 21, 50, 50, NULL),
+(55, 103, 32, 21, 50, 50, NULL),
+(56, 103, 32, 21, 50, 50, NULL),
+(57, 103, 32, 21, 50, 50, NULL),
+(58, 103, 32, 21, 50, 50, NULL),
+(59, 103, 32, 21, 50, 50, NULL),
+(60, 103, 32, 21, 50, 50, NULL),
+(61, 103, 32, 21, 50, 50, NULL),
+(62, 103, 32, 21, 50, 50, NULL),
+(63, 103, 32, 21, 50, 50, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `reviews_reward`
+-- Estructura de tabla para la tabla `reviews_rewards`
 --
 
-DROP TABLE IF EXISTS `reviews_reward`;
-CREATE TABLE IF NOT EXISTS `reviews_reward` (
+DROP TABLE IF EXISTS `reviews_rewards`;
+CREATE TABLE IF NOT EXISTS `reviews_rewards` (
   `id_review` int(11) NOT NULL,
   `id_reward` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `reviews_rewards`
+--
+
+INSERT INTO `reviews_rewards` (`id_review`, `id_reward`) VALUES
+(53, 1),
+(54, 1),
+(55, 1),
+(56, 1),
+(61, 2),
+(62, 2),
+(63, 2);
 
 -- --------------------------------------------------------
 
@@ -395,6 +453,28 @@ CREATE TABLE IF NOT EXISTS `users_platforms` (
   `id_user` int(11) NOT NULL,
   `id_platform` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `users_rewards`
+--
+
+DROP TABLE IF EXISTS `users_rewards`;
+CREATE TABLE IF NOT EXISTS `users_rewards` (
+  `id_user` int(11) NOT NULL,
+  `id_reward` int(11) NOT NULL,
+  `amount` int(11) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `users_rewards`
+--
+
+INSERT INTO `users_rewards` (`id_user`, `id_reward`, `amount`) VALUES
+(103, 2, 0),
+(103, 1, 5),
+(103, 3, 5);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

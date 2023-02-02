@@ -65,9 +65,12 @@ async function joinDelete(req, res) {
 	
 	
 	try{
-		var previousAmount = (await user.getRewards({where: {id_reward: myBo.id_reward}}))[0];
-		( typeof  previousAmount !== "undefined") ? previousAmount = previousAmount['users_rewards']['dataValues']['amount'] : previousAmount = 0;
-		res.status(200).json(await user.addRewards(reward,{through: {amount: (previousAmount > 0) ? previousAmount - 1 : 0}})); 
+		var previousAmount = (await user.getRewards({where: {id_reward: myBo.id_reward}}))[0]['users_rewards']['dataValues']['amount'];
+		if ( typeof  previousAmount !== "undefined" &&  previousAmount > 1) {
+			res.status(200).json(await user.addRewards(reward,{through: {amount: previousAmount - 1}})); 
+		} else{
+			res.status(200).json(await user.removeReward(reward)); 
+		}
 	}catch(e){
 		console.error(e);
 	} 

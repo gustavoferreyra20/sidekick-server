@@ -42,19 +42,14 @@ async function join(req, res) {
 	let myBo = (req.query);
 	models.games.belongsToMany(models.platforms, {through: 'platforms_games', foreignKey: 'id_game' })
 	models.platforms.belongsToMany(models.games, {through: 'platforms_games', foreignKey: 'id_platform' })
-
-	const gamePlatforms = await models.games.findOne({ 
-		where: myBo,
-		include: [
-			{
-			  model: models.platforms,
-			  through: {
-				attributes: []
-			  }
-			}
-		  ]
+	
+	models.games.findOne({where: myBo})
+	.then(function(game){
+		return game.getPlatforms({ joinTableAttributes: [] });
+	}).then(function(platforms){
+		res.status(200).json(platforms); 
 	})
-	res.status(200).json(gamePlatforms.platforms); 
+
 };
 
 module.exports = {

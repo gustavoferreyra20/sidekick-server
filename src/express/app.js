@@ -15,7 +15,6 @@ const routes = {
 	tokens: require('./routes/tokens'),
 	users: require('./routes/users'),
 	modes: require('./routes/modes'),
-	applications: require('./routes/applications')
 	// Add more routes here...
 	// items: require('./routes/items'),
 };
@@ -86,20 +85,6 @@ for (const [routeName, routeController] of Object.entries(routes)) {
 			makeHandlerAwareOfAsyncErrors(routeController.getBo)
 		);
 	}
-	// get specific objects which matches
-	if (routeController.join) {
-		app.get(
-			`/api/${routeName}/join`,
-			makeHandlerAwareOfAsyncErrors(routeController.join)
-		);
-	}
-	// get specific objects which matches
-	if (routeController.joinDelete) {
-		app.delete(
-			`/api/${routeName}/join`,
-			makeHandlerAwareOfAsyncErrors(routeController.joinDelete)
-		);
-	}
 	// create an object
 	if (routeController.create) {
 		app.post(
@@ -120,6 +105,28 @@ for (const [routeName, routeController] of Object.entries(routes)) {
 		app.delete(
 			`/api/${routeName}/bo`,
 			makeHandlerAwareOfAsyncErrors(routeController.removeBo)
+		);
+	}
+
+	// get specific objects which matches through intermediate table
+	if (routeController.join) {
+		app.get(
+			`/api/${routeName}/join`,
+			makeHandlerAwareOfAsyncErrors(routeController.join)
+		);
+	}
+	// remove objects which matches through intermediate table
+	if (routeController.joinDelete) {
+		app.delete(
+			`/api/${routeName}/join`,
+			makeHandlerAwareOfAsyncErrors(routeController.joinDelete)
+		);
+	}
+	// update objects which matches through intermediate table
+	if (routeController.joinUpdate) {
+		app.put(
+			`/api/${routeName}/join`,
+			makeHandlerAwareOfAsyncErrors(routeController.joinUpdate)
 		);
 	}
 }

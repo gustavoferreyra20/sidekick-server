@@ -48,7 +48,6 @@ async function join(req, res) {
 			include: [{ 
 				model: models.users,
 				attributes:{ exclude: ['password']},
-				through: { attributes: ['status'] }
 			 }],
 			
 		}) 
@@ -83,6 +82,17 @@ async function joinUpdate(req, res) {
 	res.status(200).json(await user.addPosts(post, {through: {status: myBo.status}})); 
 };
 
+async function joinDelete(req, res) {
+	let myBo = (req.query);
+	const user = await models.users.findByPk( myBo.id_user); 
+	const post = await models.posts.findByPk( myBo.id_post);
+	try{
+		res.status(200).json(await user.removePosts(post)); 
+	}catch(e){
+		console.error(e);
+	} 
+		
+};
 
 module.exports = {
 	getAll,
@@ -90,5 +100,6 @@ module.exports = {
 	create,
 	joinUpdate,
 	removeBo,
-	join
+	join,
+	joinDelete
 };

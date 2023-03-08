@@ -13,11 +13,15 @@ async function getBo(req, res) {
 		let dbPassword = myBo.password
 		delete myBo['password'];
 		user = await models.users.findAll({ where: myBo } )
-		if(bcryptjs.compareSync(dbPassword, user[0].password)){
-			user[0].password = undefined;
-			res.status(200).json(user);
+		if(user.length > 0){
+			if(bcryptjs.compareSync(dbPassword, user[0].password)){
+				user[0].password = undefined;
+				res.status(200).json(user);
+			}else{
+				res.status(200).json({});
+			}
 		} else {
-			res.status(404).send('404 - Not found');
+			res.status(200).send(user);
 		}
 	} else if (user = await models.users.findAll({ where: myBo, attributes:{ exclude: ['password']}})) {
 		res.status(200).json(user);

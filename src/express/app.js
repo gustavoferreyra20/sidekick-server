@@ -33,12 +33,12 @@ app.use(cors());
 
 // adding morgan to log HTTP requests
 app.use(morgan('dev'));
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // We create a wrapper to workaround async errors not being transmitted correctly.
 function makeHandlerAwareOfAsyncErrors(handler) {
-	return async function(req, res, next) {
+	return async function (req, res, next) {
 		try {
 			await handler(req, res);
 		} catch (error) {
@@ -49,19 +49,18 @@ function makeHandlerAwareOfAsyncErrors(handler) {
 
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
-	  cb(null, './uploads')      //you tell where to upload the files,
+		cb(null, './uploads')      //you tell where to upload the files,
 	},
 	filename: function (req, file, cb) {
-	  cb(null, file.fieldname + '-' + Date.now() + '.png')
+		cb(null, file.fieldname + '-' + Date.now() + '.png')
 	}
-  })
+})
 
-var upload = multer({storage: storage});
+var upload = multer({ storage: storage });
 
-app.post(`/api/imageupload`,upload.single('file'),function(req,res){
-    //req.file will now be available as a json object, save to mongodb, re: filename, path etc
-	console.log(req.file)
-    res.send(req.file)
+app.post(`/api/imageupload`, upload.single('file'), function (req, res) {
+	//req.file will now be available as a json object, save to mongodb, re: filename, path etc
+	res.send(req.file)
 })
 
 app.get(

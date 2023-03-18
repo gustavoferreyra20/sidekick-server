@@ -28,7 +28,7 @@ app.use(helmet());
 // using bodyParser to parse JSON bodies into JS objects
 app.use(bodyParser.json());
 
-// enabling CORS for all requests
+// permite aceptar solicitudes de cualquier origen
 app.use(cors());
 
 // adding morgan to log HTTP requests
@@ -67,6 +67,12 @@ app.get(
 	`/api/reviews/avg`,
 	makeHandlerAwareOfAsyncErrors(routes.reviews.getAvg)
 );
+
+app.get("/api/images/*", (req, res) => {
+	const filepath = req.params[0];
+	const imagePath = __dirname + '/img/' + filepath;
+	res.sendFile(imagePath);
+});
 
 // We define the standard REST APIs for each route (if they exist).
 for (const [routeName, routeController] of Object.entries(routes)) {

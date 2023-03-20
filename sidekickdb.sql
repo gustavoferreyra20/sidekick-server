@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 18-03-2023 a las 18:53:11
+-- Tiempo de generación: 20-03-2023 a las 17:58:47
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -42,14 +42,11 @@ CREATE TABLE IF NOT EXISTS `applications` (
 --
 
 INSERT INTO `applications` (`id_application`, `id_post`, `id_user`, `status`) VALUES
-(4, 21, 32, 'accepted'),
-(9, 21, 93, 'rejected'),
+(4, 21, 119, 'pending'),
 (8, 20, 93, 'pending'),
-(51, 21, 40, 'reviewed'),
-(48, 21, 30, 'pending'),
-(49, 21, 75, 'pending'),
-(42, 22, 64, 'pending'),
-(50, 21, 12, 'pending'),
+(48, 21, 103, 'pending'),
+(42, 22, 93, 'pending'),
+(50, 21, 93, 'pending'),
 (68, 22, 103, 'pending');
 
 -- --------------------------------------------------------
@@ -399,7 +396,7 @@ CREATE TABLE IF NOT EXISTS `tokens` (
 --
 
 INSERT INTO `tokens` (`session`, `token`, `expire`) VALUES
-('6bb47952d73514eaef0b386bf96ba4f2cdeda92d', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAzLCJpYXQiOjE2NzkxNTc5NTB9.XWrc47Qe4j50IV1JqWrO0s3FuRjZ1HVb2NAQ4FkgIpo', '2023-06-16');
+('04cb41a67989cacedfcfebd17098acb34c3d4af5', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAzLCJpYXQiOjE2NzkzMzMyNDR9.pX8Ez13wgo1aysl4ux_4nPtb-Tbh4Q2dPYhIl54Rix0', '2023-06-18');
 
 -- --------------------------------------------------------
 
@@ -416,50 +413,16 @@ CREATE TABLE IF NOT EXISTS `users` (
   `description` varchar(280) DEFAULT NULL,
   `img` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id_user`)
-) ENGINE=MyISAM AUTO_INCREMENT=134 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=136 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `users`
 --
 
 INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `description`, `img`) VALUES
-(74, 'mariano', 'mariano@gmail.com', '$2a$10$rHI2bW0GyFZZf1K8MepjuOttVaQOkHAVuJiXCE2cox5VQ5WY2ZK9u', NULL, NULL),
-(69, 'ryan', 'ryan@gmail.com', '$2a$10$b1lEqv8OzYRe2v5avV3CMO42HOZUKQYW0JcrD/mjzbZYEXtBbsIKa', NULL, NULL),
-(70, 'ryan2', 'ryan2@gmail.com', '$2a$10$I7hSQ/HlJ2.MgaPN7Ccx.eAqQzXRkFYhyCTigO.p5xnRSC9oNcziy', NULL, NULL),
-(71, 'harry', 'harry@gmail.com', '$2a$10$N7m/36dQ0xP4SPTuOJct..dO9EirrEQvlyA8MbJr10WDhMa9jIK1a', NULL, NULL),
-(72, 'walter', 'walter@gmail.com', '$2a$10$SrK/o2SqhSCNCfu7VeD45O4pWfgCBiyjqHL1QiVh7gzw6aox9aCmm', NULL, NULL),
-(73, 'topa', 'topa@gmail.com', '$2a$10$Y7uNjZt.Waohle8zph6YJumrdAtoVwT8ARdgMQN.2ccoC5NoNsAZe', NULL, NULL),
-(75, 'brad', 'brad@gmail.com', '$2a$10$/1HYP0a/1iOSQ3MeReA4J.Lrfs6XPbYLzbkvK6Etyll4kCy6py2A2', NULL, NULL),
-(88, 'iiiiii', 'ae', '$2a$10$TNhq5harAb7Bsaiq45iGD.q3THjH5q9ODhXrkMhqY8HGRoY2MXx7W', 'iiiiii', 'ee'),
-(90, 'undefined', 'joel@gmail.com', '$2a$10$o3xWibl.I6BO/f64M6P4ketSDPb.PI5rUxVt16DR7a9UvPlyxzSRm', NULL, NULL),
-(91, 'undefined', 'guillo@gmail.com', '$2a$10$L2LPW5vzq/yZ5iXBFYu/jeMWAUVtImgJwS/hJGP3cVWMJVM9ADD4e', NULL, NULL),
-(92, 'helado', 'helado@gmail.com', '$2a$10$HBshxrqOGucneuj1N/sK0eKRlG2Od4hBO94q7bI8Fzi0IjHCK5ivS', NULL, NULL),
-(93, 'luke', 'luke@gmail.com', '$2a$10$wOCtMtYGPg4/n6Np1YCSTutqTyttsrNWzQoM2y89L58gkRKltu3bO', NULL, NULL),
-(96, 'afwafwafawf', 'luke@gmail.com', '$2a$10$/VKBBGGpdkjIA3p2EVrGs.zyUKYjnmV8apXGY2keKlHK8jQZlOWka', NULL, NULL),
-(95, 'luke2', 'luke2@gmail.com', '$2a$10$Kx4CrcQFvlsawOQxtvhW/enUZGXozEcTklI5Egpa16qGdpSkDqMy6', NULL, NULL),
-(97, 'awfawfwafawf', 'luke@gmail.com', '$2a$10$jo6afh.s1E7nGUsjjcEzd.uWfjzc9JXP3VDDFex6x/dgRulBY96eq', NULL, NULL),
-(98, 'luke3', 'luke3@gmail.com', '$2a$10$NZlkM7uTW2PQyVdnG/4r/eLjH8CSY5.V.OOfbKL9e0lcBSZwZYIUS', NULL, NULL),
-(99, 'messi', 'messi@gmail.com', '$2a$10$/Er55uTq5P8b8AJY4m/TV.KePJS2e0xy2HgREDHrZVXoEOOu0DkEK', NULL, NULL),
-(100, 'leo', 'leo@gmail.com', '$2a$10$.j0zNpfPfbtQpjn0DAyM3utYRkYkZ7zZDtLgPnImqL9DVx8CaenRq', NULL, NULL),
-(104, 'morrisey', 'morrisey@gmail.com', '$2a$10$FgfBwj7tXQqOFxl.ih0oBe.yxrrkmdZzH.X5clJmbFaZhzdV.eAsK', NULL, NULL),
-(102, 'goofy2', 'goofy@gmail.com', '$2a$10$6HY72BtVZiyNGQZaXlLtI.OwHaH3NNtG9zYuZLyFGn5Zb78F7aHO2', NULL, NULL),
-(103, 'david', 'david@gmail.com', '$2a$10$tGBBfdEVwA947WjVWDDhCejs1eBilRQhBZI7L15MCBCptfu3OVlL6', 'description', NULL),
-(125, 'angular', 'angular@gmail.com', '$2a$10$k.Aw3onYwqACtybY2Vj/quXSfh1ZFeOM08Fa0fE922FfgCMXuTMw6', 'awdwad', 'uploads\\file-1675897478137.png'),
-(107, 'text area', 'text@gmail.com', '$2a$10$AiQj8V7lyE2tOQxrZliMgupsIgardAr74MW/Pt08vCT6FClPEo4b2', 'testing text area', NULL),
-(124, 'axi', 'axi@gmail.com', '$2a$10$FZinRDJOOTtFbhnzVqFj3.UvfzsmyPuZoisC92a8DHVF6L0rYPe1e', '', NULL),
-(118, 'artyiom', 'artyiom@gmail.com', '$2a$10$gg0sNl0wPrABRU5SAgNcSecL75edLtzrHHp5M0ESxq9q0MxbPLYF.', '', 'uploads\\file-1665959320637.png'),
-(119, 'test images2', 'images2@gmail.com', '$2a$10$d8oit8vIm3LjPrIp8savGu6dCYx/95kPZb9EZ8cCF09GTDxRhueo6', '', 'uploads\\file-1668613614142.png'),
-(115, 'awfawf', 'awawf@waffw', '$2a$10$JCATRniA4xjPDLwY6HX4AOE.XcZYaEmHaB68fYJfaHHOEgFKfE7GW', '', '\\uploads\\file-1665795770383.png'),
-(116, 'awfawff', 'fafwa@fafw', '$2a$10$SS3bht4mDKntJObdc4Al1uy1JtJuclAz.gZvZV2YEI8vewwKJ3gvK', 'afkjjhawf', '\\uploads\\file-1665795813643.png'),
-(117, 'testing multer', 'multer@gmail.com', '$2a$10$fWlfboAnbNrRLkxB4kL2Y.viRf5jIqM7gvUWepnAjB9qb2n8yvqTm', '', 'uploads\\file-1665797001578.png'),
-(126, 'angular2', 'angular2@gmail.com', '$2a$10$4UoeMYbkbILY/0SFkFJXNOjtUw3ILu6XatzfBaKmHcGnBiK58edRW', '', 'uploads\\file-1675897544906.png'),
-(127, 'test image', 'imagenull@gmail.com', '$2a$10$9P.3cCmb6J2k/PtH8yC/hu.19q6.4m6VFqQF3Dd39j7dAPJ14fy1C', '', 'uploads\\file-1675897676037.png'),
-(128, 'empty image', 'emptyimage@gmail.com', '$2a$10$rl0dcHSoWWtxN6LkrILvlOe0UVq11jI4G1y2rPWUjEQKNQkqegq06', '', NULL),
-(129, 'empty image 2', 'emptyimage2@gmail.com', '$2a$10$UyJs99n50UcfPUuGkZYHc.iLOzpkatB/dmnz.Jjk/qnU8L1kohDaq', '', NULL),
-(130, 'david@gmail.com', 'david02@gmail.com', '$2a$10$LhFNgSRfrDLZJZysNVu2leSkpyYHgO/mzUmO3Zk/A7Txb.j1dh0r6', NULL, NULL),
-(131, 'multer1', 'multer1@gmail.com', '$2a$10$XsMNaPjPdjUW3zYXCcmaquxPVEEsj7/wZbB3SY/t8DiYJaI2Tzcia', NULL, 'uploads\\file-1679154015402.png'),
-(132, 'multer3', 'multer3@gmail.com', '$2a$10$X29woo9PutvSw0HiU9LQt.swl8cy4ZeZsNdtRgXHO2wY.j/a0Rvfy', NULL, 'uploads\\file-1679155008137.png'),
-(133, 'multer3', 'multer4@gmail.com', '$2a$10$oVXtayb4mVSFEvuZ3IxnIOno3y34s5wqr/tjbvjX08iqI1Q4qgG8W', NULL, NULL);
+(119, 'testimg2', 'testimg2@gmail.com', '$2a$10$DFrSPt3NCiDXYKPSBZTLleXfJt0o.3VBywzCrxI2p7pT4Jn26ldKi', 'testimg', 'profiles/test.png'),
+(93, 'luke', 'luke@gmail.com', '$2a$10$wOCtMtYGPg4/n6Np1YCSTutqTyttsrNWzQoM2y89L58gkRKltu3bO', NULL, 'profiles/default.png'),
+(103, 'david', 'david@gmail.com', '$2a$10$tGBBfdEVwA947WjVWDDhCejs1eBilRQhBZI7L15MCBCptfu3OVlL6', 'description', 'profiles/file-1679331073218.png');
 
 -- --------------------------------------------------------
 

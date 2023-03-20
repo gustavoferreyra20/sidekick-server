@@ -49,7 +49,7 @@ function makeHandlerAwareOfAsyncErrors(handler) {
 
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
-		cb(null, './uploads')      //you tell where to upload the files,
+		cb(null, './src/express/img/profiles')      //you tell where to upload the files,
 	},
 	filename: function (req, file, cb) {
 		cb(null, file.fieldname + '-' + Date.now() + '.png')

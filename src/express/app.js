@@ -15,6 +15,7 @@ const routes = {
 	tokens: require('./routes/tokens'),
 	users: require('./routes/users'),
 	modes: require('./routes/modes'),
+	contact_inf: require('./routes/contact_inf')
 	// Add more routes here...
 	// items: require('./routes/items'),
 };

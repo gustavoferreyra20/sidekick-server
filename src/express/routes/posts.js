@@ -95,6 +95,37 @@ async function joinUpdate(req, res) {
 
 	const user = await models.users.findByPk(myBo.id_user);
 	const post = await models.posts.findByPk(myBo.id_post);
+	
+	// count all accepted applications
+	const actualUsers = await models.users.count({
+		include: [{
+		  model: models.posts,
+		  where: {
+			id_post: myBo.id_post
+		  },
+		  through: {
+			where: {
+			  status: 'accepted'
+			}
+		  }
+		}]
+	  });
+
+	// update actualUsers
+	if(req.query.status != undefined){
+		const status = req.query.status;
+
+		if(status == 'accepted'){
+			post.actualUsers = actualUsers + 1;
+		}
+
+		if(status == 'removed'){
+			post.actualUsers = actualUsers - 1;
+		}
+
+		await post.save();
+	} 
+
 	res.status(200).json(await user.addPosts(post, { through: { status: myBo.status } }));
 };
 

@@ -1,8 +1,9 @@
 const { models } = require('../../sequelize/index');
 const Op = require('sequelize').Op;
+const sequelize = require("../../sequelize/index");
+
 models.users.belongsToMany(models.posts, { through: 'applications', foreignKey: 'id_user' });
 models.posts.belongsToMany(models.users, { through: 'applications', foreignKey: 'id_post' });
-const sequelize = require("../../sequelize/index");
 
 async function getAll(req, res) {
 	const [results, metadata] = await sequelize.query('SELECT 	p.*, u.name AS userName, u.img AS userImg, g.name AS gameName, g.img AS gameImg, m.name AS mode, pf.name AS platform, ROUND(IFNULL(AVG(r.abilityScore), 0)) AS abilityScore, ROUND(IFNULL(AVG(r.karmaScore), 0)) AS karmaScore FROM posts p INNER JOIN users u ON p.id_user = u.id_user INNER JOIN games g ON p.id_game = g.id_game INNER JOIN modes m ON p.id_mode = m.id_mode INNER JOIN platforms pf ON p.id_platform = pf.id_platform LEFT JOIN reviews r ON p.id_user = r.id_user GROUP BY p.id_post ');
@@ -95,36 +96,36 @@ async function joinUpdate(req, res) {
 
 	const user = await models.users.findByPk(myBo.id_user);
 	const post = await models.posts.findByPk(myBo.id_post);
-	
+
 	// count all accepted applications
 	const actualUsers = await models.users.count({
 		include: [{
-		  model: models.posts,
-		  where: {
-			id_post: myBo.id_post
-		  },
-		  through: {
+			model: models.posts,
 			where: {
-			  status: 'accepted'
+				id_post: myBo.id_post
+			},
+			through: {
+				where: {
+					status: 'accepted'
+				}
 			}
-		  }
 		}]
-	  });
+	});
 
 	// update actualUsers
-	if(req.query.status != undefined){
+	if (req.query.status != undefined) {
 		const status = req.query.status;
 
-		if(status == 'accepted'){
+		if (status == 'accepted') {
 			post.actualUsers = actualUsers + 1;
 		}
 
-		if(status == 'removed'){
+		if (status == 'removed') {
 			post.actualUsers = actualUsers - 1;
 		}
 
 		await post.save();
-	} 
+	}
 
 	res.status(200).json(await user.addPosts(post, { through: { status: myBo.status } }));
 };

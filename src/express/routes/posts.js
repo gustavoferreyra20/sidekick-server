@@ -97,12 +97,33 @@ async function joinUpdate(req, res) {
 	const user = await models.users.findByPk(myBo.id_user);
 	const post = await models.posts.findByPk(myBo.id_post);
 
+	if (myBo.status != undefined) {
+		await updateActualUsers(myBo.id_post, myBo.status)
+	}
+
+	res.status(200).json(await user.addPosts(post, { through: { status: myBo.status } }));
+};
+
+async function joinDelete(req, res) {
+	let myBo = (req.query);
+	const user = await models.users.findByPk(myBo.id_user);
+	const post = await models.posts.findByPk(myBo.id_post);
+
+	await updateActualUsers(myBo.id_post, 'rejected')
+
+	res.status(200).json(await user.removePosts(post));
+
+};
+
+async function updateActualUsers(id_post, status) {
+	const post = await models.posts.findByPk(id_post);
+
 	// count all accepted applications
 	const actualUsers = await models.users.count({
 		include: [{
 			model: models.posts,
 			where: {
-				id_post: myBo.id_post
+				id_post: id_post
 			},
 			through: {
 				where: {
@@ -113,34 +134,16 @@ async function joinUpdate(req, res) {
 	});
 
 	// update actualUsers
-	if (req.query.status != undefined) {
-		const status = req.query.status;
-
-		if (status == 'accepted') {
-			post.actualUsers = actualUsers + 1;
-		}
-
-		if (status == 'removed') {
-			post.actualUsers = actualUsers - 1;
-		}
-
-		await post.save();
+	if (status == 'accepted') {
+		post.actualUsers = actualUsers + 1;
 	}
 
-	res.status(200).json(await user.addPosts(post, { through: { status: myBo.status } }));
-};
-
-async function joinDelete(req, res) {
-	let myBo = (req.query);
-	const user = await models.users.findByPk(myBo.id_user);
-	const post = await models.posts.findByPk(myBo.id_post);
-	try {
-		res.status(200).json(await user.removePosts(post));
-	} catch (e) {
-		console.error(e);
+	if (status == 'rejected') {
+		post.actualUsers = actualUsers - 1;
 	}
 
-};
+	await post.save();
+}
 
 module.exports = {
 	getAll,

@@ -1,6 +1,7 @@
 const app = require('./src/express/app');
 const sequelize = require('./src/sequelize');
 const PORT = 3000;
+const IP_ADDRESS = '192.168.1.82'; // Force ip_address
 
 async function assertDatabaseConnectionOk() {
 	console.log(`Checking database connection...`);
@@ -14,14 +15,28 @@ async function assertDatabaseConnectionOk() {
 	}
 }
 
+const os = require('os'); // Module to get local IP 
+
 async function init() {
 	await assertDatabaseConnectionOk();
 
-	console.log(`Starting SideKick on port ${PORT}...`);
+	const interfaces = os.networkInterfaces();
+	const addresses = [];
 
-    // starting the server
-	app.listen(PORT, () => {
-		console.log(`Express server started on port ${PORT}. Try some routes, such as '/api/games'.`);
+	Object.values(interfaces).forEach(iface =>
+		iface.forEach(addr => {
+			if (addr.family === 'IPv4' && !addr.internal) {
+				addresses.push(addr.address);
+			}
+		})
+	);
+
+	console.log(`Starting SideKick on port ${PORT}...`);
+	console.log(`Internal IP addresses: ${addresses.join(', ')}`);
+
+	// starting the server
+	app.listen(PORT, IP_ADDRESS, () => {
+		console.log(`Express server started at ${IP_ADDRESS}:${PORT}. Try some routes, such as '/api/games'.`);
 	});
 }
 

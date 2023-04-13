@@ -28,7 +28,7 @@ async function getBo(req, res) {
 		values.push(myBo.id_mode);
 	}
 
-	const [results, metadata] = await sequelize.query(`SELECT p.*, u.name AS userName, g.name AS gameName, g.img AS gameImg, m.name AS mode, pf.name AS platform, ROUND(IFNULL(AVG(r.abilityScore), 0)) AS abilityScore, ROUND(IFNULL(AVG(r.karmaScore), 0)) AS karmaScore FROM posts p INNER JOIN users u ON p.id_user = u.id_user INNER JOIN games g ON p.id_game = g.id_game INNER JOIN modes m ON p.id_mode = m.id_mode INNER JOIN platforms pf ON p.id_platform = pf.id_platform LEFT JOIN reviews r ON p.id_user = r.id_user WHERE 1=1 ${whereClause} GROUP BY p.id_post`, { replacements: values });
+	const [results, metadata] = await sequelize.query(`SELECT p.*, u.name AS userName, u.img AS userImg, g.name AS gameName, g.img AS gameImg, m.name AS mode, pf.name AS platform, ROUND(IFNULL(AVG(r.abilityScore), 0)) AS abilityScore, ROUND(IFNULL(AVG(r.karmaScore), 0)) AS karmaScore FROM posts p INNER JOIN users u ON p.id_user = u.id_user INNER JOIN games g ON p.id_game = g.id_game INNER JOIN modes m ON p.id_mode = m.id_mode INNER JOIN platforms pf ON p.id_platform = pf.id_platform LEFT JOIN reviews r ON p.id_user = r.id_user WHERE 1=1 ${whereClause} GROUP BY p.id_post`, { replacements: values });
 	res.status(200).json(results);
 };
 
@@ -37,14 +37,6 @@ async function create(req, res) {
 	const post = await models.posts.create(myBo);
 	res.status(200).json(post);
 
-};
-
-async function update(req, res) {
-	let myBo = (req.query);
-	const posts = await models.posts.update(JSON.parse(myBo.values), {
-		where: JSON.parse(myBo.cond)
-	})
-	res.status(200).json(posts);
 };
 
 async function removeBo(req, res) {

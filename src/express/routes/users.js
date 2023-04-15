@@ -63,7 +63,7 @@ async function joinUpdate(req, res) {
 	const user = await models.users.findByPk(myBo.id_user);
 
 	for (const element of myBo.contact_inf_list) {
-		const contact_inf = await models.contact_inf.findByPk(element.contact_account.id_contact_inf);
+		const contact_inf = await models.contact_inf.findByPk(element.platform.id_contact_inf);
 		await user.addContact_infs(contact_inf, { through: { nickname: element.account } })
 	};
 

@@ -12,7 +12,11 @@ module.exports = (sequelize) => {
         email: DataTypes.STRING,
         password: DataTypes.STRING,
         description: DataTypes.STRING,
-        img: DataTypes.STRING,
+        img: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: "profiles/default.png"
+        },
 }, {
     freezeTableName: true,
 	timestamps: false,

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 25-03-2023 a las 17:56:56
+-- Tiempo de generación: 15-05-2023 a las 18:55:02
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -35,18 +35,17 @@ CREATE TABLE IF NOT EXISTS `applications` (
   `id_user` int(11) NOT NULL,
   `status` varchar(45) NOT NULL DEFAULT 'pending',
   PRIMARY KEY (`id_application`)
-) ENGINE=MyISAM AUTO_INCREMENT=72 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=84 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `applications`
 --
 
 INSERT INTO `applications` (`id_application`, `id_post`, `id_user`, `status`) VALUES
-(4, 21, 119, 'removed'),
 (8, 20, 93, 'pending'),
 (42, 22, 93, 'pending'),
-(50, 21, 93, 'accepted'),
-(71, 21, 103, 'accepted');
+(83, 21, 103, 'accepted'),
+(82, 18, 103, 'pending');
 
 -- --------------------------------------------------------
 
@@ -237,7 +236,7 @@ INSERT INTO `posts` (`id_post`, `id_user`, `id_game`, `id_platform`, `id_mode`, 
 (22, 93, 1, 1, 1, 1, 0, 'awwafwaffw', '', '2023-01-10 17:58:21'),
 (23, 93, 2, 4, 4, 2, 0, 'test', 'seagfwaegawgwgg', '2023-01-10 17:58:56'),
 (24, 93, 1, 1, 1, 1, 0, 'ttttttttttttttt', '', '2023-01-10 18:12:28'),
-(21, 103, 3, 1, 2, 2, 2, 'test review stats', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-08 18:54:00'),
+(21, 103, 3, 1, 2, 2, 1, 'test review stats', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-08 18:54:00'),
 (18, 119, 2, 4, 2, 3, 0, 'test mode id', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-07 14:25:58');
 
 -- --------------------------------------------------------
@@ -408,18 +407,14 @@ INSERT INTO `rewards` (`id_reward`, `name`, `description`, `price`, `img`) VALUE
 
 DROP TABLE IF EXISTS `tokens`;
 CREATE TABLE IF NOT EXISTS `tokens` (
-  `session` varchar(300) NOT NULL,
+  `id_token` int(11) NOT NULL AUTO_INCREMENT,
+  `id_user` int(11) NOT NULL,
   `token` varchar(300) NOT NULL,
-  `expire` date NOT NULL,
-  PRIMARY KEY (`session`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `tokens`
---
-
-INSERT INTO `tokens` (`session`, `token`, `expire`) VALUES
-('a642729cb283213b8812fd4b8f2a1fc8fd29e7f4', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTc2LCJpYXQiOjE2Nzk3NjY3NTN9.cYI2hTgVe37QkO1ugBPJ_hfULOoqUdAsFprTSSEfQWU', '2023-06-23');
+  `creation_date` date NOT NULL DEFAULT current_timestamp(),
+  `expiration_date` date NOT NULL,
+  `platform` varchar(45) NOT NULL,
+  PRIMARY KEY (`id_token`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -436,18 +431,16 @@ CREATE TABLE IF NOT EXISTS `users` (
   `description` varchar(280) DEFAULT NULL,
   `img` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id_user`)
-) ENGINE=MyISAM AUTO_INCREMENT=177 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=205 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `users`
 --
 
 INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `description`, `img`) VALUES
-(119, 'testimg2', 'testimg2@gmail.com', '$2a$10$DFrSPt3NCiDXYKPSBZTLleXfJt0o.3VBywzCrxI2p7pT4Jn26ldKi', 'testimg', 'profiles/test.png'),
 (93, 'luke', 'luke@gmail.com', '$2a$10$wOCtMtYGPg4/n6Np1YCSTutqTyttsrNWzQoM2y89L58gkRKltu3bO', NULL, 'profiles/default.png'),
 (103, 'david', 'david@gmail.com', '$2a$10$tGBBfdEVwA947WjVWDDhCejs1eBilRQhBZI7L15MCBCptfu3OVlL6', 'description', 'profiles/file-1679331073218.png'),
-(175, '12414', 'qarawrwrrq@gmail.com', '$2a$10$nTBNzQ.Zv1N56Wg3PtELk.uxR9XxMHn7HtXHzbOBctY726lK008Be', NULL, NULL),
-(176, 'i', 'i@gmail.com', '$2a$10$uV0nib7mkLteTV0ObCNW9.99Leh3xusV7LQVKPj1U.zYyeaKE0hPC', NULL, 'profiles/file-1679766741629.png');
+(182, 'leoDV', 'leoDV@gmail.com', '$2a$10$L4u.jbWS/ZGjxYQq0lvsTeXMJHoBMV/4WerH5ax.eTiCAPShyikYa', NULL, 'profiles/file-1682195643474.png');
 
 -- --------------------------------------------------------
 
@@ -470,7 +463,34 @@ INSERT INTO `users_contact_inf` (`id_user`, `id_contact_inf`, `nickname`) VALUES
 (175, 3, 'awgwagawgawg'),
 (175, 1, 'awfwrr'),
 (176, 1, 'awfwafwaf'),
-(176, 3, 'awfawwaf');
+(176, 3, 'awfawwaf'),
+(177, 2, 'awfwafafawf'),
+(177, 3, 'qqqqqqqqqqqqqqq'),
+(178, 1, 'sonicD'),
+(178, 2, 'sonicPSN'),
+(179, 1, 'default@gmail.com'),
+(180, 1, 'default2@gmail.com'),
+(181, 1, 'default3@gmail.com'),
+(182, 1, 'leo'),
+(189, 1, 'Bbjjk'),
+(189, 3, 'Gvjkkkk'),
+(190, 1, 'Bbjjk'),
+(190, 3, 'Gvjkkkk'),
+(191, 1, 'Aaaaaaaa'),
+(191, 2, 'Bbbbbb'),
+(192, 1, 'Vvbbb'),
+(193, 1, 'Gghjj'),
+(194, 1, 'Ghhjj'),
+(195, 1, 'Fffff'),
+(196, 1, 'Hjjjkj'),
+(197, 1, 'Gggf'),
+(198, 1, 'awfwafwaf'),
+(199, 1, 'awfwafwaf'),
+(200, 1, 'drhrdhrdhrdh'),
+(201, 1, 'Bfbbdbd'),
+(202, 1, 'Uuuuuuuuuuu'),
+(203, 1, 'Gggggggg'),
+(204, 1, '0000000000');
 
 -- --------------------------------------------------------
 

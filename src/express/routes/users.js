@@ -27,7 +27,6 @@ async function getBo(req, res) {
 			res.status(200).send(user);
 		}
 	} else if (user = await models.users.findAll({ where: myBo, attributes: { exclude: ['password'] } })) {
-		//console.log(user)
 		res.status(200).json(user);
 	} else {
 		res.status(404).send('404 - Not found');
@@ -59,7 +58,6 @@ async function removeBo(req, res) {
 
 async function joinUpdate(req, res) {
 	let myBo = (req.body);
-	console.log(myBo)
 	const user = await models.users.findByPk(myBo.id_user);
 
 	for (const element of myBo.contact_inf_list) {

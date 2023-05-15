@@ -6,9 +6,12 @@ const { DataTypes } = require('sequelize');
 // This function will automatically receive as parameter the Sequelize connection object.
 module.exports = (sequelize) => {
 	sequelize.define('tokens', {
-		session: {type:DataTypes.STRING, autoIncrement: true, primaryKey:true},
+		id_token: {type:DataTypes.STRING, autoIncrement: true, primaryKey:true},
+		id_user: DataTypes.INTEGER,
 		token: DataTypes.STRING,
-        expire: DataTypes.DATE,
+        creation_date: DataTypes.DATE,
+		expiration_date: DataTypes.DATE,
+		platform: DataTypes.ENUM('electron', 'mobile'),
 }, {
     freezeTableName: true,
 	timestamps: false

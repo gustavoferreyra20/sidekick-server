@@ -57,7 +57,7 @@ async function getAvg(req, res) {
 
 async function join(req, res) {
 	let myBo = (req.query);
-	models.users.hasMany(models.reviews, {foreignKey: 'id_writerUser' })
+	models.users.hasMany(models.reviews, {foreignKey: 'id_user' })
 	models.reviews.belongsTo(models.users, {foreignKey: 'id_writerUser' })
 
 	const usersPosts = await models.reviews.findAll({ 

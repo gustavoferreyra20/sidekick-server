@@ -1,2 +1,4 @@
 node_modules
 .expo
+src/express/img/profiles/*
+!src/express/img/profiles/default.png

@@ -2,115 +2,147 @@ const { models } = require('../../sequelize/index');
 const Op = require('sequelize').Op;
 const sequelize = require("../../sequelize/index");
 
-models.users.belongsToMany(models.posts, { through: 'applications', foreignKey: 'id_user' });
 models.posts.belongsToMany(models.users, { through: 'applications', foreignKey: 'id_post' });
 
 async function getAll(req, res) {
-	const [results, metadata] = await sequelize.query('SELECT 	p.*, u.name AS userName, u.img AS userImg, g.name AS gameName, g.img AS gameImg, m.name AS mode, pf.name AS platform, ROUND(IFNULL(AVG(r.abilityScore), 0)) AS abilityScore, ROUND(IFNULL(AVG(r.karmaScore), 0)) AS karmaScore FROM posts p INNER JOIN users u ON p.id_user = u.id_user INNER JOIN games g ON p.id_game = g.id_game INNER JOIN modes m ON p.id_mode = m.id_mode INNER JOIN platforms pf ON p.id_platform = pf.id_platform LEFT JOIN reviews r ON p.id_user = r.id_user GROUP BY p.id_post ');
-	res.status(200).json(results);
-};
-
-async function getBo(req, res) {
-	let myBo = (req.query);
+	let postData = (req.query);
 	let whereClause = '';
 	let values = [];
 
-	if (myBo.id_game) {
+	if (postData.id_game) {
 		whereClause += ' AND p.id_game = ?';
-		values.push(myBo.id_game);
+		values.push(postData.id_game);
 	}
-	if (myBo.id_platform) {
+	if (postData.id_platform) {
 		whereClause += ' AND p.id_platform = ?';
-		values.push(myBo.id_platform);
+		values.push(postData.id_platform);
 	}
-	if (myBo.id_mode) {
+	if (postData.id_mode) {
 		whereClause += ' AND p.id_mode = ?';
-		values.push(myBo.id_mode);
+		values.push(postData.id_mode);
 	}
 
 	const [results, metadata] = await sequelize.query(`SELECT p.*, u.name AS userName, u.img AS userImg, g.name AS gameName, g.img AS gameImg, m.name AS mode, pf.name AS platform, ROUND(IFNULL(AVG(r.abilityScore), 0)) AS abilityScore, ROUND(IFNULL(AVG(r.karmaScore), 0)) AS karmaScore FROM posts p INNER JOIN users u ON p.id_user = u.id_user INNER JOIN games g ON p.id_game = g.id_game INNER JOIN modes m ON p.id_mode = m.id_mode INNER JOIN platforms pf ON p.id_platform = pf.id_platform LEFT JOIN reviews r ON p.id_user = r.id_user WHERE 1=1 ${whereClause} GROUP BY p.id_post`, { replacements: values });
 	res.status(200).json(results);
 };
 
+async function getSingle(req, res) {
+	const postId = req.params.id;
+	const post = await models.posts.findByPk(postId);
+
+	if (post) {
+		res.status(200).json(post);
+	} else {
+		res.status(404).send('404 - Not found');
+	}
+};
+
 async function create(req, res) {
-	let myBo = (req.body);
-	const post = await models.posts.create(myBo);
+	let postData = (req.body);
+	const post = await models.posts.create(postData);
 	res.status(200).json(post);
-
 };
 
-async function removeBo(req, res) {
-	let myBo = (req.query);
-	const posts = await models.posts.destroy({
-		where: myBo
+async function update(req, res) {
+	const postId = req.params.id;
+	const postData = req.body;
+
+	const [updatedRows] = await models.posts.update(postData, {
+		where: { id_post: postId },
 	});
-	res.status(200).json(posts);
-};
 
-async function join(req, res) {
-	let myBo = (req.query);
+	if (updatedRows > 0) {
+		res.status(200).json({ message: 'Updated successfully' });
+	} else {
+		res.status(404).send('404 - Not found');
+	}
+}
 
-	if (myBo.type == 'received') {
-		const usersPosts = await models.posts.findAll({
-			where: { id_user: myBo.id_user },
-			include: [{
-				model: models.users,
-				attributes: { exclude: ['password'] },
-			}],
 
-		})
+async function removeSingle(req, res) {
+	const postId = req.params.id;
+	const post = await models.posts.findByPk(postId);
 
-		res.status(200).json(usersPosts);
+	if (post) {
+		await post.destroy();
+		res.status(200).json({ message: 'Deleted successfully' });
+	} else {
+		res.status(404).send('404 - Not found');
+	}
+}
+
+async function joinPost(req, res) {
+	const postId = req.params.id;
+	const associationName = req.params.associationName;
+
+	const post = await models.posts.findByPk(postId);
+
+	if (!post) {
+		return res.status(404).json({ error: 'Post not found' });
 	}
 
-	if (myBo.type == 'sended') {
-		const usersPosts = await models.users.findAll({
-			where: { id_user: myBo.id_user },
-			attributes: [],
-			include: [{
-				model: models.posts,
-				attributes: { exclude: ['password'] },
-				through: {
-					attributes: ['status'],
-					where: { id_post: (myBo.id_post) ? myBo.id_post : { [Op.ne]: null } }
-				}
-			}],
+	switch (associationName) {
+		case "applications":
+			const id_user = req.params.associationId;
 
-		})
+			const user = await models.users.findByPk(id_user);
 
-		res.status(200).json(usersPosts[0].posts);
+			if (!user) {
+				return res.status(404).json({ error: 'Users information not found' });
+			}
+
+			await post.addUser(user);
+
+			await updateActualUsers(postId);
+
+			res.status(200).json(post);
+			break;
+
+		default:
+			res.status(404).json({ error: 'Association not found' });
+			break;
 	}
-
-};
+}
 
 async function joinUpdate(req, res) {
-	let myBo = (req.query);
+	const postId = req.params.id;
+	const associationName = req.params.associationName;
 
-	const user = await models.users.findByPk(myBo.id_user);
-	const post = await models.posts.findByPk(myBo.id_post);
+	const post = await models.posts.findByPk(postId);
 
-	if (myBo.status != undefined) {
-		await updateActualUsers(myBo.id_post, myBo.status)
+	if (!post) {
+		return res.status(404).json({ error: 'Post not found' });
 	}
 
-	res.status(200).json(await user.addPosts(post, { through: { status: myBo.status } }));
+	switch (associationName) {
+		case "applications":
+			const applicationId = req.params.associationId;
+			const status = req.query.status;
+
+			const application = await models.applications.findByPk(applicationId);
+
+			if (!application) {
+				return res.status(404).json({ message: 'Application not found' });
+			}
+
+			application.status = status;
+
+			await application.save();
+
+			await updateActualUsers(application.id_post, status);
+
+			res.status(200).json(application);
+			break;
+
+		default:
+			res.status(404).json({ error: 'Association not found' });
+			break;
+	}
 };
 
-async function joinDelete(req, res) {
-	let myBo = (req.query);
-	const user = await models.users.findByPk(myBo.id_user);
-	const post = await models.posts.findByPk(myBo.id_post);
-
-	await updateActualUsers(myBo.id_post, 'rejected')
-
-	res.status(200).json(await user.removePosts(post));
-
-};
-
-async function updateActualUsers(id_post, status) {
+async function updateActualUsers(id_post) {
 	const post = await models.posts.findByPk(id_post);
 
-	// count all accepted applications
 	const actualUsers = await models.users.count({
 		include: [{
 			model: models.posts,
@@ -125,24 +157,56 @@ async function updateActualUsers(id_post, status) {
 		}]
 	});
 
-	// update actualUsers
-	if (status == 'accepted') {
-		post.actualUsers = actualUsers + 1;
-	}
-
-	if (status == 'rejected') {
-		post.actualUsers = actualUsers - 1;
-	}
+	post.actualUsers = actualUsers;
 
 	await post.save();
 }
 
+async function joinDelete(req, res) {
+	const postId = req.params.id;
+	const associationName = req.params.associationName;
+
+	const post = await models.posts.findByPk(postId);
+
+	if (!post) {
+		return res.status(404).json({ error: 'Post not found' });
+	}
+
+	switch (associationName) {
+		case "applications":
+			const applicationId = req.params.associationId;
+			const application = await models.applications.findByPk(applicationId);
+			const user = await models.users.findByPk(application.id_user);
+
+			if (!application) {
+				return res.status(404).json({ message: 'Application not found' });
+			}
+
+			if (!user) {
+				return res.status(404).json({ message: 'User not found' });
+			}
+
+			await user.removePosts(post);
+
+			await updateActualUsers(application.id_post);
+
+			res.status(200).json({ message: 'Deleted successfully' });
+			break;
+
+		default:
+			res.status(404).json({ error: 'Association not found' });
+			break;
+	}
+
+};
+
 module.exports = {
-	getAll,
-	getBo,
-	create,
-	joinUpdate,
-	removeBo,
-	join,
-	joinDelete
+	getAll: getAll,
+	getSingle: getSingle,
+	create: create,
+	update: update,
+	joinUpdate: joinUpdate,
+	removeSingle: removeSingle,
+	joinDelete: joinDelete,
+	joinPost: joinPost,
 };

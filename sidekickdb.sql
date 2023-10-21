@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 15-05-2023 a las 18:55:02
+-- Tiempo de generación: 21-10-2023 a las 14:46:20
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -35,17 +35,19 @@ CREATE TABLE IF NOT EXISTS `applications` (
   `id_user` int(11) NOT NULL,
   `status` varchar(45) NOT NULL DEFAULT 'pending',
   PRIMARY KEY (`id_application`)
-) ENGINE=MyISAM AUTO_INCREMENT=84 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=86 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `applications`
 --
 
 INSERT INTO `applications` (`id_application`, `id_post`, `id_user`, `status`) VALUES
-(8, 20, 93, 'pending'),
+(8, 23, 93, 'pending'),
 (42, 22, 93, 'pending'),
-(83, 21, 103, 'accepted'),
-(82, 18, 103, 'pending');
+(83, 23, 103, 'pending'),
+(82, 18, 103, 'pending'),
+(84, 23, 2, 'pending'),
+(85, 23, 103, 'accepted');
 
 -- --------------------------------------------------------
 
@@ -234,7 +236,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
 
 INSERT INTO `posts` (`id_post`, `id_user`, `id_game`, `id_platform`, `id_mode`, `requiredUsers`, `actualUsers`, `title`, `description`, `date`) VALUES
 (22, 93, 1, 1, 1, 1, 0, 'awwafwaffw', '', '2023-01-10 17:58:21'),
-(23, 93, 2, 4, 4, 2, 0, 'test', 'seagfwaegawgwgg', '2023-01-10 17:58:56'),
+(23, 93, 2, 4, 4, 2, 1, 'test', 'seagfwaegawgwgg', '2023-01-10 17:58:56'),
 (24, 93, 1, 1, 1, 1, 0, 'ttttttttttttttt', '', '2023-01-10 18:12:28'),
 (21, 103, 3, 1, 2, 2, 1, 'test review stats', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-08 18:54:00'),
 (18, 119, 2, 4, 2, 3, 0, 'test mode id', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-07 14:25:58');
@@ -414,7 +416,18 @@ CREATE TABLE IF NOT EXISTS `tokens` (
   `expiration_date` date NOT NULL,
   `platform` varchar(45) NOT NULL,
   PRIMARY KEY (`id_token`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `tokens`
+--
+
+INSERT INTO `tokens` (`id_token`, `id_user`, `token`, `creation_date`, `expiration_date`, `platform`) VALUES
+(26, 103, 'b5faf08195884599d9a9d6381e03264800dab173', '2023-09-04', '2023-12-03', 'electron'),
+(25, 103, '03002f25d1fcdb9e596ef78130adcfa9073bc29b', '2023-08-08', '2023-11-06', 'mobile'),
+(24, 103, '9f357e7608e973ce92d5ecfb599487bdd89b6a17', '2023-08-08', '2023-11-06', 'mobile'),
+(23, 103, 'f4f4dde0f34044b1f7ffebaff3461a75338c0974', '2023-05-22', '2023-08-20', 'electron'),
+(22, 103, 'ef4e358d936a706692bee1f9a4b92c5e3e8adc7c', '2023-05-17', '2023-08-15', 'mobile');
 
 -- --------------------------------------------------------
 
@@ -430,8 +443,9 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(100) NOT NULL,
   `description` varchar(280) DEFAULT NULL,
   `img` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id_user`)
-) ENGINE=MyISAM AUTO_INCREMENT=205 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id_user`),
+  UNIQUE KEY `unique_email` (`email`)
+) ENGINE=MyISAM AUTO_INCREMENT=209 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `users`
@@ -490,7 +504,9 @@ INSERT INTO `users_contact_inf` (`id_user`, `id_contact_inf`, `nickname`) VALUES
 (201, 1, 'Bfbbdbd'),
 (202, 1, 'Uuuuuuuuuuu'),
 (203, 1, 'Gggggggg'),
-(204, 1, '0000000000');
+(204, 1, '0000000000'),
+(103, 1, 'test'),
+(103, 3, 'aaaaaaaaaaaaaa');
 
 -- --------------------------------------------------------
 
@@ -516,6 +532,14 @@ CREATE TABLE IF NOT EXISTS `users_rewards` (
   `id_reward` int(11) NOT NULL,
   `amount` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `users_rewards`
+--
+
+INSERT INTO `users_rewards` (`id_user`, `id_reward`, `amount`) VALUES
+(103, 1, 3),
+(103, 2, 1);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

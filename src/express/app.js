@@ -7,7 +7,6 @@ var multer = require('multer');
 
 const routes = {
 	games: require('./routes/games'),
-	genres: require('./routes/genres'),
 	rewards: require('./routes/rewards'),
 	platforms: require('./routes/platforms'),
 	posts: require('./routes/posts'),
@@ -64,11 +63,6 @@ app.post(`/api/imageupload`, upload.single('file'), function (req, res) {
 	res.send(req.file)
 })
 
-app.get(
-	`/api/reviews/avg`,
-	makeHandlerAwareOfAsyncErrors(routes.reviews.getAvg)
-);
-
 app.get("/api/images/*", (req, res) => {
 	const filepath = req.params[0];
 	const imagePath = __dirname + '/img/' + filepath;
@@ -85,10 +79,10 @@ for (const [routeName, routeController] of Object.entries(routes)) {
 		);
 	}
 	// get specific objects which matches
-	if (routeController.getBo) {
+	if (routeController.getSingle) {
 		app.get(
-			`/api/${routeName}/bo`,
-			makeHandlerAwareOfAsyncErrors(routeController.getBo)
+			`/api/${routeName}/:id`,
+			makeHandlerAwareOfAsyncErrors(routeController.getSingle)
 		);
 	}
 	// create an object
@@ -102,38 +96,50 @@ for (const [routeName, routeController] of Object.entries(routes)) {
 	// recive value and condition as json strings
 	if (routeController.update) {
 		app.put(
-			`/api/${routeName}`,
+			`/api/${routeName}/:id`,
 			makeHandlerAwareOfAsyncErrors(routeController.update)
 		);
 	}
 	// remove objects which matches
-	if (routeController.removeBo) {
+	if (routeController.removeSingle) {
 		app.delete(
-			`/api/${routeName}/bo`,
-			makeHandlerAwareOfAsyncErrors(routeController.removeBo)
+			`/api/${routeName}/:id`,
+			makeHandlerAwareOfAsyncErrors(routeController.removeSingle)
 		);
 	}
 
 	// get specific objects which matches through intermediate table
 	if (routeController.join) {
 		app.get(
-			`/api/${routeName}/join`,
+			`/api/${routeName}/:id/:associationName`,
 			makeHandlerAwareOfAsyncErrors(routeController.join)
 		);
 	}
 	// remove objects which matches through intermediate table
 	if (routeController.joinDelete) {
 		app.delete(
-			`/api/${routeName}/join`,
+			`/api/${routeName}/:id/:associationName/:associationId`,
 			makeHandlerAwareOfAsyncErrors(routeController.joinDelete)
 		);
 	}
 	// update objects which matches through intermediate table
 	if (routeController.joinUpdate) {
 		app.put(
-			`/api/${routeName}/join`,
+			`/api/${routeName}/:id/:associationName/:associationId`,
 			makeHandlerAwareOfAsyncErrors(routeController.joinUpdate)
 		);
+	}
+	// create objects through intermediate table
+	if (routeController.joinPost) {
+		app.post(
+			`/api/${routeName}/:id/:associationName/:associationId`,
+			makeHandlerAwareOfAsyncErrors(routeController.joinPost)
+		);
+	}
+
+	if (routeController.login) {
+		console.log(`/api/${routeName}/login`)
+		app.post(`/api/${routeName}/login`, makeHandlerAwareOfAsyncErrors(routeController.login));
 	}
 }
 

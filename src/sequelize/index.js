@@ -4,13 +4,12 @@ const { Sequelize } = require('sequelize');
 // But for this example, we will just use a local SQLite database.
 // const sequelize = new Sequelize(process.env.DB_CONNECTION_URL);
 const sequelize = new Sequelize('sidekickdb', 'root', '', {
-    host: 'localhost',
-    dialect: 'mariadb'/* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
-  });
+	host: 'localhost',
+	dialect: 'mariadb'/* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
+});
 
 const modelDefiners = [
 	require('./models/games.model'),
-	require('./models/genres.model'),
 	require('./models/rewards.model'),
 	require('./models/platforms_games.model'),
 	require('./models/platforms.model'),

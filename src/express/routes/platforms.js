@@ -1,62 +1,63 @@
 const { models } = require('../../sequelize/index');
 
-async function getAll(req, res) {
-	const platforms = await models.platforms.findAll( );
-	res.status(200).json(platforms);
-};
+models.platforms.belongsToMany(models.games, { through: 'platforms_games', foreignKey: 'id_platform' })
 
-async function getBo(req, res) {
-	let myBo = (req.query);
-	const platforms = await models.platforms.findAll({ where: myBo } );
-	if (platforms[0]) {
-		res.status(200).json(platforms);
+async function getAll(req, res) {
+	const platforms = await models.platforms.findAll();
+	res.status(200).json(platforms);
+}
+
+async function getSingle(req, res) {
+	const platformId = req.params.id;
+
+	const platform = await models.platforms.findByPk(platformId);
+
+	if (platform) {
+		res.status(200).json(platform);
 	} else {
 		res.status(404).send('404 - Not found');
 	}
-};
+}
 
 async function create(req, res) {
-	let myBo = (req.query);
-	const platform = await models.platforms.create(myBo);
-	res.status(200).json(platform); 
-	
-};
+	const platformData = req.body;
+
+	const platform = await models.platforms.create(platformData);
+	res.status(200).json(platform);
+}
 
 async function update(req, res) {
-	let myBo = (req.query);
-	const platforms = await models.platforms.update( JSON.parse(myBo.values), {
-		where: JSON.parse(myBo.cond)
-	  })
-	res.status(200).json(platforms); 
-};
+	const platformId = req.params.id;
+	const platformData = req.body;
 
-async function removeBo(req, res) {
-	let myBo = (req.query);
-	const platforms = await models.platforms.destroy({
-		where: myBo
-	  });
-	res.status(200).json(platforms); 
-};
+	const [updatedRows] = await models.platforms.update(platformData, {
+		where: { id_platform: platformId },
+	});
 
-async function join(req, res) {
-	let myBo = (req.query);
-	models.games.belongsToMany(models.platforms, {through: 'platforms_games', foreignKey: 'id_game' })
-	models.platforms.belongsToMany(models.games, {through: 'platforms_games', foreignKey: 'id_platform' })
-	
-	models.games.findOne({where: myBo})
-	.then(function(game){
-		return game.getPlatforms({ joinTableAttributes: [] });
-	}).then(function(platforms){
-		res.status(200).json(platforms); 
-	})
+	if (updatedRows > 0) {
+		res.status(200).json({ message: 'Updated successfully' });
+	} else {
+		res.status(404).send('404 - Not found');
+	}
+}
 
-};
+async function removeSingle(req, res) {
+	const platformId = req.params.id;
+
+	const platform = await models.platforms.findByPk(platformId);
+
+	if (platform) {
+		await platform.destroy();
+		res.status(200).json({ message: 'Deleted successfully' });
+	} else {
+		res.status(404).send('404 - Not found');
+	}
+}
 
 module.exports = {
-	getAll,
-	getBo,
-	create,
-	update,
-	removeBo,
-	join
+	getAll: getAll,
+	getSingle: getSingle,
+	create: create,
+	update: update,
+	removeSingle: removeSingle,
 };

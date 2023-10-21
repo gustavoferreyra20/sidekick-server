@@ -1,62 +1,63 @@
 const { models } = require('../../sequelize/index');
 
-async function getAll(req, res) {
-	const contact_inf = await models.contact_inf.findAll( );
-	res.status(200).json(contact_inf);
-};
+models.contact_inf.belongsToMany(models.users, { through: 'users_contact_inf', foreignKey: 'id_contact_inf' });
 
-async function getBo(req, res) {
-	let myBo = (req.query);
-	const contact_inf = await models.contact_inf.findAll({ where: myBo } );
-	if (contact_inf[0]) {
-		res.status(200).json(contact_inf);
+async function getAll(req, res) {
+	const contactInf = await models.contact_inf.findAll();
+	res.status(200).json(contactInf);
+}
+
+async function getSingle(req, res) {
+	const contactInfId = req.params.id;
+
+	const contactInf = await models.contact_inf.findByPk(contactInfId);
+
+	if (contactInf) {
+		res.status(200).json(contactInf);
 	} else {
 		res.status(404).send('404 - Not found');
 	}
-};
+}
 
 async function create(req, res) {
-	let myBo = (req.query);
-	const platform = await models.contact_inf.create(myBo);
-	res.status(200).json(platform); 
-	
-};
+	const contactInfData = req.body;
+
+	const contactInf = await models.contact_inf.create(contactInfData);
+	res.status(200).json(contactInf);
+}
 
 async function update(req, res) {
-	let myBo = (req.query);
-	const contact_inf = await models.contact_inf.update( JSON.parse(myBo.values), {
-		where: JSON.parse(myBo.cond)
-	  })
-	res.status(200).json(contact_inf); 
-};
+	const contactInfId = req.params.id;
+	const contactInfData = req.body;
 
-async function removeBo(req, res) {
-	let myBo = (req.query);
-	const contact_inf = await models.contact_inf.destroy({
-		where: myBo
-	  });
-	res.status(200).json(contact_inf); 
-};
+	const [updatedRows] = await models.contact_inf.update(contactInfData, {
+		where: { id_contact_inf: contactInfId },
+	});
 
-async function join(req, res) {
-	let myBo = (req.query);
-	models.users.belongsToMany(models.contact_inf, {through: 'users_contact_inf', foreignKey: 'id_user' })
-	models.contact_inf.belongsToMany(models.users, {through: 'users_contact_inf', foreignKey: 'id_contact_inf' })
-	
-	models.users.findOne({where: myBo})
-	.then(function(user){
-		return user.getPlatforms({ joinTableAttributes: [] });
-	}).then(function(contact_inf){
-		res.status(200).json(contact_inf); 
-	})
+	if (updatedRows > 0) {
+		res.status(200).json({ message: 'Updated successfully' });
+	} else {
+		res.status(404).send('404 - Not found');
+	}
+}
 
-};
+async function removeSingle(req, res) {
+	const contactInfId = req.params.id;
+
+	const contactInf = await models.contact_inf.findByPk(contactInfId);
+
+	if (contactInf) {
+		await contactInf.destroy({ force: true });
+		res.status(200).json({ message: 'Deleted successfully' });
+	} else {
+		res.status(404).send('404 - Not found');
+	}
+}
 
 module.exports = {
-	getAll,
-	getBo,
-	create,
-	update,
-	removeBo,
-	join
+	getAll: getAll,
+	getSingle: getSingle,
+	create: create,
+	update: update,
+	removeSingle: removeSingle,
 };

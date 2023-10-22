@@ -17,9 +17,9 @@ async function getSingle(req, res) {
 }
 
 async function create(req, res) {
-	const tokenBody = req.body;
+	const tokenData = req.body;
 
-	const token = await models.tokens.create(tokenBody);
+	const token = await models.tokens.create(tokenData);
 	res.status(200).json(token);
 }
 

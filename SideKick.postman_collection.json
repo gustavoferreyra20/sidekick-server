@@ -181,6 +181,31 @@
 					"response": []
 				},
 				{
+					"name": "Get game platforms",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/games/:id/platforms",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"games",
+								":id",
+								"platforms"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create a game",
 					"request": {
 						"method": "POST",
@@ -615,6 +640,45 @@
 					"response": []
 				},
 				{
+					"name": "Apply for a post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/posts/:id/applications/:id_user",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"posts",
+								":id",
+								"applications",
+								":id_user"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								},
+								{
+									"key": "id_user",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Update post application ",
 					"request": {
 						"method": "PUT",
@@ -710,45 +774,6 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Apply for a post",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{server}}/posts/:id/applications/:id_user",
-							"host": [
-								"{{server}}"
-							],
-							"path": [
-								"posts",
-								":id",
-								"applications",
-								":id_user"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": ""
-								},
-								{
-									"key": "id_user",
 									"value": ""
 								}
 							]
@@ -854,6 +879,45 @@
 							"path": [
 								"reviews",
 								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add reward",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_writerUser\": 0,\r\n    \"id_user\": 0,\r\n    \"id_post\": 0,\r\n    \"abilityScore\": 0,\r\n    \"karmaScore\": 0,\r\n    \"reward\": 1, //optional\r\n    \"comment\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/reviews/:id/rewards/:id_reward",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"reviews",
+								":id",
+								"rewards",
+								":id_reward"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								},
+								{
+									"key": "id_reward",
+									"value": ""
+								}
 							]
 						}
 					},
@@ -1092,13 +1156,13 @@
 					"response": []
 				},
 				{
-					"name": "Create a tokens",
+					"name": "Create a token",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id_user\": 0,\r\n    \"token\": \"\",\r\n    \"creation_date\": \"\",\r\n    \"expiration_date\": \"\",\r\n    \"platform\": \"\"\r\n}",
+							"raw": "{\r\n                  \"id_user\": 0,\r\n                  \"token\": \"\",\r\n                  \"expiration_date\": \"2023-12-03\",\r\n                  \"platform\": \"\"\r\n                }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1452,6 +1516,45 @@
 				},
 				{
 					"name": "Add reward to user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"\",\r\n    \"email\": \"\",\r\n    \"description\": \"\",\r\n    \"img\": \"profiles/default.png\",\r\n    \"password\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/users/:id/rewards/:id_reward",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"users",
+								":id",
+								"rewards",
+								":id_reward"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								},
+								{
+									"key": "id_reward",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add review to user",
 					"request": {
 						"method": "POST",
 						"header": [],

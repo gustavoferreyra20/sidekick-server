@@ -151,8 +151,11 @@ async function updateActualUsers(id_post) {
 			},
 			through: {
 				where: {
-					status: 'accepted'
-				}
+					[Op.or]: [
+					  { status: 'accepted' },
+					  { status: 'reviewed' }
+					]
+				  }
 			}
 		}]
 	});

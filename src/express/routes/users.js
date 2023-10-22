@@ -27,7 +27,6 @@ async function getSingle(req, res) {
 
 async function login(req, res) {
 	const { email, password } = req.body;
-	console.log("here")
 	const user = await models.users.findOne({
 		where: { email },
 	});
@@ -104,30 +103,48 @@ async function joinPost(req, res) {
 
 	switch (associationName) {
 		case "contact_inf":
-			const id_contact_inf = req.params.associationId;
+			const contactInfId = req.params.associationId;
 			const account = req.query.account;
 
-			const contact_inf = await models.contact_inf.findByPk(id_contact_inf);
+			const contactInf = await models.contact_inf.findByPk(contactInfId);
 
-			if (!contact_inf) {
+			if (!contactInf) {
 				return res.status(404).json({ error: 'Contact information not found' });
 			}
 
-			const hasContact = await user.hasContact_infs(contact_inf);
+			const hasContact = await user.hasContact_infs(contactInf);
 
 			if (hasContact) {
 				return res.status(404).json({ error: 'User already has this contact information' });
 			}
 
-			await user.addContact_infs(contact_inf, { through: { nickname: account } })
+			await user.addContact_infs(contactInf, { through: { nickname: account } })
 
 			res.status(200).json({ message: 'Contact information added successfully' });
 			break;
 
-		case "rewards":
-			const id_reward = req.params.associationId;
+		case "reviews":
+			const reviewData = req.body;
+			const writerUserId = req.params.associationId;
 
-			const reward = await models.rewards.findByPk(id_reward);
+			const writerUser = await models.users.findByPk(writerUserId);
+
+			if (!writerUser) {
+				return res.status(404).json({ error: 'Writer user not found' });
+			}
+
+			reviewData.id_writerUser = writerUserId;
+
+			const createdReview = await user.createReview(reviewData);
+
+			res.status(201).json({ message: 'Review created successfully', reviewId: createdReview.dataValues.id_review });
+			break;
+
+
+		case "rewards":
+			const rewardId = req.params.associationId;
+
+			const reward = await models.rewards.findByPk(rewardId);
 
 			if (!reward) {
 				return res.status(404).json({ error: 'Reward not found' });
@@ -180,23 +197,12 @@ async function join(req, res) {
 				})
 
 				res.status(200).json(usersPosts);
-			}
-
-			if (type == 'sent') {
-				const sentApplications = await models.users.findAll({
-					where: { id_user: userId },
-					include: [
-						{
-							model: models.posts,
-							attributes: { exclude: ['password'] },
-							through: {
-								attributes: ['status'],
-							}
-						},
-					],
-				});
+			} else if (type == 'sent') {
+				const sentApplications = await user.getPosts();
 
 				res.status(200).json(sentApplications);
+			} else {
+				return res.status(404).json({ error: 'Type not found' });
 			}
 			break;
 

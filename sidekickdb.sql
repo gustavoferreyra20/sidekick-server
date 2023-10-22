@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 21-10-2023 a las 14:46:20
+-- Tiempo de generación: 22-10-2023 a las 01:34:55
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -34,8 +34,10 @@ CREATE TABLE IF NOT EXISTS `applications` (
   `id_post` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
   `status` varchar(45) NOT NULL DEFAULT 'pending',
-  PRIMARY KEY (`id_application`)
-) ENGINE=MyISAM AUTO_INCREMENT=86 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id_application`),
+  KEY `fk_user` (`id_user`),
+  KEY `fk_post` (`id_post`)
+) ENGINE=MyISAM AUTO_INCREMENT=88 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `applications`
@@ -44,10 +46,10 @@ CREATE TABLE IF NOT EXISTS `applications` (
 INSERT INTO `applications` (`id_application`, `id_post`, `id_user`, `status`) VALUES
 (8, 23, 93, 'pending'),
 (42, 22, 93, 'pending'),
-(83, 23, 103, 'pending'),
 (82, 18, 103, 'pending'),
 (84, 23, 2, 'pending'),
-(85, 23, 103, 'accepted');
+(87, 34, 103, 'reviewed'),
+(86, 21, 103, 'rejected');
 
 -- --------------------------------------------------------
 
@@ -97,43 +99,6 @@ INSERT INTO `games` (`id_game`, `name`, `img`, `createdAt`, `updatedAt`) VALUES
 (1, 'Fortnite', 'games/Fortnite.jpg', '2023-03-18 17:54:52', '0000-00-00 00:00:00'),
 (2, 'CSGO', 'games/CSGO.jpg', '2023-03-18 17:54:53', '0000-00-00 00:00:00'),
 (3, 'MultiVersus', 'games/MultiVersus.jpg', '2023-03-18 17:54:55', '0000-00-00 00:00:00');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `genres`
---
-
-DROP TABLE IF EXISTS `genres`;
-CREATE TABLE IF NOT EXISTS `genres` (
-  `id_genre` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`id_genre`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `genres_games`
---
-
-DROP TABLE IF EXISTS `genres_games`;
-CREATE TABLE IF NOT EXISTS `genres_games` (
-  `id_game` int(11) NOT NULL,
-  `id_genre` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `genres_posts`
---
-
-DROP TABLE IF EXISTS `genres_posts`;
-CREATE TABLE IF NOT EXISTS `genres_posts` (
-  `id_post` int(11) NOT NULL,
-  `id_genre` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -190,7 +155,9 @@ INSERT INTO `platforms` (`id_platform`, `name`, `img`) VALUES
 DROP TABLE IF EXISTS `platforms_games`;
 CREATE TABLE IF NOT EXISTS `platforms_games` (
   `id_game` int(11) NOT NULL,
-  `id_platform` int(11) NOT NULL
+  `id_platform` int(11) NOT NULL,
+  KEY `fk_platform` (`id_platform`),
+  KEY `fk_game` (`id_game`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -228,7 +195,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `description` varchar(280) NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id_post`)
-) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `posts`
@@ -236,10 +203,9 @@ CREATE TABLE IF NOT EXISTS `posts` (
 
 INSERT INTO `posts` (`id_post`, `id_user`, `id_game`, `id_platform`, `id_mode`, `requiredUsers`, `actualUsers`, `title`, `description`, `date`) VALUES
 (22, 93, 1, 1, 1, 1, 0, 'awwafwaffw', '', '2023-01-10 17:58:21'),
-(23, 93, 2, 4, 4, 2, 1, 'test', 'seagfwaegawgwgg', '2023-01-10 17:58:56'),
 (24, 93, 1, 1, 1, 1, 0, 'ttttttttttttttt', '', '2023-01-10 18:12:28'),
-(21, 103, 3, 1, 2, 2, 1, 'test review stats', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-08 18:54:00'),
-(18, 119, 2, 4, 2, 3, 0, 'test mode id', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-07 14:25:58');
+(18, 119, 2, 4, 2, 3, 0, 'test mode id', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-07 14:25:58'),
+(34, 103, 1, 1, 1, 1, 1, 'test 2', '', '2023-10-21 20:39:20');
 
 -- --------------------------------------------------------
 
@@ -257,85 +223,21 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   `karmaScore` int(11) NOT NULL DEFAULT 50,
   `comment` varchar(280) DEFAULT NULL,
   PRIMARY KEY (`id_review`)
-) ENGINE=MyISAM AUTO_INCREMENT=87 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=111 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `reviews`
 --
 
 INSERT INTO `reviews` (`id_review`, `id_writerUser`, `id_user`, `id_post`, `abilityScore`, `karmaScore`, `comment`) VALUES
-(27, 103, 103, 21, 50, 50, NULL),
-(26, 103, 103, 21, 74, 73, NULL),
-(25, 103, 32, 21, 85, 25, NULL),
-(24, 103, 93, 21, 50, 84, NULL),
-(23, 103, 103, 21, 50, 50, NULL),
-(22, 103, 32, 21, 50, 50, NULL),
-(21, 103, 93, 21, 50, 50, NULL),
-(20, 103, 103, 21, 50, 50, NULL),
-(19, 103, 32, 21, 50, 50, NULL),
-(18, 103, 93, 21, 50, 50, NULL),
-(17, 103, 103, 21, 50, 50, NULL),
-(16, 103, 103, 21, 50, 50, NULL),
-(15, 103, 103, 21, 50, 50, NULL),
-(28, 103, 32, 21, 50, 50, NULL),
-(29, 103, 93, 20, 50, 50, NULL),
-(30, 103, 32, 21, 50, 78, NULL),
-(31, 103, 32, 21, 50, 19, NULL),
-(32, 103, 32, 21, 50, 50, NULL),
-(33, 103, 32, 21, 50, 50, NULL),
-(34, 103, 32, 21, 50, 50, NULL),
-(35, 103, 32, 21, 50, 50, NULL),
-(36, 103, 32, 21, 50, 50, NULL),
-(37, 103, 32, 21, 50, 50, NULL),
-(38, 103, 32, 21, 50, 50, NULL),
-(39, 103, 32, 21, 50, 50, NULL),
-(40, 103, 32, 21, 50, 50, NULL),
-(41, 103, 32, 21, 50, 50, NULL),
-(42, 103, 32, 21, 76, 50, NULL),
-(43, 103, 32, 21, 50, 50, NULL),
-(44, 103, 32, 21, 50, 50, NULL),
-(45, 103, 32, 21, 50, 50, NULL),
-(46, 103, 93, 21, 50, 50, NULL),
-(47, 103, 93, 21, 50, 50, NULL),
-(48, 103, 32, 21, 50, 50, NULL),
-(49, 103, 32, 21, 50, 50, NULL),
-(50, 103, 32, 21, 50, 50, NULL),
-(51, 103, 32, 21, 50, 50, NULL),
-(52, 103, 32, 21, 50, 50, NULL),
-(53, 103, 32, 21, 50, 50, NULL),
-(54, 103, 32, 21, 50, 50, NULL),
-(55, 103, 32, 21, 50, 50, NULL),
-(56, 103, 32, 21, 50, 50, NULL),
-(57, 103, 32, 21, 50, 50, NULL),
-(58, 103, 32, 21, 50, 50, NULL),
-(59, 103, 32, 21, 50, 50, NULL),
-(60, 103, 32, 21, 50, 50, NULL),
-(61, 103, 32, 21, 50, 50, NULL),
-(62, 103, 32, 21, 50, 50, NULL),
-(63, 103, 32, 21, 50, 50, NULL),
-(64, 103, 32, 21, 50, 50, NULL),
-(65, 103, 32, 21, 50, 50, NULL),
-(66, 103, 32, 21, 50, 50, NULL),
-(67, 103, 32, 21, 50, 50, NULL),
-(68, 103, 32, 21, 50, 50, NULL),
-(69, 103, 103, 21, 50, 50, NULL),
-(70, 103, 103, 21, 50, 50, NULL),
-(71, 103, 103, 21, 50, 50, NULL),
-(72, 103, 75, 21, 76, 79, 'WDADWADWAD'),
-(73, 103, 32, 21, 75, 13, 'awdwfaawfa'),
-(74, 103, 93, 20, 74, 50, NULL),
 (75, 103, 93, 21, 50, 50, 'testing pop up'),
-(76, 103, 40, 21, 50, 50, '4wsegsgseg'),
-(77, 103, 103, 21, 41, 81, NULL),
-(78, 103, 32, 21, 32, 59, 'fsafasf'),
-(79, 103, 93, 21, 50, 50, NULL),
-(80, 103, 40, 21, 50, 50, 'aaaaaa'),
-(81, 103, 93, 20, 50, 50, NULL),
-(82, 103, 32, 21, 50, 50, NULL),
-(83, 103, 93, 21, 50, 50, NULL),
-(84, 103, 40, 21, 50, 50, NULL),
-(85, 103, 75, 21, 50, 50, NULL),
-(86, 103, 40, 21, 50, 50, 'hi tito');
+(89, 93, 93, 10, 0, 0, 'aaaaaaaa'),
+(90, 93, 93, 10, 0, 0, 'aaaaaaaa'),
+(91, 93, 93, 10, 0, 0, 'aaaaaaaa'),
+(92, 93, 103, 10, 0, 0, 'aaaaaaaa'),
+(95, 103, 103, 34, 50, 50, 'addReward'),
+(96, 103, 103, 34, 50, 50, 'addreward 2'),
+(97, 103, 103, 34, 50, 50, 'ttttttt');
 
 -- --------------------------------------------------------
 
@@ -346,7 +248,9 @@ INSERT INTO `reviews` (`id_review`, `id_writerUser`, `id_user`, `id_post`, `abil
 DROP TABLE IF EXISTS `reviews_rewards`;
 CREATE TABLE IF NOT EXISTS `reviews_rewards` (
   `id_review` int(11) NOT NULL,
-  `id_reward` int(11) NOT NULL
+  `id_reward` int(11) NOT NULL,
+  KEY `fk_review` (`id_review`),
+  KEY `fk_reward` (`id_reward`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -371,7 +275,10 @@ INSERT INTO `reviews_rewards` (`id_review`, `id_reward`) VALUES
 (73, 3),
 (75, 3),
 (76, 3),
-(81, 3);
+(81, 3),
+(94, 1),
+(94, 2),
+(107, 2);
 
 -- --------------------------------------------------------
 
@@ -415,19 +322,16 @@ CREATE TABLE IF NOT EXISTS `tokens` (
   `creation_date` date NOT NULL DEFAULT current_timestamp(),
   `expiration_date` date NOT NULL,
   `platform` varchar(45) NOT NULL,
-  PRIMARY KEY (`id_token`)
-) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id_token`),
+  KEY `fk_user` (`id_user`)
+) ENGINE=MyISAM AUTO_INCREMENT=66 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tokens`
 --
 
 INSERT INTO `tokens` (`id_token`, `id_user`, `token`, `creation_date`, `expiration_date`, `platform`) VALUES
-(26, 103, 'b5faf08195884599d9a9d6381e03264800dab173', '2023-09-04', '2023-12-03', 'electron'),
-(25, 103, '03002f25d1fcdb9e596ef78130adcfa9073bc29b', '2023-08-08', '2023-11-06', 'mobile'),
-(24, 103, '9f357e7608e973ce92d5ecfb599487bdd89b6a17', '2023-08-08', '2023-11-06', 'mobile'),
-(23, 103, 'f4f4dde0f34044b1f7ffebaff3461a75338c0974', '2023-05-22', '2023-08-20', 'electron'),
-(22, 103, 'ef4e358d936a706692bee1f9a4b92c5e3e8adc7c', '2023-05-17', '2023-08-15', 'mobile');
+(65, 103, '915fb742c671989cb6dfc01de7fbbf6fb4c6c56c', '2023-10-22', '2024-01-20', 'electron');
 
 -- --------------------------------------------------------
 
@@ -466,7 +370,9 @@ DROP TABLE IF EXISTS `users_contact_inf`;
 CREATE TABLE IF NOT EXISTS `users_contact_inf` (
   `id_user` int(45) NOT NULL,
   `id_contact_inf` int(45) NOT NULL,
-  `nickname` varchar(45) NOT NULL
+  `nickname` varchar(45) NOT NULL,
+  KEY `fk_user` (`id_user`),
+  KEY `fk_contact_inf` (`id_contact_inf`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -511,18 +417,6 @@ INSERT INTO `users_contact_inf` (`id_user`, `id_contact_inf`, `nickname`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `users_platforms`
---
-
-DROP TABLE IF EXISTS `users_platforms`;
-CREATE TABLE IF NOT EXISTS `users_platforms` (
-  `id_user` int(11) NOT NULL,
-  `id_platform` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `users_rewards`
 --
 
@@ -530,7 +424,9 @@ DROP TABLE IF EXISTS `users_rewards`;
 CREATE TABLE IF NOT EXISTS `users_rewards` (
   `id_user` int(11) NOT NULL,
   `id_reward` int(11) NOT NULL,
-  `amount` int(11) DEFAULT NULL
+  `amount` int(11) DEFAULT NULL,
+  KEY `fk_user` (`id_user`),
+  KEY `fk_reward` (`id_reward`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -538,7 +434,7 @@ CREATE TABLE IF NOT EXISTS `users_rewards` (
 --
 
 INSERT INTO `users_rewards` (`id_user`, `id_reward`, `amount`) VALUES
-(103, 1, 3),
+(103, 1, 2),
 (103, 2, 1);
 COMMIT;
 

@@ -138,9 +138,9 @@ for (const [routeName, routeController] of Object.entries(routes)) {
 	}
 
 	if (routeController.login) {
-		console.log(`/api/${routeName}/login`)
 		app.post(`/api/${routeName}/login`, makeHandlerAwareOfAsyncErrors(routeController.login));
 	}
+
 }
 
 module.exports = app;

@@ -1,5 +1,7 @@
 const { models } = require('../../sequelize/index');
 const bcryptjs = require('bcryptjs');
+const dotenv = require('dotenv').config();
+const jwt = require('jsonwebtoken');
 var Sequelize = require("sequelize");
 
 models.users.belongsToMany(models.contact_inf, { through: 'users_contact_inf', foreignKey: 'id_user' });
@@ -38,8 +40,9 @@ async function login(req, res) {
 
 	if (bcryptjs.compareSync(password, user.password)) {
 		const userWithoutPassword = { ...user.toJSON() };
+		const token = jwt.sign(userWithoutPassword, process.env.JWT_SECRET, { expiresIn: process.env.JWT_TIME_EXPIRES });
 		delete userWithoutPassword.password;
-		res.status(200).json(userWithoutPassword);
+		res.status(200).json({id: userWithoutPassword.id_user, token: token});
 	} else {
 		res.status(401).json({ error: 'Incorrect email or password' });
 	}

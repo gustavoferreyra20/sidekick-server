@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 var multer = require('multer');
+const { handleAsyncErrors } = require('./middleware/errorHandler');
+const { auth } = require('./middleware/auth');
 
 const routes = {
 	games: require('./routes/games'),
@@ -11,7 +13,6 @@ const routes = {
 	platforms: require('./routes/platforms'),
 	posts: require('./routes/posts'),
 	reviews: require('./routes/reviews'),
-	tokens: require('./routes/tokens'),
 	users: require('./routes/users'),
 	modes: require('./routes/modes'),
 	contact_inf: require('./routes/contact_inf')
@@ -36,17 +37,6 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// We create a wrapper to workaround async errors not being transmitted correctly.
-function makeHandlerAwareOfAsyncErrors(handler) {
-	return async function (req, res, next) {
-		try {
-			await handler(req, res);
-		} catch (error) {
-			next(error);
-		}
-	};
-}
-
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
 		cb(null, './src/express/img/profiles')      //you tell where to upload the files,
@@ -58,12 +48,12 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 
-app.post(`/api/imageupload`, upload.single('file'), function (req, res) {
+app.post(`/api/imageupload`, auth, upload.single('file'), function (req, res) {
 	//req.file will now be available as a json object, save to mongodb, re: filename, path etc
 	res.send(req.file)
 })
 
-app.get("/api/images/*", (req, res) => {
+app.get("/api/images/*", auth, (req, res) => {
 	const filepath = req.params[0];
 	const imagePath = __dirname + '/img/' + filepath;
 	res.sendFile(imagePath);
@@ -74,71 +64,71 @@ for (const [routeName, routeController] of Object.entries(routes)) {
 	// get all elements
 	if (routeController.getAll) {
 		app.get(
-			`/api/${routeName}`,
-			makeHandlerAwareOfAsyncErrors(routeController.getAll)
+			`/api/${routeName}`, auth,
+			handleAsyncErrors(routeController.getAll)
 		);
 	}
 	// get specific objects which matches
 	if (routeController.getSingle) {
 		app.get(
-			`/api/${routeName}/:id`,
-			makeHandlerAwareOfAsyncErrors(routeController.getSingle)
+			`/api/${routeName}/:id`, auth,
+			handleAsyncErrors(routeController.getSingle)
 		);
 	}
 	// create an object
 	if (routeController.create) {
 		app.post(
-			`/api/${routeName}`,
-			makeHandlerAwareOfAsyncErrors(routeController.create)
+			`/api/${routeName}`, auth,
+			handleAsyncErrors(routeController.create)
 		);
 	}
 	// updates objects which matches
 	// recive value and condition as json strings
 	if (routeController.update) {
 		app.put(
-			`/api/${routeName}/:id`,
-			makeHandlerAwareOfAsyncErrors(routeController.update)
+			`/api/${routeName}/:id`, auth,
+			handleAsyncErrors(routeController.update)
 		);
 	}
 	// remove objects which matches
 	if (routeController.removeSingle) {
 		app.delete(
-			`/api/${routeName}/:id`,
-			makeHandlerAwareOfAsyncErrors(routeController.removeSingle)
+			`/api/${routeName}/:id`, auth,
+			handleAsyncErrors(routeController.removeSingle)
 		);
 	}
 
 	// get specific objects which matches through intermediate table
 	if (routeController.join) {
 		app.get(
-			`/api/${routeName}/:id/:associationName`,
-			makeHandlerAwareOfAsyncErrors(routeController.join)
+			`/api/${routeName}/:id/:associationName`, auth,
+			handleAsyncErrors(routeController.join)
 		);
 	}
 	// remove objects which matches through intermediate table
 	if (routeController.joinDelete) {
 		app.delete(
-			`/api/${routeName}/:id/:associationName/:associationId`,
-			makeHandlerAwareOfAsyncErrors(routeController.joinDelete)
+			`/api/${routeName}/:id/:associationName/:associationId`, auth,
+			handleAsyncErrors(routeController.joinDelete)
 		);
 	}
 	// update objects which matches through intermediate table
 	if (routeController.joinUpdate) {
 		app.put(
-			`/api/${routeName}/:id/:associationName/:associationId`,
-			makeHandlerAwareOfAsyncErrors(routeController.joinUpdate)
+			`/api/${routeName}/:id/:associationName/:associationId`, auth,
+			handleAsyncErrors(routeController.joinUpdate)
 		);
 	}
 	// create objects through intermediate table
 	if (routeController.joinPost) {
 		app.post(
-			`/api/${routeName}/:id/:associationName/:associationId`,
-			makeHandlerAwareOfAsyncErrors(routeController.joinPost)
+			`/api/${routeName}/:id/:associationName/:associationId`, auth,
+			handleAsyncErrors(routeController.joinPost)
 		);
 	}
 
 	if (routeController.login) {
-		app.post(`/api/${routeName}/login`, makeHandlerAwareOfAsyncErrors(routeController.login));
+		app.post(`/api/${routeName}/login`, handleAsyncErrors(routeController.login));
 	}
 
 }

@@ -15,7 +15,6 @@ const modelDefiners = [
 	require('./models/platforms.model'),
 	require('./models/posts.model'),
 	require('./models/reviews.model'),
-	require('./models/tokens.model'),
 	require('./models/users.model'),
 	require('./models/modes.model'),
 	require('./models/applications.model'),

@@ -1,7 +1,8 @@
 const app = require('./src/express/app');
 const sequelize = require('./src/sequelize');
-const PORT = 3000;
-const IP_ADDRESS = '192.168.1.82'; // Force ip_address
+const dotenv = require('dotenv').config();
+const PORT = process.env.PORT;
+const IP_ADDRESS = process.env.IP_ADDRESS; // Force ip_address
 
 async function assertDatabaseConnectionOk() {
 	console.log(`Checking database connection...`);

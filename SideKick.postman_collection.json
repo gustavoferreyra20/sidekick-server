@@ -1112,135 +1112,6 @@
 			]
 		},
 		{
-			"name": "tokens",
-			"item": [
-				{
-					"name": "List all tokens",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{server}}/tokens",
-							"host": [
-								"{{server}}"
-							],
-							"path": [
-								"tokens"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get a single tokens",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{server}}/rewards/:id",
-							"host": [
-								"{{server}}"
-							],
-							"path": [
-								"rewards",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": ""
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create a token",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n                  \"id_user\": 0,\r\n                  \"token\": \"\",\r\n                  \"expiration_date\": \"2023-12-03\",\r\n                  \"platform\": \"\"\r\n                }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{server}}/tokens",
-							"host": [
-								"{{server}}"
-							],
-							"path": [
-								"tokens"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update tokens",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id_user\": 0,\r\n    \"token\": \"\",\r\n    \"creation_date\": \"\",\r\n    \"expiration_date\": \"\",\r\n    \"platform\": \"\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{server}}/tokens/:id",
-							"host": [
-								"{{server}}"
-							],
-							"path": [
-								"tokens",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": ""
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete a tokens",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{server}}/tokens/:id",
-							"host": [
-								"{{server}}"
-							],
-							"path": [
-								"tokens",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": ""
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "users",
 			"item": [
 				{
@@ -1757,10 +1628,34 @@
 			]
 		}
 	],
-	"variable": [
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
 		{
-			"key": "server",
-			"value": "http://192.168.1.82:3000/api"
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }

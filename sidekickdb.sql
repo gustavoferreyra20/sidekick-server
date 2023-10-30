@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 22-10-2023 a las 01:34:55
--- Versión del servidor: 10.4.10-MariaDB
--- Versión de PHP: 7.3.12
+-- Tiempo de generación: 30-10-2023 a las 00:06:16
+-- Versión del servidor: 8.0.31
+-- Versión de PHP: 8.0.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -30,9 +29,9 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `applications`;
 CREATE TABLE IF NOT EXISTS `applications` (
-  `id_application` int(11) NOT NULL AUTO_INCREMENT,
-  `id_post` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
+  `id_application` int NOT NULL AUTO_INCREMENT,
+  `id_post` int NOT NULL,
+  `id_user` int NOT NULL,
   `status` varchar(45) NOT NULL DEFAULT 'pending',
   PRIMARY KEY (`id_application`),
   KEY `fk_user` (`id_user`),
@@ -59,7 +58,7 @@ INSERT INTO `applications` (`id_application`, `id_post`, `id_user`, `status`) VA
 
 DROP TABLE IF EXISTS `contact_inf`;
 CREATE TABLE IF NOT EXISTS `contact_inf` (
-  `id_contact_inf` int(11) NOT NULL AUTO_INCREMENT,
+  `id_contact_inf` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `img` varchar(45) NOT NULL,
   PRIMARY KEY (`id_contact_inf`)
@@ -83,10 +82,10 @@ INSERT INTO `contact_inf` (`id_contact_inf`, `name`, `img`) VALUES
 
 DROP TABLE IF EXISTS `games`;
 CREATE TABLE IF NOT EXISTS `games` (
-  `id_game` int(11) NOT NULL AUTO_INCREMENT,
+  `id_game` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `img` varchar(45) NOT NULL,
-  `createdAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updatedAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_game`)
 ) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
@@ -108,7 +107,7 @@ INSERT INTO `games` (`id_game`, `name`, `img`, `createdAt`, `updatedAt`) VALUES
 
 DROP TABLE IF EXISTS `modes`;
 CREATE TABLE IF NOT EXISTS `modes` (
-  `id_mode` int(11) NOT NULL AUTO_INCREMENT,
+  `id_mode` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id_mode`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
@@ -130,7 +129,7 @@ INSERT INTO `modes` (`id_mode`, `name`) VALUES
 
 DROP TABLE IF EXISTS `platforms`;
 CREATE TABLE IF NOT EXISTS `platforms` (
-  `id_platform` int(11) NOT NULL AUTO_INCREMENT,
+  `id_platform` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `img` varchar(45) NOT NULL,
   PRIMARY KEY (`id_platform`)
@@ -154,8 +153,8 @@ INSERT INTO `platforms` (`id_platform`, `name`, `img`) VALUES
 
 DROP TABLE IF EXISTS `platforms_games`;
 CREATE TABLE IF NOT EXISTS `platforms_games` (
-  `id_game` int(11) NOT NULL,
-  `id_platform` int(11) NOT NULL,
+  `id_game` int NOT NULL,
+  `id_platform` int NOT NULL,
   KEY `fk_platform` (`id_platform`),
   KEY `fk_game` (`id_game`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -184,16 +183,16 @@ INSERT INTO `platforms_games` (`id_game`, `id_platform`) VALUES
 
 DROP TABLE IF EXISTS `posts`;
 CREATE TABLE IF NOT EXISTS `posts` (
-  `id_post` int(11) NOT NULL AUTO_INCREMENT,
-  `id_user` int(11) NOT NULL,
-  `id_game` int(11) NOT NULL,
-  `id_platform` int(11) NOT NULL,
-  `id_mode` int(11) NOT NULL,
-  `requiredUsers` int(11) NOT NULL,
-  `actualUsers` int(11) NOT NULL DEFAULT 1,
+  `id_post` int NOT NULL AUTO_INCREMENT,
+  `id_user` int NOT NULL,
+  `id_game` int NOT NULL,
+  `id_platform` int NOT NULL,
+  `id_mode` int NOT NULL,
+  `requiredUsers` int NOT NULL,
+  `actualUsers` int NOT NULL DEFAULT '1',
   `title` varchar(45) NOT NULL,
   `description` varchar(280) NOT NULL,
-  `date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_post`)
 ) ENGINE=MyISAM AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
 
@@ -215,12 +214,12 @@ INSERT INTO `posts` (`id_post`, `id_user`, `id_game`, `id_platform`, `id_mode`, 
 
 DROP TABLE IF EXISTS `reviews`;
 CREATE TABLE IF NOT EXISTS `reviews` (
-  `id_review` int(11) NOT NULL AUTO_INCREMENT,
-  `id_writerUser` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `id_post` int(11) NOT NULL,
-  `abilityScore` int(11) NOT NULL DEFAULT 50,
-  `karmaScore` int(11) NOT NULL DEFAULT 50,
+  `id_review` int NOT NULL AUTO_INCREMENT,
+  `id_writerUser` int NOT NULL,
+  `id_user` int NOT NULL,
+  `id_post` int NOT NULL,
+  `abilityScore` int NOT NULL DEFAULT '50',
+  `karmaScore` int NOT NULL DEFAULT '50',
   `comment` varchar(280) DEFAULT NULL,
   PRIMARY KEY (`id_review`)
 ) ENGINE=MyISAM AUTO_INCREMENT=111 DEFAULT CHARSET=latin1;
@@ -247,8 +246,8 @@ INSERT INTO `reviews` (`id_review`, `id_writerUser`, `id_user`, `id_post`, `abil
 
 DROP TABLE IF EXISTS `reviews_rewards`;
 CREATE TABLE IF NOT EXISTS `reviews_rewards` (
-  `id_review` int(11) NOT NULL,
-  `id_reward` int(11) NOT NULL,
+  `id_review` int NOT NULL,
+  `id_reward` int NOT NULL,
   KEY `fk_review` (`id_review`),
   KEY `fk_reward` (`id_reward`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -288,7 +287,7 @@ INSERT INTO `reviews_rewards` (`id_review`, `id_reward`) VALUES
 
 DROP TABLE IF EXISTS `rewards`;
 CREATE TABLE IF NOT EXISTS `rewards` (
-  `id_reward` int(11) NOT NULL AUTO_INCREMENT,
+  `id_reward` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `description` varchar(280) NOT NULL,
   `price` decimal(19,4) NOT NULL,
@@ -311,37 +310,12 @@ INSERT INTO `rewards` (`id_reward`, `name`, `description`, `price`, `img`) VALUE
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tokens`
---
-
-DROP TABLE IF EXISTS `tokens`;
-CREATE TABLE IF NOT EXISTS `tokens` (
-  `id_token` int(11) NOT NULL AUTO_INCREMENT,
-  `id_user` int(11) NOT NULL,
-  `token` varchar(300) NOT NULL,
-  `creation_date` date NOT NULL DEFAULT current_timestamp(),
-  `expiration_date` date NOT NULL,
-  `platform` varchar(45) NOT NULL,
-  PRIMARY KEY (`id_token`),
-  KEY `fk_user` (`id_user`)
-) ENGINE=MyISAM AUTO_INCREMENT=66 DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `tokens`
---
-
-INSERT INTO `tokens` (`id_token`, `id_user`, `token`, `creation_date`, `expiration_date`, `platform`) VALUES
-(65, 103, '915fb742c671989cb6dfc01de7fbbf6fb4c6c56c', '2023-10-22', '2024-01-20', 'electron');
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `users`
 --
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
-  `id_user` int(11) NOT NULL AUTO_INCREMENT,
+  `id_user` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `email` varchar(45) NOT NULL,
   `password` varchar(100) NOT NULL,
@@ -368,8 +342,8 @@ INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `description`, `img
 
 DROP TABLE IF EXISTS `users_contact_inf`;
 CREATE TABLE IF NOT EXISTS `users_contact_inf` (
-  `id_user` int(45) NOT NULL,
-  `id_contact_inf` int(45) NOT NULL,
+  `id_user` int NOT NULL,
+  `id_contact_inf` int NOT NULL,
   `nickname` varchar(45) NOT NULL,
   KEY `fk_user` (`id_user`),
   KEY `fk_contact_inf` (`id_contact_inf`)
@@ -422,9 +396,9 @@ INSERT INTO `users_contact_inf` (`id_user`, `id_contact_inf`, `nickname`) VALUES
 
 DROP TABLE IF EXISTS `users_rewards`;
 CREATE TABLE IF NOT EXISTS `users_rewards` (
-  `id_user` int(11) NOT NULL,
-  `id_reward` int(11) NOT NULL,
-  `amount` int(11) DEFAULT NULL,
+  `id_user` int NOT NULL,
+  `id_reward` int NOT NULL,
+  `amount` int DEFAULT NULL,
   KEY `fk_user` (`id_user`),
   KEY `fk_reward` (`id_reward`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;

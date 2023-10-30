@@ -8,4 +8,4 @@ function handleAsyncErrors(fn) {
     };
 }
 
-module.exports = handleAsyncErrors;
+module.exports = { handleAsyncErrors };

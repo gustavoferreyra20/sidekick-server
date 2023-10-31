@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 30-10-2023 a las 00:06:16
+-- Tiempo de generación: 31-10-2023 a las 21:58:39
 -- Versión del servidor: 8.0.31
 -- Versión de PHP: 8.0.26
 
@@ -323,7 +323,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `img` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id_user`),
   UNIQUE KEY `unique_email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=209 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=236 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `users`
@@ -332,7 +332,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `description`, `img`) VALUES
 (93, 'luke', 'luke@gmail.com', '$2a$10$wOCtMtYGPg4/n6Np1YCSTutqTyttsrNWzQoM2y89L58gkRKltu3bO', NULL, 'profiles/default.png'),
 (103, 'david', 'david@gmail.com', '$2a$10$tGBBfdEVwA947WjVWDDhCejs1eBilRQhBZI7L15MCBCptfu3OVlL6', 'description', 'profiles/file-1679331073218.png'),
-(182, 'leoDV', 'leoDV@gmail.com', '$2a$10$L4u.jbWS/ZGjxYQq0lvsTeXMJHoBMV/4WerH5ax.eTiCAPShyikYa', NULL, 'profiles/file-1682195643474.png');
+(182, 'leoDV', 'leoDV@gmail.com', '$2a$10$L4u.jbWS/ZGjxYQq0lvsTeXMJHoBMV/4WerH5ax.eTiCAPShyikYa', NULL, 'profiles/file-1679960143954.png'),
+(235, 'test', 'test@gmail.com', '$2a$10$8BljRKtBokHVp.lrq28w5uJ4SN.iK6UQY5aZfJb3xP690LoYFQGea', '', 'profiles/default.png');
 
 -- --------------------------------------------------------
 
@@ -354,37 +355,12 @@ CREATE TABLE IF NOT EXISTS `users_contact_inf` (
 --
 
 INSERT INTO `users_contact_inf` (`id_user`, `id_contact_inf`, `nickname`) VALUES
-(175, 3, 'awgwagawgawg'),
-(175, 1, 'awfwrr'),
-(176, 1, 'awfwafwaf'),
-(176, 3, 'awfawwaf'),
-(177, 2, 'awfwafafawf'),
-(177, 3, 'qqqqqqqqqqqqqqq'),
-(178, 1, 'sonicD'),
-(178, 2, 'sonicPSN'),
-(179, 1, 'default@gmail.com'),
-(180, 1, 'default2@gmail.com'),
-(181, 1, 'default3@gmail.com'),
 (182, 1, 'leo'),
-(189, 1, 'Bbjjk'),
-(189, 3, 'Gvjkkkk'),
-(190, 1, 'Bbjjk'),
-(190, 3, 'Gvjkkkk'),
-(191, 1, 'Aaaaaaaa'),
-(191, 2, 'Bbbbbb'),
-(192, 1, 'Vvbbb'),
-(193, 1, 'Gghjj'),
-(194, 1, 'Ghhjj'),
-(195, 1, 'Fffff'),
-(196, 1, 'Hjjjkj'),
-(197, 1, 'Gggf'),
-(198, 1, 'awfwafwaf'),
-(199, 1, 'awfwafwaf'),
-(200, 1, 'drhrdhrdhrdh'),
-(201, 1, 'Bfbbdbd'),
-(202, 1, 'Uuuuuuuuuuu'),
-(203, 1, 'Gggggggg'),
-(204, 1, '0000000000'),
+(235, 1, 'test'),
+(93, 4, 'test'),
+(93, 3, ''),
+(93, 2, ''),
+(93, 1, ''),
 (103, 1, 'test'),
 (103, 3, 'aaaaaaaaaaaaaa');
 

@@ -8,6 +8,7 @@ const { handleAsyncErrors } = require('./middleware/errorHandler');
 const { auth } = require('./middleware/auth');
 
 const routes = {
+	auth: require('./routes/auth'),
 	games: require('./routes/games'),
 	rewards: require('./routes/rewards'),
 	platforms: require('./routes/platforms'),
@@ -48,16 +49,45 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 
-app.post(`/api/imageupload`, auth, upload.single('file'), function (req, res) {
-	//req.file will now be available as a json object, save to mongodb, re: filename, path etc
-	res.send(req.file)
-})
+app.post(`/api/imageupload`, upload.single('file'), async function (req, res) {
+	const userId = req.body.userId;
+	const userData = {
+		img: `profiles/${req.file.filename}`
+	};
 
-app.get("/api/images/*", auth, (req, res) => {
+	try {
+		await routes.users.update({ params: { id: userId }, body: userData }, res);
+	} catch (error) {
+		console.error(error);
+		res.status(500).send("Error updating user");
+	}
+});
+
+app.get("/api/images/*", (req, res) => {
 	const filepath = req.params[0];
 	const imagePath = __dirname + '/img/' + filepath;
 	res.sendFile(imagePath);
 });
+
+app.get(
+	`/api/contact_inf`,
+	handleAsyncErrors(routes.contact_inf.getAll)
+);
+
+app.post(
+	`/api/auth/login`,
+	handleAsyncErrors(routes.auth.login)
+);
+
+app.post(
+	`/api/auth/register`,
+	handleAsyncErrors(routes.auth.register)
+);
+
+app.post(
+	`/api/auth/:id/contact_inf/:associationId`,
+	handleAsyncErrors(routes.auth.addContactInf)
+);
 
 // We define the standard REST APIs for each route (if they exist).
 for (const [routeName, routeController] of Object.entries(routes)) {
@@ -125,10 +155,6 @@ for (const [routeName, routeController] of Object.entries(routes)) {
 			`/api/${routeName}/:id/:associationName/:associationId`, auth,
 			handleAsyncErrors(routeController.joinPost)
 		);
-	}
-
-	if (routeController.login) {
-		app.post(`/api/${routeName}/login`, handleAsyncErrors(routeController.login));
 	}
 
 }

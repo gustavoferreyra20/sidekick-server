@@ -1288,104 +1288,6 @@
 					"response": []
 				},
 				{
-					"name": "Create an user",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"\",\r\n    \"email\": \"\",\r\n    \"description\": \"\",\r\n    \"img\": \"profiles/default.png\",\r\n    \"password\": \"\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{server}}/users",
-							"host": [
-								"{{server}}"
-							],
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Login user",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"\",\r\n    \"password\": \"\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{server}}/users/login",
-							"host": [
-								"{{server}}"
-							],
-							"path": [
-								"users",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add contact inf to user",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"\",\r\n    \"email\": \"\",\r\n    \"description\": \"\",\r\n    \"img\": \"profiles/default.png\",\r\n    \"password\": \"\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{server}}/users/:id/contact_inf/:id_contact_inf?account=",
-							"host": [
-								"{{server}}"
-							],
-							"path": [
-								"users",
-								":id",
-								"contact_inf",
-								":id_contact_inf"
-							],
-							"query": [
-								{
-									"key": "account",
-									"value": ""
-								}
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": ""
-								},
-								{
-									"key": "id_contact_inf",
-									"value": ""
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Add reward to user",
 					"request": {
 						"method": "POST",
@@ -1620,6 +1522,104 @@
 									"key": "id_contact_inf",
 									"value": ""
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "Add contact inf to user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nickname\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/auth/:id/contact_inf/:id_contact_inf",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"auth",
+								":id",
+								"contact_inf",
+								":id_contact_inf"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								},
+								{
+									"key": "id_contact_inf",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"\",\r\n    \"password\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/auth/login",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"\",\r\n    \"email\": \"\",\r\n    \"description\": \"\",\r\n    \"password\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/auth/register",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"auth",
+								"register"
 							]
 						}
 					},

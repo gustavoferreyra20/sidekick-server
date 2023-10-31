@@ -3,7 +3,7 @@ const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 async function login(req, res) {
-
+console.log(process.env.JWT_SECRET)
     const { email, password } = req.body;
     const user = await models.users.findOne({
         where: { email },

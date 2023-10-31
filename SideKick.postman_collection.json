@@ -1626,6 +1626,37 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "payment",
+			"item": [
+				{
+					"name": "New payment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_reward\": 1,\r\n    \"name\": \"gold\",\r\n    \"description\": \"Medalla de oro\",\r\n    \"price\": 600,\r\n    \"img\": \"rewards/gold.png\",\r\n    \"$$hashKey\": \"object:60\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/payment",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"payment"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"auth": {

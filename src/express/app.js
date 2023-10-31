@@ -16,7 +16,8 @@ const routes = {
 	reviews: require('./routes/reviews'),
 	users: require('./routes/users'),
 	modes: require('./routes/modes'),
-	contact_inf: require('./routes/contact_inf')
+	contact_inf: require('./routes/contact_inf'),
+	payment: require('./routes/payment')
 	// Add more routes here...
 	// items: require('./routes/items'),
 };

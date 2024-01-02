@@ -1238,6 +1238,31 @@
 					"response": []
 				},
 				{
+					"name": "List users notifications",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/users/:id/notifications",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"users",
+								":id",
+								"notifications"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "List users rewards",
 					"request": {
 						"method": "GET",
@@ -1333,7 +1358,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"\",\r\n    \"email\": \"\",\r\n    \"description\": \"\",\r\n    \"img\": \"profiles/default.png\",\r\n    \"password\": \"\"\r\n}",
+							"raw": "{\r\n    \"abilityScore\": 70,\r\n     \"comment\": \"\", \r\n     \"id_post\": 38, \r\n     \"id_user\": 103, \r\n     \"id_writerUser\": 103,\r\n      \"karmaScore\": 23, \r\n      \"reward\": null\r\n      }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1341,24 +1366,24 @@
 							}
 						},
 						"url": {
-							"raw": "{{server}}/users/:id/rewards/:id_reward",
+							"raw": "{{server}}/users/:id/reviews/:id_writer_user",
 							"host": [
 								"{{server}}"
 							],
 							"path": [
 								"users",
 								":id",
-								"rewards",
-								":id_reward"
+								"reviews",
+								":id_writer_user"
 							],
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "103"
 								},
 								{
-									"key": "id_reward",
-									"value": ""
+									"key": "id_writer_user",
+									"value": "103"
 								}
 							]
 						}
@@ -1403,6 +1428,51 @@
 								},
 								{
 									"key": "id_contact_inf",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update users notification",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"\",\r\n    \"email\": \"\",\r\n    \"description\": \"\",\r\n    \"img\": \"profiles/default.png\",\r\n    \"password\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/users/:id/notifications/:id_notification?status=read",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"users",
+								":id",
+								"notifications",
+								":id_notification"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "read"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								},
+								{
+									"key": "id_notification",
 									"value": ""
 								}
 							]
@@ -1573,12 +1643,30 @@
 				},
 				{
 					"name": "Login user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json();\r",
+									"\r",
+									"if(response.token){\r",
+									"pm.environment.set(\"token\", response.token);\r",
+									"} else {\r",
+									"    pm.environment.set(\"token\", null);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"\",\r\n    \"password\": \"\"\r\n}",
+							"raw": "{\r\n    \"email\": \"david@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1593,6 +1681,33 @@
 							"path": [
 								"auth",
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/auth/validate",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"auth",
+								"validate"
 							]
 						}
 					},

@@ -2,8 +2,24 @@ const { models } = require('../../sequelize/index');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+
+async function validate(req, res) {
+    const { token } = req.body;
+
+    if (!token) {
+        res.status(400).json({ error: 'Token is missing' });
+        return;
+    }
+
+    try {
+        //const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        res.status(200).json({ message: 'Token is valid'});
+    } catch (error) {
+        res.status(401).json({ error: 'Token is invalid or has expired' });
+    }
+}
+
 async function login(req, res) {
-console.log(process.env.JWT_SECRET)
     const { email, password } = req.body;
     const user = await models.users.findOne({
         where: { email },
@@ -16,8 +32,8 @@ console.log(process.env.JWT_SECRET)
 
     if (bcryptjs.compareSync(password, user.password)) {
         const userWithoutPassword = { ...user.toJSON() };
-        const token = jwt.sign(userWithoutPassword, process.env.JWT_SECRET, { expiresIn: process.env.JWT_TIME_EXPIRES });
         delete userWithoutPassword.password;
+        const token = jwt.sign(userWithoutPassword, process.env.JWT_SECRET, { expiresIn: process.env.JWT_TIME_EXPIRES });
         res.status(200).json({ id: userWithoutPassword.id_user, token: token });
     } else {
         res.status(401).json({ error: 'Incorrect email or password' });
@@ -46,7 +62,7 @@ async function register(req, res) {
 async function addContactInf(req, res) {
     const userId = req.params.id;
     const user = await models.users.findByPk(userId);
-    
+
     const contactInfId = req.params.associationId;
     const nickname = req.body.nickname;
 
@@ -68,6 +84,7 @@ async function addContactInf(req, res) {
 }
 
 module.exports = {
+    validate,
     login,
     register,
     addContactInf

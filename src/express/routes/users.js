@@ -5,6 +5,7 @@ var Sequelize = require("sequelize");
 models.users.belongsToMany(models.contact_inf, { through: 'users_contact_inf', foreignKey: 'id_user' });
 models.users.belongsToMany(models.posts, { through: 'applications', foreignKey: 'id_user' });
 models.users.hasMany(models.reviews, { foreignKey: 'id_user' });
+models.users.hasMany(models.notifications, { foreignKey: 'id_user' });
 models.users.belongsToMany(models.rewards, { through: 'users_rewards', foreignKey: 'id_user' });
 
 async function getAll(req, res) {
@@ -179,6 +180,12 @@ async function join(req, res) {
 			}
 			break;
 
+		case "notifications":
+			const notifications = await user.getNotifications();
+
+			res.status(200).json(notifications);
+			break;
+
 		default:
 			res.status(404).json({ error: 'Association not found' });
 			break;
@@ -213,8 +220,25 @@ async function joinUpdate(req, res) {
 			}
 
 			await user.addContact_infs(contact_inf, { through: { nickname: account } })
+			break;
 
-			return res.status(404).json({ error: 'User does not have this contact information' });
+		case "notifications":
+			const id_notification = req.params.associationId;
+			const status = req.query.status;
+
+			const notification = await models.notifications.findByPk(id_notification);
+
+			if (!notification) {
+				return res.status(404).json({ error: 'Notification not found' });
+			}
+
+			if (!status) {
+				return res.status(404).json({ error: 'Status not found' });
+			}
+
+			await notification.update({ status: status });
+
+			return res.status(200).json({ message: 'Updated successfully' });
 			break;
 
 		default:

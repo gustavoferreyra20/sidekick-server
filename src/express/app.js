@@ -17,7 +17,8 @@ const routes = {
 	users: require('./routes/users'),
 	modes: require('./routes/modes'),
 	contact_inf: require('./routes/contact_inf'),
-	payment: require('./routes/payment')
+	payment: require('./routes/payment'),
+	notifications: require('./routes/notifications')
 	// Add more routes here...
 	// items: require('./routes/items'),
 };
@@ -73,6 +74,11 @@ app.get("/api/images/*", (req, res) => {
 app.get(
 	`/api/contact_inf`,
 	handleAsyncErrors(routes.contact_inf.getAll)
+);
+
+app.post(
+	`/api/auth/validate`,
+	handleAsyncErrors(routes.auth.validate)
 );
 
 app.post(

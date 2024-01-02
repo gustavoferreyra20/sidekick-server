@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 31-10-2023 a las 21:58:39
+-- Tiempo de generación: 02-01-2024 a las 21:51:48
 -- Versión del servidor: 8.0.31
 -- Versión de PHP: 8.0.26
 
@@ -36,19 +36,17 @@ CREATE TABLE IF NOT EXISTS `applications` (
   PRIMARY KEY (`id_application`),
   KEY `fk_user` (`id_user`),
   KEY `fk_post` (`id_post`)
-) ENGINE=MyISAM AUTO_INCREMENT=88 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=93 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `applications`
 --
 
 INSERT INTO `applications` (`id_application`, `id_post`, `id_user`, `status`) VALUES
-(8, 23, 93, 'pending'),
-(42, 22, 93, 'pending'),
-(82, 18, 103, 'pending'),
+(92, 38, 103, 'pending'),
 (84, 23, 2, 'pending'),
-(87, 34, 103, 'reviewed'),
-(86, 21, 103, 'rejected');
+(90, 34, 103, 'pending'),
+(86, 21, 103, 'pending');
 
 -- --------------------------------------------------------
 
@@ -62,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `contact_inf` (
   `name` varchar(45) NOT NULL,
   `img` varchar(45) NOT NULL,
   PRIMARY KEY (`id_contact_inf`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `contact_inf`
@@ -72,7 +70,8 @@ INSERT INTO `contact_inf` (`id_contact_inf`, `name`, `img`) VALUES
 (1, 'Discord', 'contact_inf/discord.png'),
 (2, 'PSN', 'contact_inf/playstation.png'),
 (3, 'Steam', 'contact_inf/steam.png'),
-(4, 'Xbox', 'contact_inf/xbox.png');
+(4, 'Xbox', 'contact_inf/xbox.png'),
+(14, 'wdw', 'contact_inf/test.png');
 
 -- --------------------------------------------------------
 
@@ -119,7 +118,31 @@ CREATE TABLE IF NOT EXISTS `modes` (
 INSERT INTO `modes` (`id_mode`, `name`) VALUES
 (1, 'casual'),
 (2, 'competitivo'),
-(4, 'cazador de trofeos');
+(3, 'cazador de trofeos');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `notifications`
+--
+
+DROP TABLE IF EXISTS `notifications`;
+CREATE TABLE IF NOT EXISTS `notifications` (
+  `id_notification` int NOT NULL AUTO_INCREMENT,
+  `id_user` int NOT NULL,
+  `message` varchar(45) NOT NULL,
+  `status` varchar(45) NOT NULL DEFAULT 'unread',
+  `updatedAt` timestamp NOT NULL,
+  `createdAt` timestamp NOT NULL,
+  PRIMARY KEY (`id_notification`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `notifications`
+--
+
+INSERT INTO `notifications` (`id_notification`, `id_user`, `message`, `status`, `updatedAt`, `createdAt`) VALUES
+(7, 103, 'test', 'read', '2024-01-02 21:30:01', '2024-01-02 20:54:48');
 
 -- --------------------------------------------------------
 
@@ -194,17 +217,20 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `description` varchar(280) NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_post`)
-) ENGINE=MyISAM AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `posts`
 --
 
 INSERT INTO `posts` (`id_post`, `id_user`, `id_game`, `id_platform`, `id_mode`, `requiredUsers`, `actualUsers`, `title`, `description`, `date`) VALUES
-(22, 93, 1, 1, 1, 1, 0, 'awwafwaffw', '', '2023-01-10 17:58:21'),
-(24, 93, 1, 1, 1, 1, 0, 'ttttttttttttttt', '', '2023-01-10 18:12:28'),
-(18, 119, 2, 4, 2, 3, 0, 'test mode id', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-07 14:25:58'),
-(34, 103, 1, 1, 1, 1, 1, 'test 2', '', '2023-10-21 20:39:20');
+(22, 93, 1, 1, 2, 1, 0, 'awwafwaffw', '', '2023-01-10 17:58:21'),
+(24, 235, 2, 2, 1, 1, 0, 'ttttttttttttttt', '', '2023-01-10 18:12:28'),
+(18, 182, 1, 4, 2, 3, 0, 'test mode id', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-07 14:25:58'),
+(38, 103, 2, 1, 1, 99, 0, 'Teste mobile', '', '2023-11-10 16:13:08'),
+(42, 103, 1, 1, 1, 1, 0, 'Guvuvv', '', '2023-11-10 17:43:43'),
+(43, 103, 2, 1, 1, 1, 0, 'Test mobile 54', '', '2023-11-10 17:52:12'),
+(44, 103, 1, 1, 1, 1, 0, 'Test refresh', '', '2023-11-10 19:08:18');
 
 -- --------------------------------------------------------
 
@@ -222,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   `karmaScore` int NOT NULL DEFAULT '50',
   `comment` varchar(280) DEFAULT NULL,
   PRIMARY KEY (`id_review`)
-) ENGINE=MyISAM AUTO_INCREMENT=111 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=137 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `reviews`
@@ -236,7 +262,33 @@ INSERT INTO `reviews` (`id_review`, `id_writerUser`, `id_user`, `id_post`, `abil
 (92, 93, 103, 10, 0, 0, 'aaaaaaaa'),
 (95, 103, 103, 34, 50, 50, 'addReward'),
 (96, 103, 103, 34, 50, 50, 'addreward 2'),
-(97, 103, 103, 34, 50, 50, 'ttttttt');
+(97, 103, 103, 34, 50, 50, 'ttttttt'),
+(111, 103, 103, 38, 70, 23, ''),
+(112, 103, 103, 38, 50, 50, ''),
+(113, 103, 103, 38, 50, 50, 'Test mobile 2'),
+(114, 103, 103, 38, 50, 50, 'Bdbbdjds'),
+(115, 103, 103, 38, 50, 50, ''),
+(116, 103, 103, 38, 50, 50, ''),
+(117, 103, 103, 38, 50, 50, 'Aaaaasaaaaaaq'),
+(118, 103, 103, 38, 50, 50, 'Aaaaasaaaaaaq'),
+(119, 103, 103, 38, 50, 50, 'Uudjdhdhdh'),
+(120, 103, 103, 38, 50, 50, 'Bdbdbdbdj'),
+(121, 103, 103, 38, 50, 50, 'Bdbdbdbdj'),
+(122, 103, 103, 38, 50, 50, 'Hdvvdvd'),
+(123, 103, 103, 38, 50, 50, ''),
+(124, 103, 103, 38, 50, 50, ''),
+(125, 103, 103, 38, 50, 50, ''),
+(126, 103, 103, 38, 50, 50, ''),
+(127, 103, 103, 38, 50, 50, ''),
+(128, 103, 103, 38, 50, 50, ''),
+(129, 103, 103, 38, 50, 50, ''),
+(130, 103, 103, 38, 50, 50, ''),
+(131, 103, 103, 38, 50, 50, ''),
+(132, 103, 103, 38, 50, 50, ''),
+(133, 103, 103, 38, 50, 50, ''),
+(134, 103, 103, 38, 50, 50, 'Bdbddbdh'),
+(135, 103, 103, 38, 70, 23, ''),
+(136, 103, 103, 38, 50, 50, '');
 
 -- --------------------------------------------------------
 
@@ -277,7 +329,10 @@ INSERT INTO `reviews_rewards` (`id_review`, `id_reward`) VALUES
 (81, 3),
 (94, 1),
 (94, 2),
-(107, 2);
+(107, 2),
+(112, 1),
+(92, 1),
+(136, 1);
 
 -- --------------------------------------------------------
 

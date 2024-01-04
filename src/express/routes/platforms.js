@@ -1,4 +1,5 @@
 const { models } = require('../../sequelize/index');
+const isAdmin = require('../utils/isAdmin');
 
 models.platforms.belongsToMany(models.games, { through: 'platforms_games', foreignKey: 'id_platform' })
 
@@ -22,22 +23,32 @@ async function getSingle(req, res) {
 async function create(req, res) {
 	const platformData = req.body;
 
-	const platform = await models.platforms.create(platformData);
-	res.status(200).json(platform);
+	const adminStatus = await isAdmin(req);
+
+	if (adminStatus) {
+		const platform = await models.platforms.create(platformData);
+		res.status(200).json(platform);
+	} else {
+		res.status(401).json({ error: 'Unauthorized' });
+	}
 }
 
 async function update(req, res) {
 	const platformId = req.params.id;
 	const platformData = req.body;
+	const adminStatus = await isAdmin(req);
 
-	const [updatedRows] = await models.platforms.update(platformData, {
-		where: { id_platform: platformId },
-	});
+	if (adminStatus) {
+		const platform = await models.platforms.findByPk(platformId);
+		if (!platform) {
+			res.status(404).send('404 - Not found');
+		}
 
-	if (updatedRows > 0) {
+		await platform.update(platformData);
+
 		res.status(200).json({ message: 'Updated successfully' });
 	} else {
-		res.status(404).send('404 - Not found');
+		res.status(401).json({ error: 'Unauthorized' });
 	}
 }
 

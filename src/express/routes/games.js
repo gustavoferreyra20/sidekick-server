@@ -1,4 +1,5 @@
 const { models } = require('../../sequelize/index');
+const isAdmin = require('../utils/isAdmin');
 
 models.games.belongsToMany(models.platforms, { through: 'platforms_games', foreignKey: 'id_game' })
 
@@ -21,34 +22,51 @@ async function getSingle(req, res) {
 async function create(req, res) {
 	const gameData = req.body;
 
-	const game = await models.games.create(gameData);
-	res.status(200).json(game);
+	const adminStatus = await isAdmin(req);
+
+	if (adminStatus) {
+		const game = await models.games.create(gameData);
+		res.status(200).json(game);
+	} else {
+		res.status(401).json({ error: 'Unauthorized' });
+	}
 }
 
 async function update(req, res) {
 	const gameId = req.params.id;
 	const gameData = req.body;
+	const adminStatus = await isAdmin(req);
 
-	const [updatedRows] = await models.games.update(gameData, {
-		where: { id_game: gameId },
-	});
+	if (adminStatus) {
+		const game = await models.games.findByPk(gameId);
+		if (!game) {
+			res.status(404).send('404 - Not found');
+		}
 
-	if (updatedRows > 0) {
+		await game.update(gameData);
+
 		res.status(200).json({ message: 'Updated successfully' });
 	} else {
-		res.status(404).send('404 - Not found');
+		res.status(401).json({ error: 'Unauthorized' });
 	}
+
 }
 
 async function removeSingle(req, res) {
 	const gameId = req.params.id;
-	const game = await models.games.findByPk(gameId);
+	const adminStatus = await isAdmin(req);
 
-	if (game) {
-		await game.destroy();
-		res.status(200).json({ message: 'Deleted successfully' });
+	if (adminStatus) {
+		const game = await models.games.findByPk(gameId);
+
+		if (game) {
+			await game.destroy();
+			res.status(200).json({ message: 'Deleted successfully' });
+		} else {
+			res.status(404).send('404 - Not found');
+		}
 	} else {
-		res.status(404).send('404 - Not found');
+		res.status(401).json({ error: 'Unauthorized' });
 	}
 }
 

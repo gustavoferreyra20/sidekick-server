@@ -19,6 +19,11 @@ module.exports = (sequelize) => {
         },
         password: DataTypes.STRING,
         description: DataTypes.STRING,
+        role: {
+            type: DataTypes.BIGINT,
+            allowNull: true,
+            defaultValue: 2
+        },
 
         img: {
             type: DataTypes.STRING,

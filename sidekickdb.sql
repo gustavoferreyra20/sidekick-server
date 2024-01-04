@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 02-01-2024 a las 21:51:48
+-- Tiempo de generación: 04-01-2024 a las 01:36:12
 -- Versión del servidor: 8.0.31
 -- Versión de PHP: 8.0.26
 
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `contact_inf` (
   `name` varchar(45) NOT NULL,
   `img` varchar(45) NOT NULL,
   PRIMARY KEY (`id_contact_inf`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `contact_inf`
@@ -71,7 +71,12 @@ INSERT INTO `contact_inf` (`id_contact_inf`, `name`, `img`) VALUES
 (2, 'PSN', 'contact_inf/playstation.png'),
 (3, 'Steam', 'contact_inf/steam.png'),
 (4, 'Xbox', 'contact_inf/xbox.png'),
-(14, 'wdw', 'contact_inf/test.png');
+(14, 'wdw', 'contact_inf/test.png'),
+(16, '', ''),
+(17, '', ''),
+(18, '', ''),
+(20, '', ''),
+(21, '', '');
 
 -- --------------------------------------------------------
 
@@ -84,19 +89,17 @@ CREATE TABLE IF NOT EXISTS `games` (
   `id_game` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `img` varchar(45) NOT NULL,
-  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updatedAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_game`)
-) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `games`
 --
 
-INSERT INTO `games` (`id_game`, `name`, `img`, `createdAt`, `updatedAt`) VALUES
-(1, 'Fortnite', 'games/Fortnite.jpg', '2023-03-18 17:54:52', '0000-00-00 00:00:00'),
-(2, 'CSGO', 'games/CSGO.jpg', '2023-03-18 17:54:53', '0000-00-00 00:00:00'),
-(3, 'MultiVersus', 'games/MultiVersus.jpg', '2023-03-18 17:54:55', '0000-00-00 00:00:00');
+INSERT INTO `games` (`id_game`, `name`, `img`) VALUES
+(1, 'Fortnite', 'games/Fortnite.jpg'),
+(2, 'CSGO', 'games/CSGO.jpg'),
+(3, 'MultiVersus', 'games/MultiVersus.jpg');
 
 -- --------------------------------------------------------
 
@@ -365,6 +368,27 @@ INSERT INTO `rewards` (`id_reward`, `name`, `description`, `price`, `img`) VALUE
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `roles`
+--
+
+DROP TABLE IF EXISTS `roles`;
+CREATE TABLE IF NOT EXISTS `roles` (
+  `id_role` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(11) NOT NULL,
+  PRIMARY KEY (`id_role`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `roles`
+--
+
+INSERT INTO `roles` (`id_role`, `name`) VALUES
+(1, 'ADMIN'),
+(2, 'USER');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `users`
 --
 
@@ -376,19 +400,22 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(100) NOT NULL,
   `description` varchar(280) DEFAULT NULL,
   `img` varchar(45) DEFAULT NULL,
+  `role` bigint NOT NULL,
   PRIMARY KEY (`id_user`),
   UNIQUE KEY `unique_email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=236 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=238 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `description`, `img`) VALUES
-(93, 'luke', 'luke@gmail.com', '$2a$10$wOCtMtYGPg4/n6Np1YCSTutqTyttsrNWzQoM2y89L58gkRKltu3bO', NULL, 'profiles/default.png'),
-(103, 'david', 'david@gmail.com', '$2a$10$tGBBfdEVwA947WjVWDDhCejs1eBilRQhBZI7L15MCBCptfu3OVlL6', 'description', 'profiles/file-1679331073218.png'),
-(182, 'leoDV', 'leoDV@gmail.com', '$2a$10$L4u.jbWS/ZGjxYQq0lvsTeXMJHoBMV/4WerH5ax.eTiCAPShyikYa', NULL, 'profiles/file-1679960143954.png'),
-(235, 'test', 'test@gmail.com', '$2a$10$8BljRKtBokHVp.lrq28w5uJ4SN.iK6UQY5aZfJb3xP690LoYFQGea', '', 'profiles/default.png');
+INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `description`, `img`, `role`) VALUES
+(93, 'luke', 'luke@gmail.com', '$2a$10$wOCtMtYGPg4/n6Np1YCSTutqTyttsrNWzQoM2y89L58gkRKltu3bO', NULL, 'profiles/default.png', 2),
+(103, 'david', 'david@gmail.com', '$2a$10$tGBBfdEVwA947WjVWDDhCejs1eBilRQhBZI7L15MCBCptfu3OVlL6', 'description', 'profiles/file-1679331073218.png', 1),
+(182, 'leoDV', 'leoDV@gmail.com', '$2a$10$L4u.jbWS/ZGjxYQq0lvsTeXMJHoBMV/4WerH5ax.eTiCAPShyikYa', NULL, 'profiles/file-1679960143954.png', 2),
+(235, 'test', 'test@gmail.com', '$2a$10$8BljRKtBokHVp.lrq28w5uJ4SN.iK6UQY5aZfJb3xP690LoYFQGea', '', 'profiles/default.png', 2),
+(236, 'user', 'user@gmail.com', '$2a$10$mGbCieoL6GSmfvElAg6gBeE7B/IKUV6peBwBM5zmsHSAcP70f.Zge', '', 'profiles/default.png', 2),
+(237, 'admin', 'admin@gmail.com', '$2a$10$ypTfBSbd9O84yymLoBePiexm/pTdYyRJc6WnFEA2WPL84zEW722Ee', '', 'profiles/default.png', 1);
 
 -- --------------------------------------------------------
 

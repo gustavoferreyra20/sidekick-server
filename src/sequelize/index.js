@@ -22,7 +22,8 @@ const modelDefiners = [
 	require('./models/reviews_rewards.model'),
 	require('./models/contact_inf.model'),
 	require('./models/users_contact_inf.model'),
-	require('./models/notifications.model')
+	require('./models/notifications.model'),
+	require('./models/roles.model')
 
 	// Add more models here...
 	// require('./models/item'),

@@ -39,8 +39,9 @@ async function update(req, res) {
 
 	if (adminStatus) {
 		const game = await models.games.findByPk(gameId);
+		
 		if (!game) {
-			res.status(404).send('404 - Not found');
+			return res.status(404).send('404 - Not found');
 		}
 
 		await game.update(gameData);

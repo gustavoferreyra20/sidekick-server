@@ -1,6 +1,7 @@
 const { models } = require('../../sequelize/index');
 const Op = require('sequelize').Op;
 const sequelize = require("../../sequelize/index");
+const isAdmin = require('../utils/isAdmin');
 
 models.posts.belongsToMany(models.users, { through: 'applications', foreignKey: 'id_post' });
 
@@ -38,42 +39,69 @@ async function getSingle(req, res) {
 };
 
 async function create(req, res) {
+	const currentUser = req.auth;
+
 	let postData = (req.body);
+
+	postData.id_user = currentUser.id_user;
 	const post = await models.posts.create(postData);
 	res.status(200).json(post);
 };
 
 async function update(req, res) {
-	const postId = req.params.id;
-	const postData = req.body;
+	try {
+		const postId = req.params.id;
+		const postData = req.body;
+		const currentUser = req.auth;
 
-	const [updatedRows] = await models.posts.update(postData, {
-		where: { id_post: postId },
-	});
+		const post = await models.posts.findOne({
+			where: {
+				id_post: postId,
+				id_user: currentUser.id_user
+			},
+		})
 
-	if (updatedRows > 0) {
+		if (!post) {
+			return res.status(404).send('404 - Not found');
+		}
+
+		const { title, description } = postData;
+
+		await post.update({ title, description });
+
 		res.status(200).json({ message: 'Updated successfully' });
-	} else {
-		res.status(404).send('404 - Not found');
+	} catch (error) {
+		console.log(error)
 	}
 }
 
-
 async function removeSingle(req, res) {
 	const postId = req.params.id;
+	const adminStatus = await isAdmin(req);
 	const post = await models.posts.findByPk(postId);
+	const currentUser = req.auth;
 
-	if (post) {
-		await post.destroy();
+	if (!post) {
+		return res.status(404).send('404 - Not found');
+	}
+
+	if (adminStatus) {
+		await post.update({ deleted: 1 });
+		res.status(200).json({ message: 'Deleted successfully' });
+	} else if (post.id_user == currentUser.id_user) {
+		await post.update({ deleted: 1 });
 		res.status(200).json({ message: 'Deleted successfully' });
 	} else {
-		res.status(404).send('404 - Not found');
+		res.status(401).json({ error: 'Unauthorized' });
 	}
+
+
 }
 
 async function joinPost(req, res) {
 	const postId = req.params.id;
 	const associationName = req.params.associationName;
+	const currentUser = req.auth;
 
 	const post = await models.posts.findByPk(postId);
 
@@ -83,7 +111,7 @@ async function joinPost(req, res) {
 
 	switch (associationName) {
 		case "applications":
-			const id_user = req.params.associationId;
+			const id_user = currentUser.id_user;
 
 			const user = await models.users.findByPk(id_user);
 
@@ -107,7 +135,7 @@ async function joinPost(req, res) {
 async function joinUpdate(req, res) {
 	const postId = req.params.id;
 	const associationName = req.params.associationName;
-
+	const currentUser = req.auth;
 	const post = await models.posts.findByPk(postId);
 
 	if (!post) {
@@ -116,10 +144,14 @@ async function joinUpdate(req, res) {
 
 	switch (associationName) {
 		case "applications":
-			const applicationId = req.params.associationId;
 			const status = req.query.status;
 
-			const application = await models.applications.findByPk(applicationId);
+			const application = await models.applications.findOne({
+				where: {
+					id_user: currentUser.id_user,
+					id_post: postId
+				}
+			});
 
 			if (!application) {
 				return res.status(404).json({ message: 'Application not found' });
@@ -152,10 +184,10 @@ async function updateActualUsers(id_post) {
 			through: {
 				where: {
 					[Op.or]: [
-					  { status: 'accepted' },
-					  { status: 'reviewed' }
+						{ status: 'accepted' },
+						{ status: 'reviewed' }
 					]
-				  }
+				}
 			}
 		}]
 	});
@@ -168,38 +200,48 @@ async function updateActualUsers(id_post) {
 async function joinDelete(req, res) {
 	const postId = req.params.id;
 	const associationName = req.params.associationName;
-
+	const currentUser = req.auth;
 	const post = await models.posts.findByPk(postId);
 
 	if (!post) {
 		return res.status(404).json({ error: 'Post not found' });
 	}
+	try {
+		switch (associationName) {
+			case "applications":
+				const application = await models.applications.findOne({
+					where: {
+						id_post: postId,
+						id_user: currentUser.id_user
+					},
+				})
 
-	switch (associationName) {
-		case "applications":
-			const applicationId = req.params.associationId;
-			const application = await models.applications.findByPk(applicationId);
-			const user = await models.users.findByPk(application.id_user);
+				const user = await models.users.findByPk(application.id_user);
 
-			if (!application) {
-				return res.status(404).json({ message: 'Application not found' });
-			}
+				if (!application) {
+					return res.status(404).json({ message: 'Application not found' });
+				}
 
-			if (!user) {
-				return res.status(404).json({ message: 'User not found' });
-			}
+				if (!user) {
+					return res.status(404).json({ message: 'User not found' });
+				}
 
-			await user.removePosts(post);
+				await user.removePosts(post);
 
-			await updateActualUsers(application.id_post);
+				await updateActualUsers(application.id_post);
 
-			res.status(200).json({ message: 'Deleted successfully' });
-			break;
+				res.status(200).json({ message: 'Deleted successfully' });
+				break;
 
-		default:
-			res.status(404).json({ error: 'Association not found' });
-			break;
+			default:
+				res.status(404).json({ error: 'Association not found' });
+				break;
+		}
+	} catch (error) {
+		console.log(error)
+		res.status(500)
 	}
+
 
 };
 

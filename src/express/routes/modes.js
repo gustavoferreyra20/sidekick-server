@@ -39,7 +39,7 @@ async function update(req, res) {
 	if (adminStatus) {
 		const mode = await models.modes.findByPk(modeId);
 		if (!mode) {
-			res.status(404).send('404 - Not found');
+			return res.status(404).send('404 - Not found');
 		}
 
 		await mode.update(modeData);

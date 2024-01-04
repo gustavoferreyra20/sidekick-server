@@ -16,6 +16,7 @@ module.exports = (sequelize) => {
         title: DataTypes.STRING,
         description: DataTypes.STRING,
         date: DataTypes.TIME,
+        deleted: DataTypes.BOOLEAN
 }, {
     freezeTableName: true,
 	timestamps: false

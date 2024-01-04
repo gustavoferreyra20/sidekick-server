@@ -149,6 +149,13 @@ for (const [routeName, routeController] of Object.entries(routes)) {
 			handleAsyncErrors(routeController.joinDelete)
 		);
 	}
+	// remove objects which matches through intermediate table
+	if (routeController.joinDelete) {
+		app.delete(
+			`/api/${routeName}/:id/:associationName`, auth,
+			handleAsyncErrors(routeController.joinDelete)
+		);
+	}
 	// update objects which matches through intermediate table
 	if (routeController.joinUpdate) {
 		app.put(
@@ -156,10 +163,24 @@ for (const [routeName, routeController] of Object.entries(routes)) {
 			handleAsyncErrors(routeController.joinUpdate)
 		);
 	}
+	// update objects which matches through intermediate table
+	if (routeController.joinUpdate) {
+		app.put(
+			`/api/${routeName}/:id/:associationName`, auth,
+			handleAsyncErrors(routeController.joinUpdate)
+		);
+	}
 	// create objects through intermediate table
 	if (routeController.joinPost) {
 		app.post(
 			`/api/${routeName}/:id/:associationName/:associationId`, auth,
+			handleAsyncErrors(routeController.joinPost)
+		);
+	}
+	// create objects through intermediate table
+	if (routeController.joinPost) {
+		app.post(
+			`/api/${routeName}/:id/:associationName`, auth,
 			handleAsyncErrors(routeController.joinPost)
 		);
 	}

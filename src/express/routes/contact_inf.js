@@ -41,8 +41,9 @@ async function update(req, res) {
 
 	if (adminStatus) {
 		const contactInf = await models.contact_inf.findByPk(contactInfId);
+		
 		if (!contactInf) {
-			res.status(404).send('404 - Not found');
+			return res.status(404).send('404 - Not found');
 		}
 
 		await contactInf.update(contactInfData);

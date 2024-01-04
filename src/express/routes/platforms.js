@@ -40,8 +40,9 @@ async function update(req, res) {
 
 	if (adminStatus) {
 		const platform = await models.platforms.findByPk(platformId);
+		
 		if (!platform) {
-			res.status(404).send('404 - Not found');
+			return res.status(404).send('404 - Not found');
 		}
 
 		await platform.update(platformData);

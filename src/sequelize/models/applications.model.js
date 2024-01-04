@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
 		id_application: {type:DataTypes.INTEGER, autoIncrement: true, primaryKey:true},
         id_post: DataTypes.INTEGER,
 		id_user: DataTypes.INTEGER,
-		status: DataTypes.STRING
+		status: DataTypes.STRING,
 }, {
     freezeTableName: true,
 	timestamps: false

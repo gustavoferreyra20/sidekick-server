@@ -1,4 +1,5 @@
 const { models } = require('../../sequelize/index');
+const isAdmin = require('../utils/isAdmin');
 
 models.contact_inf.belongsToMany(models.users, { through: 'users_contact_inf', foreignKey: 'id_contact_inf' });
 
@@ -22,35 +23,50 @@ async function getSingle(req, res) {
 async function create(req, res) {
 	const contactInfData = req.body;
 
-	const contactInf = await models.contact_inf.create(contactInfData);
-	res.status(200).json(contactInf);
+	const adminStatus = await isAdmin(req);
+
+	if (adminStatus) {
+		const contactInf = await models.contact_inf.create(contactInfData);
+		res.status(200).json(contactInf);
+	} else {
+		res.status(401).json({ error: 'Unauthorized' });
+	}
+
 }
 
 async function update(req, res) {
 	const contactInfId = req.params.id;
 	const contactInfData = req.body;
+	const adminStatus = await isAdmin(req);
 
-	const [updatedRows] = await models.contact_inf.update(contactInfData, {
-		where: { id_contact_inf: contactInfId },
-	});
+	if (adminStatus) {
+		const contactInf = await models.contact_inf.findByPk(contactInfId);
+		if (!contactInf) {
+			res.status(404).send('404 - Not found');
+		}
 
-	if (updatedRows > 0) {
+		await contactInf.update(contactInfData);
+
 		res.status(200).json({ message: 'Updated successfully' });
 	} else {
-		res.status(404).send('404 - Not found');
+		res.status(401).json({ error: 'Unauthorized' });
 	}
 }
 
 async function removeSingle(req, res) {
 	const contactInfId = req.params.id;
+	const adminStatus = await isAdmin(req);
+	if (adminStatus) {
+		const contactInf = await models.contact_inf.findByPk(contactInfId);
 
-	const contactInf = await models.contact_inf.findByPk(contactInfId);
-
-	if (contactInf) {
-		await contactInf.destroy({ force: true });
-		res.status(200).json({ message: 'Deleted successfully' });
+		if (contactInf) {
+			await contactInf.destroy({ force: true });
+			res.status(200).json({ message: 'Deleted successfully' });
+		} else {
+			res.status(404).send('404 - Not found');
+		}
 	} else {
-		res.status(404).send('404 - Not found');
+		res.status(401).json({ error: 'Unauthorized' });
 	}
 }
 

@@ -1,26 +1,45 @@
 const { models } = require('../../sequelize/index');
+const isAdmin = require('../utils/isAdmin');
 
 models.reviews.belongsTo(models.users, { foreignKey: 'id_writerUser' });
 models.reviews.belongsToMany(models.rewards, { through: 'reviews_rewards', foreignKey: 'id_review' });
 
 async function getAll(req, res) {
-	const review = await models.reviews.findAll();
-	res.status(200).json(review);
+	const adminStatus = await isAdmin(req);
+
+	if (adminStatus) {
+		const review = await models.reviews.findAll();
+		res.status(200).json(review);
+	} else {
+		res.status(401).json({ error: 'Unauthorized' });
+	}
+
 };
 
 async function getSingle(req, res) {
 	const reviewId = req.params.id;
-	const review = await models.reviews.findByPk(reviewId);
+	const adminStatus = await isAdmin(req);
 
-	if (review) {
-		res.status(200).json(review);
+	if (adminStatus) {
+		const review = await models.reviews.findByPk(reviewId);
+
+		if (review) {
+			res.status(200).json(review);
+		} else {
+			res.status(404).send('404 - Not found');
+		}
 	} else {
-		res.status(404).send('404 - Not found');
+		res.status(401).json({ error: 'Unauthorized' });
 	}
+
+
 };
 
 async function create(req, res) {
 	let reviewData = (req.body);
+	const currentUser = req.auth;
+
+	reviewData.id_writerUser = currentUser.id_user;
 	const review = await models.reviews.create(reviewData);
 	if (reviewData.reward != undefined) {
 
@@ -36,27 +55,42 @@ async function create(req, res) {
 
 async function update(req, res) {
 	const reviewId = req.params.id;
-	const review = await models.reviews.findByPk(reviewId);
 	const reviewData = req.body;
+	const currentUser = req.auth;
+	const review = await models.reviews.findOne({
+		where: {
+			id_review: reviewId,
+			id_writerUser: currentUser.id_user
+		},
+	})
 
-	if (review) {
-		await review.update(reviewData);
-		res.status(200).json({ message: 'Updated successfully' });
-	} else {
-		res.status(404).send('404 - Not found');
+	if (!review) {
+		return res.status(404).send('404 - Not found');
 	}
+
+	const { comment } = reviewData;
+
+	await review.update({ comment });
+	res.status(200).json({ message: 'Updated successfully' });
 }
 
 async function removeSingle(req, res) {
 	const reviewId = req.params.id;
-	const review = await models.reviews.findByPk(reviewId);
+	const adminStatus = await isAdmin(req);
 
-	if (review) {
-		await review.destroy();
-		res.status(200).json({ message: 'Deleted successfully' });
+	if (adminStatus) {
+		const review = await models.reviews.findByPk(reviewId);
+
+		if (review) {
+			await review.destroy();
+			res.status(200).json({ message: 'Deleted successfully' });
+		} else {
+			res.status(404).send('404 - Not found');
+		}
 	} else {
-		res.status(404).send('404 - Not found');
+		res.status(401).json({ error: 'Unauthorized' });
 	}
+
 };
 
 async function joinPost(req, res) {

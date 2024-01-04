@@ -49,30 +49,26 @@ async function create(req, res) {
 };
 
 async function update(req, res) {
-	try {
-		const postId = req.params.id;
-		const postData = req.body;
-		const currentUser = req.auth;
+	const postId = req.params.id;
+	const postData = req.body;
+	const currentUser = req.auth;
 
-		const post = await models.posts.findOne({
-			where: {
-				id_post: postId,
-				id_user: currentUser.id_user
-			},
-		})
+	const post = await models.posts.findOne({
+		where: {
+			id_post: postId,
+			id_user: currentUser.id_user
+		},
+	})
 
-		if (!post) {
-			return res.status(404).send('404 - Not found');
-		}
-
-		const { title, description } = postData;
-
-		await post.update({ title, description });
-
-		res.status(200).json({ message: 'Updated successfully' });
-	} catch (error) {
-		console.log(error)
+	if (!post) {
+		return res.status(404).send('404 - Not found');
 	}
+
+	const { title, description } = postData;
+
+	await post.update({ title, description });
+
+	res.status(200).json({ message: 'Updated successfully' });
 }
 
 async function removeSingle(req, res) {

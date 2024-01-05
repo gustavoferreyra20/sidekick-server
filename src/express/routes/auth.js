@@ -13,7 +13,7 @@ async function validate(req, res) {
 
     try {
         //const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        res.status(200).json({ message: 'Token is valid'});
+        res.status(200).json({ message: 'Token is valid' });
     } catch (error) {
         res.status(401).json({ error: 'Token is invalid or has expired' });
     }
@@ -34,7 +34,7 @@ async function login(req, res) {
         const userWithoutPassword = { ...user.toJSON() };
         delete userWithoutPassword.password;
         const token = jwt.sign(userWithoutPassword, process.env.JWT_SECRET, { expiresIn: process.env.JWT_TIME_EXPIRES });
-        res.status(200).json({ id: userWithoutPassword.id_user, token: token });
+        res.status(200).json({ token: token });
     } else {
         res.status(401).json({ error: 'Incorrect email or password' });
     }

@@ -6,6 +6,7 @@ const helmet = require('helmet');
 var multer = require('multer');
 const { handleAsyncErrors } = require('./middleware/errorHandler');
 const { auth } = require('./middleware/auth');
+const authRoutes = require('./routers/authRouter');
 
 const routes = {
 	auth: require('./routes/auth'),
@@ -76,25 +77,7 @@ app.get(
 	handleAsyncErrors(routes.contact_inf.getAll)
 );
 
-app.post(
-	`/api/auth/validate`,
-	handleAsyncErrors(routes.auth.validate)
-);
-
-app.post(
-	`/api/auth/login`,
-	handleAsyncErrors(routes.auth.login)
-);
-
-app.post(
-	`/api/auth/register`,
-	handleAsyncErrors(routes.auth.register)
-);
-
-app.post(
-	`/api/auth/:id/contact_inf/:associationId`,
-	handleAsyncErrors(routes.auth.addContactInf)
-);
+app.use('/api/auth', authRoutes);
 
 // We define the standard REST APIs for each route (if they exist).
 for (const [routeName, routeController] of Object.entries(routes)) {

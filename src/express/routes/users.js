@@ -1,6 +1,7 @@
 const { models } = require('../../sequelize/index');
 const dotenv = require('dotenv').config();
 var Sequelize = require("sequelize");
+const isAdmin = require('../utils/isAdmin');
 
 models.users.belongsToMany(models.contact_inf, { through: 'users_contact_inf', foreignKey: 'id_user' });
 models.users.belongsToMany(models.posts, { through: 'applications', foreignKey: 'id_user' });
@@ -9,36 +10,63 @@ models.users.hasMany(models.notifications, { foreignKey: 'id_user' });
 models.users.belongsToMany(models.rewards, { through: 'users_rewards', foreignKey: 'id_user' });
 
 async function getAll(req, res) {
-	const user = await models.users.findAll({ attributes: { exclude: ['password'] } });
-	res.status(200).json(user);
+	const adminStatus = await isAdmin(req);
+
+	if (adminStatus) {
+		const user = await models.users.findAll({ attributes: { exclude: ['password'] } });
+		res.status(200).json(user);
+	} else {
+		res.status(401).json({ error: 'Unauthorized' });
+	}
 };
 
 async function getSingle(req, res) {
 	const userId = req.params.id;
+	const adminStatus = await isAdmin(req);
+	const currentUser = req.auth;
 	const user = await models.users.findByPk(userId, {
 		attributes: { exclude: ['password'] },
 	});
 
-	if (user) {
+	if (!user) {
+		return res.status(404).send('404 - Not found');
+	}
+
+	if (adminStatus) {
+		res.status(200).json(user);
+	} else if (user.id_user == currentUser.id_user) {
 		res.status(200).json(user);
 	} else {
-		res.status(404).send('404 - Not found');
+		res.status(401).json({ error: 'Unauthorized' });
 	}
 }
 
 async function update(req, res) {
 	const userId = req.params.id;
 	const userData = req.body;
+	const currentUser = req.auth;
+	const adminStatus = await isAdmin(req);
+	const user = await models.users.findByPk(userId);
 
-	const [updatedRows] = await models.users.update(userData, {
-		where: { id_user: userId },
-	});
+	if (!user) {
+		return res.status(404).send('404 - Not found');
+	}
 
-	if (updatedRows > 0) {
+
+	if (adminStatus) {
+		const { name, description, role, img } = userData;
+
+		await user.update({ name, description, role, img });
+		res.status(200).json({ message: 'Updated successfully' });
+	} else if (user.id_user == currentUser.id_user) {
+		const { name, description, password, img } = userData;
+
+		await user.update({ name, description, password, img });
 		res.status(200).json({ message: 'Updated successfully' });
 	} else {
-		res.status(404).send('404 - Not found');
+		res.status(401).json({ error: 'Unauthorized' });
 	}
+
 };
 
 async function removeSingle(req, res) {
@@ -56,7 +84,7 @@ async function removeSingle(req, res) {
 async function joinPost(req, res) {
 	const userId = req.params.id;
 	const associationName = req.params.associationName;
-
+	const currentUser = req.auth;
 	const user = await models.users.findByPk(userId);
 
 	if (!user) {
@@ -65,16 +93,9 @@ async function joinPost(req, res) {
 
 	switch (associationName) {
 		case "reviews":
+
 			const reviewData = req.body;
-			const writerUserId = req.params.associationId;
-
-			const writerUser = await models.users.findByPk(writerUserId);
-
-			if (!writerUser) {
-				return res.status(404).json({ error: 'Writer user not found' });
-			}
-
-			reviewData.id_writerUser = writerUserId;
+			reviewData.id_writerUser = currentUser.id_user;
 
 			const createdReview = await user.createReview(reviewData);
 

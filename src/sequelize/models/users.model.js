@@ -39,10 +39,10 @@ module.exports = (sequelize) => {
                 const salt = await bcryptjs.genSalt();
                 users.password = await bcryptjs.hash(users.password, salt);
             },
-            beforeBulkUpdate: async (users) => {
-                if (users.fields.includes('password')) {
+            beforeUpdate: async (user) => {
+                if (user.changed('password')) {
                     const salt = await bcryptjs.genSalt();
-                    users.attributes.password = await bcryptjs.hash(users.attributes.password, salt);
+                    user.password = await bcryptjs.hash(user.password, salt);
                 }
             }
         }

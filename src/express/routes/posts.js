@@ -94,43 +94,37 @@ async function removeSingle(req, res) {
 
 }
 
-async function joinPost(req, res) {
-	const postId = req.params.id;
-	const associationName = req.params.associationName;
-	const currentUser = req.auth;
+async function apply(req, res) {
+	try {
+		const postId = req.params.id;
+		const currentUser = req.auth;
 
-	const post = await models.posts.findByPk(postId);
+		const post = await models.posts.findByPk(postId);
 
-	if (!post) {
-		return res.status(404).json({ error: 'Post not found' });
-	}
+		if (!post) {
+			return res.status(404).json({ error: 'Post not found' });
+		}
 
-	switch (associationName) {
-		case "applications":
-			const id_user = currentUser.id_user;
+		const id_user = currentUser.id_user;
 
-			const user = await models.users.findByPk(id_user);
+		const user = await models.users.findByPk(id_user);
 
-			if (!user) {
-				return res.status(404).json({ error: 'Users information not found' });
-			}
+		if (!user) {
+			return res.status(404).json({ error: 'Users information not found' });
+		}
 
-			await post.addUser(user);
+		await post.addUser(user);
 
-			await updateActualUsers(postId);
+		await updateActualUsers(postId);
 
-			res.status(200).json(post);
-			break;
-
-		default:
-			res.status(404).json({ error: 'Association not found' });
-			break;
+		res.status(200).json(post);
+	} catch (error) {
+		console.log(error)
 	}
 }
 
-async function joinUpdate(req, res) {
+async function updateApplication(req, res) {
 	const postId = req.params.id;
-	const associationName = req.params.associationName;
 	const currentUser = req.auth;
 	const post = await models.posts.findByPk(postId);
 
@@ -138,34 +132,26 @@ async function joinUpdate(req, res) {
 		return res.status(404).json({ error: 'Post not found' });
 	}
 
-	switch (associationName) {
-		case "applications":
-			const status = req.query.status;
+	const status = req.query.status;
 
-			const application = await models.applications.findOne({
-				where: {
-					id_user: currentUser.id_user,
-					id_post: postId
-				}
-			});
+	const application = await models.applications.findOne({
+		where: {
+			id_user: currentUser.id_user,
+			id_post: postId
+		}
+	});
 
-			if (!application) {
-				return res.status(404).json({ message: 'Application not found' });
-			}
-
-			application.status = status;
-
-			await application.save();
-
-			await updateActualUsers(application.id_post, status);
-
-			res.status(200).json(application);
-			break;
-
-		default:
-			res.status(404).json({ error: 'Association not found' });
-			break;
+	if (!application) {
+		return res.status(404).json({ message: 'Application not found' });
 	}
+
+	application.status = status;
+
+	await application.save();
+
+	await updateActualUsers(application.id_post, status);
+
+	res.status(200).json(application);
 };
 
 async function updateActualUsers(id_post) {
@@ -193,7 +179,7 @@ async function updateActualUsers(id_post) {
 	await post.save();
 }
 
-async function joinDelete(req, res) {
+async function cancelApplication(req, res) {
 	const postId = req.params.id;
 	const associationName = req.params.associationName;
 	const currentUser = req.auth;
@@ -202,41 +188,29 @@ async function joinDelete(req, res) {
 	if (!post) {
 		return res.status(404).json({ error: 'Post not found' });
 	}
-	try {
-		switch (associationName) {
-			case "applications":
-				const application = await models.applications.findOne({
-					where: {
-						id_post: postId,
-						id_user: currentUser.id_user
-					},
-				})
 
-				const user = await models.users.findByPk(application.id_user);
+	const application = await models.applications.findOne({
+		where: {
+			id_post: postId,
+			id_user: currentUser.id_user
+		},
+	})
 
-				if (!application) {
-					return res.status(404).json({ message: 'Application not found' });
-				}
+	const user = await models.users.findByPk(application.id_user);
 
-				if (!user) {
-					return res.status(404).json({ message: 'User not found' });
-				}
-
-				await user.removePosts(post);
-
-				await updateActualUsers(application.id_post);
-
-				res.status(200).json({ message: 'Deleted successfully' });
-				break;
-
-			default:
-				res.status(404).json({ error: 'Association not found' });
-				break;
-		}
-	} catch (error) {
-		console.log(error)
-		res.status(500)
+	if (!application) {
+		return res.status(404).json({ message: 'Application not found' });
 	}
+
+	if (!user) {
+		return res.status(404).json({ message: 'User not found' });
+	}
+
+	await user.removePosts(post);
+
+	await updateActualUsers(application.id_post);
+
+	res.status(200).json({ message: 'Deleted successfully' });
 
 
 };
@@ -246,8 +220,8 @@ module.exports = {
 	getSingle: getSingle,
 	create: create,
 	update: update,
-	joinUpdate: joinUpdate,
+	updateApplication: updateApplication,
 	removeSingle: removeSingle,
-	joinDelete: joinDelete,
-	joinPost: joinPost,
+	cancelApplication: cancelApplication,
+	apply: apply,
 };

@@ -6,18 +6,19 @@ const helmet = require('helmet');
 var multer = require('multer');
 const { handleAsyncErrors } = require('./middleware/errorHandler');
 const { auth } = require('./middleware/auth');
-const authRoutes = require('./routers/authRouter');
+
+// Routes
+const authRouter = require('./routers/authRouter');
+const contact_infRouter = require('./routers/contact_infRouter');
+const gamesRouter = require('./routers/gamesRouter');
+const modesRouter = require('./routers/modesRouter');
+const platformsRouter = require('./routers/platformsRouter');
+const postsRouter = require('./routers/postsRouter');
 
 const routes = {
-	auth: require('./routes/auth'),
-	games: require('./routes/games'),
 	rewards: require('./routes/rewards'),
-	platforms: require('./routes/platforms'),
-	posts: require('./routes/posts'),
 	reviews: require('./routes/reviews'),
 	users: require('./routes/users'),
-	modes: require('./routes/modes'),
-	contact_inf: require('./routes/contact_inf'),
 	payment: require('./routes/payment'),
 	notifications: require('./routes/notifications')
 	// Add more routes here...
@@ -72,12 +73,12 @@ app.get("/api/images/*", (req, res) => {
 	res.sendFile(imagePath);
 });
 
-app.get(
-	`/api/contact_inf`,
-	handleAsyncErrors(routes.contact_inf.getAll)
-);
-
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRouter);
+app.use('/api/contact_inf', auth, contact_infRouter);
+app.use('/api/games', auth, gamesRouter);
+app.use('/api/modes', auth, modesRouter);
+app.use('/api/platforms', auth, platformsRouter);
+app.use('/api/posts', auth, postsRouter);
 
 // We define the standard REST APIs for each route (if they exist).
 for (const [routeName, routeController] of Object.entries(routes)) {

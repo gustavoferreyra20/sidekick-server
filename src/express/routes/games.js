@@ -39,7 +39,7 @@ async function update(req, res) {
 
 	if (adminStatus) {
 		const game = await models.games.findByPk(gameId);
-		
+
 		if (!game) {
 			return res.status(404).send('404 - Not found');
 		}
@@ -71,9 +71,8 @@ async function removeSingle(req, res) {
 	}
 }
 
-async function join(req, res) {
+async function getPlatforms(req, res) {
 	const gameId = req.params.id;
-	const associationName = req.params.associationName;
 
 	const game = await models.games.findByPk(gameId);
 
@@ -81,17 +80,9 @@ async function join(req, res) {
 		return res.status(404).json({ error: 'Game not found' });
 	}
 
-	switch (associationName) {
-		case "platforms":
-			const platforms = await game.getPlatforms();
+	const platforms = await game.getPlatforms();
 
-			res.status(200).json(platforms);
-			break;
-
-		default:
-			res.status(404).json({ error: 'Association not found' });
-			break;
-	}
+	res.status(200).json(platforms);
 };
 
 module.exports = {
@@ -100,5 +91,5 @@ module.exports = {
 	create: create,
 	update: update,
 	removeSingle: removeSingle,
-	join: join,
+	getPlatforms: getPlatforms,
 };

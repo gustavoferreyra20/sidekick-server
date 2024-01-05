@@ -40,7 +40,7 @@ async function update(req, res) {
 
 	if (adminStatus) {
 		const platform = await models.platforms.findByPk(platformId);
-		
+
 		if (!platform) {
 			return res.status(404).send('404 - Not found');
 		}
@@ -56,13 +56,19 @@ async function update(req, res) {
 async function removeSingle(req, res) {
 	const platformId = req.params.id;
 
-	const platform = await models.platforms.findByPk(platformId);
+	const adminStatus = await isAdmin(req);
 
-	if (platform) {
-		await platform.destroy();
-		res.status(200).json({ message: 'Deleted successfully' });
+	if (adminStatus) {
+		const platform = await models.platforms.findByPk(platformId);
+
+		if (platform) {
+			await platform.destroy();
+			res.status(200).json({ message: 'Deleted successfully' });
+		} else {
+			res.status(404).send('404 - Not found');
+		}
 	} else {
-		res.status(404).send('404 - Not found');
+		res.status(401).json({ error: 'Unauthorized' });
 	}
 }
 

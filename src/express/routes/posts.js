@@ -115,6 +115,12 @@ async function apply(req, res) {
 
 		await post.addUser(user);
 
+		const notificationData = {
+			id_user: post.id_user,
+			message: `Recibiste una solicitud para jugar en ${post.title}`
+		};
+
+		await models.notifications.create(notificationData);
 		await updateActualUsers(postId);
 
 		res.status(200).json(post);
@@ -125,7 +131,8 @@ async function apply(req, res) {
 
 async function updateApplication(req, res) {
 	const postId = req.params.id;
-	const currentUser = req.auth;
+	const applicationId = req.params.id_application;
+
 	const post = await models.posts.findByPk(postId);
 
 	if (!post) {
@@ -134,12 +141,7 @@ async function updateApplication(req, res) {
 
 	const status = req.query.status;
 
-	const application = await models.applications.findOne({
-		where: {
-			id_user: currentUser.id_user,
-			id_post: postId
-		}
-	});
+	const application = await models.applications.findByPk(applicationId);
 
 	if (!application) {
 		return res.status(404).json({ message: 'Application not found' });
@@ -150,6 +152,13 @@ async function updateApplication(req, res) {
 	await application.save();
 
 	await updateActualUsers(application.id_post, status);
+
+	const notificationData = {
+		id_user: application.id_user,
+		message: (status == "accepted") ? `Su solicitud para ${post.title} ha sido aceptada` : `Su solicitud para ${post.title} ha sido rechazada`
+	};
+
+	await models.notifications.create(notificationData);
 
 	res.status(200).json(application);
 };
@@ -208,6 +217,13 @@ async function cancelApplication(req, res) {
 	await user.removePosts(post);
 
 	await updateActualUsers(application.id_post);
+
+	const notificationData = {
+		id_user: application.id_user,
+		message: `Han cancelado una solicitud en ${post.title}`
+	};
+
+	await models.notifications.create(notificationData);
 
 	res.status(200).json({ message: 'Deleted successfully' });
 

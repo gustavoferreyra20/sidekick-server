@@ -1,18 +1,30 @@
 const { models } = require('../../sequelize/index');
 
 async function getAll(req, res) {
-    const notifications = await models.notifications.findAll();
-    res.status(200).json(notifications);
+    const adminStatus = await isAdmin(req);
+
+    if (adminStatus) {
+        const notifications = await models.notifications.findAll();
+        res.status(200).json(notifications);
+    } else {
+        res.status(401).json({ error: 'Unauthorized' });
+    }
 }
 
 async function getSingle(req, res) {
     const notificationId = req.params.id;
-    const notification = await models.notifications.findByPk(notificationId);
+    const adminStatus = await isAdmin(req);
 
-    if (notification) {
-        res.status(200).json(notification);
+    if (adminStatus) {
+        const notification = await models.notifications.findByPk(notificationId);
+
+        if (notification) {
+            res.status(200).json(notification);
+        } else {
+            res.status(404).send('404 - Not found');
+        }
     } else {
-        res.status(404).send('404 - Not found');
+        res.status(401).json({ error: 'Unauthorized' });
     }
 }
 

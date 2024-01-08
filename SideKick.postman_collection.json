@@ -472,7 +472,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": " {\r\n             \"name\": \"\",\r\n        \"img\": \"\"\r\n    }",
+							"raw": "{\r\n    \"name\": \"\",\r\n    \"img\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -499,7 +499,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": " {\r\n                   \"name\": \"\",\r\n        \"img\": \"\"\r\n    }",
+							"raw": "{\r\n    \"name\": \"\",\r\n    \"img\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -518,7 +518,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "6"
 								}
 							]
 						}
@@ -537,6 +537,136 @@
 							],
 							"path": [
 								"platforms",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "notifications",
+			"item": [
+				{
+					"name": "List all notifications",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/notifications",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"notifications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a single notification",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/notifications/:id",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"notifications",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a notification",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_user\": \"\",\r\n    \"message\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/notifications/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"notifications",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update notification",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"message\": \"\",\r\n    \"status\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/notifications/:id",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"notifications",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a notification",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/notifications/:id",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"notifications",
 								":id"
 							],
 							"variable": [
@@ -619,7 +749,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id_user\": 0,\r\n    \"id_game\": 0,\r\n    \"id_platform\": 0,\r\n    \"id_mode\": 0,\r\n    \"requiredUsers\": 0,\r\n    \"actualUsers\": 0,\r\n    \"title\": \"\",\r\n    \"description\": \"\"\r\n}",
+							"raw": "{\r\n    \"id_game\": 0,\r\n    \"id_platform\": 0,\r\n    \"id_mode\": 0,\r\n    \"requiredUsers\": 0,\r\n    \"actualUsers\": 0,\r\n    \"title\": \"\",\r\n    \"description\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -654,23 +784,18 @@
 							}
 						},
 						"url": {
-							"raw": "{{server}}/posts/:id/applications/:id_user",
+							"raw": "{{server}}/posts/:id/applications",
 							"host": [
 								"{{server}}"
 							],
 							"path": [
 								"posts",
 								":id",
-								"applications",
-								":id_user"
+								"applications"
 							],
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
-								},
-								{
-									"key": "id_user",
 									"value": ""
 								}
 							]
@@ -685,7 +810,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"test2\",\r\n    \"description\": \"test2\"\r\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -693,15 +818,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{server}}/posts/:id/applications/:id_application?status=",
+							"raw": "{{server}}/posts/:id/applications?status=",
 							"host": [
 								"{{server}}"
 							],
 							"path": [
 								"posts",
 								":id",
-								"applications",
-								":id_application"
+								"applications"
 							],
 							"query": [
 								{
@@ -713,10 +837,6 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
-								},
-								{
-									"key": "id_application",
 									"value": ""
 								}
 							]
@@ -731,7 +851,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": " {\r\n                   \"name\": \"\",\r\n        \"img\": \"\"\r\n    }",
+							"raw": "{\r\n    \"title\": \"\",\r\n    \"description\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -739,12 +859,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{server}}/platforms/:id",
+							"raw": "{{server}}/posts/:id",
 							"host": [
 								"{{server}}"
 							],
 							"path": [
-								"platforms",
+								"posts",
 								":id"
 							],
 							"variable": [
@@ -782,28 +902,23 @@
 					"response": []
 				},
 				{
-					"name": "Delete post application",
+					"name": "Cancel post application",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{server}}/posts/:id/applications/:id_application",
+							"raw": "{{server}}/posts/:id/applications",
 							"host": [
 								"{{server}}"
 							],
 							"path": [
 								"posts",
 								":id",
-								"applications",
-								":id_application"
+								"applications"
 							],
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
-								},
-								{
-									"key": "id_application",
 									"value": ""
 								}
 							]
@@ -864,7 +979,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id_writerUser\": 0,\r\n    \"id_user\": 0,\r\n    \"id_post\": 0,\r\n    \"abilityScore\": 0,\r\n    \"karmaScore\": 0,\r\n    \"reward\": 1, //optional\r\n    \"comment\": \"\"\r\n}",
+							"raw": "{\r\n    \"id_user\": 0,\r\n    \"id_post\": 0,\r\n    \"abilityScore\": 0,\r\n    \"karmaScore\": 0,\r\n    \"reward\": 1, //optional\r\n    \"comment\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -891,7 +1006,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id_writerUser\": 0,\r\n    \"id_user\": 0,\r\n    \"id_post\": 0,\r\n    \"abilityScore\": 0,\r\n    \"karmaScore\": 0,\r\n    \"reward\": 1, //optional\r\n    \"comment\": \"\"\r\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -930,7 +1045,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id_writerUser\": 0,\r\n    \"id_user\": 0,\r\n    \"id_post\": 0,\r\n    \"abilityScore\": 0,\r\n    \"karmaScore\": 0,\r\n    \"comment\": \"\"\r\n}",
+							"raw": "{\r\n    \"comment\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1319,7 +1434,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"\",\r\n    \"email\": \"\",\r\n    \"description\": \"\",\r\n    \"img\": \"profiles/default.png\",\r\n    \"password\": \"\"\r\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1358,7 +1473,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"abilityScore\": 70,\r\n     \"comment\": \"\", \r\n     \"id_post\": 38, \r\n     \"id_user\": 103, \r\n     \"id_writerUser\": 103,\r\n      \"karmaScore\": 23, \r\n      \"reward\": null\r\n      }",
+							"raw": "{\r\n    \"abilityScore\": 70,\r\n     \"comment\": \"test api\", \r\n     \"id_post\": 38, \r\n     \"id_user\": 103, \r\n      \"karmaScore\": 23, \r\n      \"reward\": null\r\n      }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1366,23 +1481,18 @@
 							}
 						},
 						"url": {
-							"raw": "{{server}}/users/:id/reviews/:id_writer_user",
+							"raw": "{{server}}/users/:id/reviews",
 							"host": [
 								"{{server}}"
 							],
 							"path": [
 								"users",
 								":id",
-								"reviews",
-								":id_writer_user"
+								"reviews"
 							],
 							"variable": [
 								{
 									"key": "id",
-									"value": "103"
-								},
-								{
-									"key": "id_writer_user",
 									"value": "103"
 								}
 							]
@@ -1666,7 +1776,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"david@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}",
+							"raw": "{\r\n    \"email\": \"david@gmail.com\",\r\n    \"password\": \"123456789\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1743,10 +1853,10 @@
 			]
 		},
 		{
-			"name": "payment",
+			"name": "payments",
 			"item": [
 				{
-					"name": "New payment",
+					"name": "New MP payment",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -1760,12 +1870,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{server}}/payment",
+							"raw": "{{server}}/payments/mp",
 							"host": [
 								"{{server}}"
 							],
 							"path": [
-								"payment"
+								"payments",
+								"mp"
 							]
 						}
 					},

@@ -17,10 +17,10 @@ const postsRouter = require('./routers/postsRouter');
 const rewardsRouter = require('./routers/rewardsRouter');
 const reviewsRouter = require('./routers/reviewsRouters');
 const paymentsRouter = require('./routers/paymentsRouter');
+const notificationsRouter = require('./routers/notificationsRouter');
 
 const routes = {
 	users: require('./routes/users'),
-	notifications: require('./routes/notifications')
 	// Add more routes here...
 	// items: require('./routes/items'),
 };
@@ -82,6 +82,7 @@ app.use('/api/posts', auth, postsRouter);
 app.use('/api/rewards', auth, rewardsRouter);
 app.use('/api/reviews', auth, reviewsRouter);
 app.use('/api/payments', auth, paymentsRouter);
+app.use('/api/notifications', auth, notificationsRouter);
 
 // We define the standard REST APIs for each route (if they exist).
 for (const [routeName, routeController] of Object.entries(routes)) {

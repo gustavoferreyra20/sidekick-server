@@ -93,9 +93,9 @@ async function removeSingle(req, res) {
 
 };
 
-async function joinPost(req, res) {
+async function addReward(req, res) {
 	const reviewId = req.params.id;
-	const associationName = req.params.associationName;
+	const rewardId = req.params.id_reward;
 
 	const review = await models.reviews.findByPk(reviewId);
 
@@ -103,25 +103,15 @@ async function joinPost(req, res) {
 		return res.status(404).json({ error: 'Review not found' });
 	}
 
-	switch (associationName) {
-		case "rewards":
-			const rewardId = req.params.associationId;
+	const reward = await models.rewards.findByPk(rewardId);
 
-			const reward = await models.rewards.findByPk(rewardId);
-
-			if (!reward) {
-				return res.status(404).json({ error: 'Reward not found' });
-			}
-
-			review.addReward(reward)
-
-			res.status(200).json({ message: 'Reward added successfully' });
-			break;
-
-		default:
-			res.status(404).json({ error: 'Association not found' });
-			break;
+	if (!reward) {
+		return res.status(404).json({ error: 'Reward not found' });
 	}
+
+	review.addReward(reward)
+
+	res.status(200).json({ message: 'Reward added successfully' });
 
 };
 
@@ -131,5 +121,5 @@ module.exports = {
 	create: create,
 	update: update,
 	removeSingle: removeSingle,
-	joinPost: joinPost,
+	addReward: addReward,
 };

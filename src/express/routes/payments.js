@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-async function create(req, res) {
+async function createMp(req, res) {
     try {
         const body = {
             items: [
@@ -35,5 +35,5 @@ async function create(req, res) {
 }
 
 module.exports = {
-    create: create,
+    createMp: createMp,
 };

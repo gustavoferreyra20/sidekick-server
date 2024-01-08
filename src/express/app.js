@@ -18,6 +18,7 @@ const rewardsRouter = require('./routers/rewardsRouter');
 const reviewsRouter = require('./routers/reviewsRouters');
 const paymentsRouter = require('./routers/paymentsRouter');
 const notificationsRouter = require('./routers/notificationsRouter');
+const usersRouter = require('./routers/usersRouter');
 
 const routes = {
 	users: require('./routes/users'),
@@ -83,75 +84,6 @@ app.use('/api/rewards', auth, rewardsRouter);
 app.use('/api/reviews', auth, reviewsRouter);
 app.use('/api/payments', auth, paymentsRouter);
 app.use('/api/notifications', auth, notificationsRouter);
-
-// We define the standard REST APIs for each route (if they exist).
-for (const [routeName, routeController] of Object.entries(routes)) {
-	// get all elements
-	if (routeController.getAll) {
-		app.get(
-			`/api/${routeName}`, auth,
-			handleAsyncErrors(routeController.getAll)
-		);
-	}
-	// get specific objects which matches
-	if (routeController.getSingle) {
-		app.get(
-			`/api/${routeName}/:id`, auth,
-			handleAsyncErrors(routeController.getSingle)
-		);
-	}
-	// create an object
-	if (routeController.create) {
-		app.post(
-			`/api/${routeName}`, auth,
-			handleAsyncErrors(routeController.create)
-		);
-	}
-	// updates objects which matches
-	// recive value and condition as json strings
-	if (routeController.update) {
-		app.put(
-			`/api/${routeName}/:id`, auth,
-			handleAsyncErrors(routeController.update)
-		);
-	}
-	// remove objects which matches
-	if (routeController.removeSingle) {
-		app.delete(
-			`/api/${routeName}/:id`, auth,
-			handleAsyncErrors(routeController.removeSingle)
-		);
-	}
-
-	// get specific objects which matches through intermediate table
-	if (routeController.join) {
-		app.get(
-			`/api/${routeName}/:id/:associationName`, auth,
-			handleAsyncErrors(routeController.join)
-		);
-	}
-	// remove objects which matches through intermediate table
-	if (routeController.joinDelete) {
-		app.delete(
-			`/api/${routeName}/:id/:associationName/:associationId?`, auth,
-			handleAsyncErrors(routeController.joinDelete)
-		);
-	}
-	// update objects which matches through intermediate table
-	if (routeController.joinUpdate) {
-		app.put(
-			`/api/${routeName}/:id/:associationName/:associationId?`, auth,
-			handleAsyncErrors(routeController.joinUpdate)
-		);
-	}
-	// create objects through intermediate table
-	if (routeController.joinPost) {
-		app.post(
-			`/api/${routeName}/:id/:associationName/:associationId?`, auth,
-			handleAsyncErrors(routeController.joinPost)
-		);
-	}
-
-}
+app.use('/api/users', auth, usersRouter);
 
 module.exports = app;

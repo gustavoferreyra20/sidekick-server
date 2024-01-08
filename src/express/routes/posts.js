@@ -181,7 +181,6 @@ async function updateActualUsers(id_post) {
 
 async function cancelApplication(req, res) {
 	const postId = req.params.id;
-	const associationName = req.params.associationName;
 	const currentUser = req.auth;
 	const post = await models.posts.findByPk(postId);
 

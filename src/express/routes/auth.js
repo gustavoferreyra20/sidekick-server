@@ -63,7 +63,7 @@ async function addContactInf(req, res) {
     const userId = req.params.id;
     const user = await models.users.findByPk(userId);
 
-    const contactInfId = req.params.associationId;
+    const contactInfId = req.params.id_contact_inf;
     const nickname = req.body.nickname;
 
     const contactInf = await models.contact_inf.findByPk(contactInfId);

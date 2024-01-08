@@ -7,6 +7,6 @@ const auth = require('../routes/auth');
 router.post('/validate', handleAsyncErrors(auth.validate));
 router.post('/login', handleAsyncErrors(auth.login));
 router.post('/register', handleAsyncErrors(auth.register));
-router.post('/:id/contact_inf/:associationId', handleAsyncErrors(auth.addContactInf));
+router.post('/:id/contact_inf/:id_contact_inf', handleAsyncErrors(auth.addContactInf));
 
 module.exports = router;

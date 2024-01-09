@@ -1883,6 +1883,82 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "images",
+			"item": [
+				{
+					"name": "Get Image",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/images/:path",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"images",
+								":path"
+							],
+							"variable": [
+								{
+									"key": "path",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save profile image",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/images/:id_user",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"images",
+								":id_user"
+							],
+							"query": [
+								{
+									"key": "id_user",
+									"value": "93",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "id_user",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"auth": {

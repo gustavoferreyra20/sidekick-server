@@ -3,8 +3,6 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
-var multer = require('multer');
-const { handleAsyncErrors } = require('./middleware/errorHandler');
 const { auth } = require('./middleware/auth');
 
 // Routes
@@ -19,12 +17,7 @@ const reviewsRouter = require('./routers/reviewsRouters');
 const paymentsRouter = require('./routers/paymentsRouter');
 const notificationsRouter = require('./routers/notificationsRouter');
 const usersRouter = require('./routers/usersRouter');
-
-const routes = {
-	users: require('./routes/users'),
-	// Add more routes here...
-	// items: require('./routes/items'),
-};
+const imagesRouter = require('./routers/imagesRouter');
 
 // defining the Express app
 const app = express();
@@ -43,37 +36,7 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-var storage = multer.diskStorage({
-	destination: function (req, file, cb) {
-		cb(null, './src/express/img/profiles')      //you tell where to upload the files,
-	},
-	filename: function (req, file, cb) {
-		cb(null, file.fieldname + '-' + Date.now() + '.png')
-	}
-})
-
-var upload = multer({ storage: storage });
-
-app.post(`/api/imageupload`, upload.single('file'), async function (req, res) {
-	const userId = req.body.userId;
-	const userData = {
-		img: `profiles/${req.file.filename}`
-	};
-
-	try {
-		await routes.users.update({ params: { id: userId }, body: userData }, res);
-	} catch (error) {
-		console.error(error);
-		res.status(500).send("Error updating user");
-	}
-});
-
-app.get("/api/images/*", (req, res) => {
-	const filepath = req.params[0];
-	const imagePath = __dirname + '/img/' + filepath;
-	res.sendFile(imagePath);
-});
-
+app.use('/api/images', imagesRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/contact_inf', auth, contact_infRouter);
 app.use('/api/games', auth, gamesRouter);

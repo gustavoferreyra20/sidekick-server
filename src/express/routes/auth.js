@@ -34,7 +34,7 @@ async function login(req, res) {
         const userWithoutPassword = { ...user.toJSON() };
         delete userWithoutPassword.password;
         const token = jwt.sign(userWithoutPassword, process.env.JWT_SECRET, { expiresIn: process.env.JWT_TIME_EXPIRES });
-        res.status(200).json({ token: token });
+        res.status(200).json({ token: token, id: userWithoutPassword.id_user });
     } else {
         res.status(401).json({ error: 'Incorrect email or password' });
     }

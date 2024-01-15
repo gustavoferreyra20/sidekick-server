@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 08-01-2024 a las 17:33:35
+-- Tiempo de generación: 15-01-2024 a las 18:02:07
 -- Versión del servidor: 8.0.31
 -- Versión de PHP: 8.0.26
 
@@ -36,7 +36,16 @@ CREATE TABLE IF NOT EXISTS `applications` (
   PRIMARY KEY (`id_application`),
   KEY `fk_user` (`id_user`),
   KEY `fk_post` (`id_post`)
-) ENGINE=MyISAM AUTO_INCREMENT=96 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=103 DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `applications`
+--
+
+INSERT INTO `applications` (`id_application`, `id_post`, `id_user`, `status`) VALUES
+(98, 38, 103, 'reviewed'),
+(102, 22, 103, 'pending'),
+(96, 45, 103, 'rejected');
 
 -- --------------------------------------------------------
 
@@ -122,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   `updatedAt` timestamp NOT NULL,
   `createdAt` timestamp NOT NULL,
   PRIMARY KEY (`id_notification`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Volcado de datos para la tabla `notifications`
@@ -130,7 +139,24 @@ CREATE TABLE IF NOT EXISTS `notifications` (
 
 INSERT INTO `notifications` (`id_notification`, `id_user`, `message`, `status`, `updatedAt`, `createdAt`) VALUES
 (7, 103, 'test', 'read', '2024-01-02 21:30:01', '2024-01-02 20:54:48'),
-(8, 103, 'test update 2', 'unread', '2024-01-08 17:10:39', '2024-01-08 17:08:04');
+(8, 103, 'test update 2', 'unread', '2024-01-08 17:10:39', '2024-01-08 17:08:04'),
+(10, 103, 'Recibiste una solicitud para jugar.', 'unread', '2024-01-08 19:02:58', '2024-01-08 19:02:58'),
+(11, 103, 'Recibiste una solicitud para jugar en test', 'unread', '2024-01-08 19:04:19', '2024-01-08 19:04:19'),
+(12, 103, 'Su solicitud para test ha sido aceptada', 'unread', '2024-01-08 19:29:09', '2024-01-08 19:29:09'),
+(13, 103, 'Su solicitud para test ha sido rechazada', 'unread', '2024-01-08 19:29:32', '2024-01-08 19:29:32'),
+(14, 93, 'Recibiste una solicitud para jugar en awwafwa', 'unread', '2024-01-15 15:06:12', '2024-01-15 15:06:12'),
+(15, 103, 'Recibiste una solicitud para jugar en Teste m', 'unread', '2024-01-15 15:10:06', '2024-01-15 15:10:06'),
+(16, 103, 'Su solicitud para Teste mobile ha sido acepta', 'unread', '2024-01-15 15:24:16', '2024-01-15 15:24:16'),
+(17, 103, 'Su solicitud para Teste mobile ha sido rechaz', 'unread', '2024-01-15 15:25:02', '2024-01-15 15:25:02'),
+(18, 103, 'Su solicitud para Teste mobile ha sido rechaz', 'unread', '2024-01-15 15:26:09', '2024-01-15 15:26:09'),
+(19, 103, 'Han cancelado una solicitud en awwafwaffw', 'unread', '2024-01-15 15:41:20', '2024-01-15 15:41:20'),
+(20, 93, 'Recibiste una solicitud para jugar en awwafwa', 'unread', '2024-01-15 15:52:44', '2024-01-15 15:52:44'),
+(21, 103, 'Han cancelado una solicitud en awwafwaffw', 'unread', '2024-01-15 15:53:07', '2024-01-15 15:53:07'),
+(22, 93, 'Recibiste una solicitud para jugar en awwafwa', 'unread', '2024-01-15 15:55:09', '2024-01-15 15:55:09'),
+(23, 93, 'Recibiste una solicitud para jugar en awwafwa', 'unread', '2024-01-15 15:57:55', '2024-01-15 15:57:55'),
+(24, 93, 'Recibiste una solicitud para jugar en awwafwa', 'unread', '2024-01-15 16:01:37', '2024-01-15 16:01:37'),
+(25, 103, 'Su solicitud para Teste mobile ha sido acepta', 'unread', '2024-01-15 16:03:23', '2024-01-15 16:03:23'),
+(26, 103, 'Su solicitud para Teste mobile ha sido rechaz', 'unread', '2024-01-15 16:15:06', '2024-01-15 16:15:06');
 
 -- --------------------------------------------------------
 
@@ -206,7 +232,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_post`)
-) ENGINE=MyISAM AUTO_INCREMENT=46 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `posts`
@@ -216,11 +242,12 @@ INSERT INTO `posts` (`id_post`, `id_user`, `id_game`, `id_platform`, `id_mode`, 
 (22, 93, 1, 1, 2, 1, 0, 'awwafwaffw', '', '2023-01-10 17:58:21', 0),
 (24, 235, 2, 2, 1, 1, 0, 'ttttttttttttttt', '', '2023-01-10 18:12:28', 0),
 (18, 182, 1, 4, 2, 3, 0, 'test mode id', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos officia dolore quod accusantium ipsa, fugiat velit corrupti nemo consequuntur accusamus ducimus, repellat quibusdam voluptatem quidem unde ipsam. Officiis, necessitatibus eveniet.', '2023-01-07 14:25:58', 0),
-(45, 103, 0, 0, 0, 0, 1, 'test', 't', '2024-01-04 18:04:59', 0),
-(38, 103, 2, 1, 1, 99, 0, 'Teste mobile', '', '2023-11-10 16:13:08', 0),
+(45, 103, 0, 0, 0, 0, 0, 'test', 't', '2024-01-04 18:04:59', 0),
+(38, 103, 2, 1, 1, 99, 1, 'Teste mobile', '', '2023-11-10 16:13:08', 0),
 (42, 103, 1, 1, 1, 1, 0, 'Guvuvv', '', '2023-11-10 17:43:43', 0),
 (43, 103, 2, 1, 1, 1, 0, 'Test mobile 54', '', '2023-11-10 17:52:12', 0),
-(44, 103, 1, 1, 1, 1, 0, 'Test refresh', '', '2023-11-10 19:08:18', 0);
+(44, 103, 1, 1, 1, 1, 0, 'Test refresh', '', '2023-11-10 19:08:18', 0),
+(46, 103, 1, 1, 1, 1, 0, 'test 2024', '', '2024-01-15 16:15:38', 0);
 
 -- --------------------------------------------------------
 
@@ -238,7 +265,7 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   `karmaScore` int NOT NULL DEFAULT '50',
   `comment` varchar(280) DEFAULT NULL,
   PRIMARY KEY (`id_review`)
-) ENGINE=MyISAM AUTO_INCREMENT=139 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=141 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `reviews`
@@ -280,7 +307,9 @@ INSERT INTO `reviews` (`id_review`, `id_writerUser`, `id_user`, `id_post`, `abil
 (135, 103, 103, 38, 70, 23, ''),
 (136, 103, 103, 38, 50, 50, ''),
 (137, 103, 0, 45, 0, 0, 'test'),
-(138, 103, 103, 38, 70, 23, 'test api');
+(138, 103, 103, 38, 70, 23, 'test api'),
+(139, 103, 103, 38, 50, 50, 'est'),
+(140, 103, 103, 38, 50, 50, 'test');
 
 -- --------------------------------------------------------
 
@@ -326,7 +355,9 @@ INSERT INTO `reviews_rewards` (`id_review`, `id_reward`) VALUES
 (92, 1),
 (136, 1),
 (137, 1),
-(75, 1);
+(75, 1),
+(139, 2),
+(140, 2);
 
 -- --------------------------------------------------------
 
@@ -401,7 +432,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `description`, `img`, `role`) VALUES
-(93, 'luke', 'luke@gmail.com', '$2a$10$wOCtMtYGPg4/n6Np1YCSTutqTyttsrNWzQoM2y89L58gkRKltu3bO', NULL, 'profiles/default.png', 2),
+(93, 'luke', 'luke@gmail.com', '$2a$10$wOCtMtYGPg4/n6Np1YCSTutqTyttsrNWzQoM2y89L58gkRKltu3bO', NULL, 'profiles/file-1704817454676.png', 2),
 (103, 'david2', 'david@gmail.com', '$2a$10$UQYtnf8uldFUnDGneacMiOBP9m6TT5jyoLwfAoW9xRHGcltUIDoiy', 'test', 'profiles/default.png', 1),
 (182, 'leoDV', 'leoDV@gmail.com', '$2a$10$L4u.jbWS/ZGjxYQq0lvsTeXMJHoBMV/4WerH5ax.eTiCAPShyikYa', NULL, 'profiles/file-1679960143954.png', 2),
 (235, 'test', 'test@gmail.com', '$2a$10$8BljRKtBokHVp.lrq28w5uJ4SN.iK6UQY5aZfJb3xP690LoYFQGea', '', 'profiles/default.png', 2),

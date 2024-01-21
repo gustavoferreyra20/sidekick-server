@@ -13,10 +13,16 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: true,
             defaultValue: "unread"
-        }
+        },
+        deleted: { type: DataTypes.BOOLEAN, defaultValue: false }
     }, {
         freezeTableName: true,
-        timestamps: true
+        timestamps: true,
+        defaultScope: {
+            where: {
+                deleted: false
+            }
+        }
     });
 };
 

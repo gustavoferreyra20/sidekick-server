@@ -656,6 +656,32 @@
 					"response": []
 				},
 				{
+					"name": "Bulk Update notifications",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": \"read\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/notifications",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"notifications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Delete a notification",
 					"request": {
 						"method": "DELETE",

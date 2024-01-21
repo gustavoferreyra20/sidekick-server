@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 15-01-2024 a las 18:02:07
+-- Tiempo de generación: 21-01-2024 a las 00:50:17
 -- Versión del servidor: 8.0.31
 -- Versión de PHP: 8.0.26
 
@@ -130,6 +130,7 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   `status` varchar(45) NOT NULL DEFAULT 'unread',
   `updatedAt` timestamp NOT NULL,
   `createdAt` timestamp NOT NULL,
+  `deleted` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_notification`)
 ) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -137,26 +138,26 @@ CREATE TABLE IF NOT EXISTS `notifications` (
 -- Volcado de datos para la tabla `notifications`
 --
 
-INSERT INTO `notifications` (`id_notification`, `id_user`, `message`, `status`, `updatedAt`, `createdAt`) VALUES
-(7, 103, 'test', 'read', '2024-01-02 21:30:01', '2024-01-02 20:54:48'),
-(8, 103, 'test update 2', 'unread', '2024-01-08 17:10:39', '2024-01-08 17:08:04'),
-(10, 103, 'Recibiste una solicitud para jugar.', 'unread', '2024-01-08 19:02:58', '2024-01-08 19:02:58'),
-(11, 103, 'Recibiste una solicitud para jugar en test', 'unread', '2024-01-08 19:04:19', '2024-01-08 19:04:19'),
-(12, 103, 'Su solicitud para test ha sido aceptada', 'unread', '2024-01-08 19:29:09', '2024-01-08 19:29:09'),
-(13, 103, 'Su solicitud para test ha sido rechazada', 'unread', '2024-01-08 19:29:32', '2024-01-08 19:29:32'),
-(14, 93, 'Recibiste una solicitud para jugar en awwafwa', 'unread', '2024-01-15 15:06:12', '2024-01-15 15:06:12'),
-(15, 103, 'Recibiste una solicitud para jugar en Teste m', 'unread', '2024-01-15 15:10:06', '2024-01-15 15:10:06'),
-(16, 103, 'Su solicitud para Teste mobile ha sido acepta', 'unread', '2024-01-15 15:24:16', '2024-01-15 15:24:16'),
-(17, 103, 'Su solicitud para Teste mobile ha sido rechaz', 'unread', '2024-01-15 15:25:02', '2024-01-15 15:25:02'),
-(18, 103, 'Su solicitud para Teste mobile ha sido rechaz', 'unread', '2024-01-15 15:26:09', '2024-01-15 15:26:09'),
-(19, 103, 'Han cancelado una solicitud en awwafwaffw', 'unread', '2024-01-15 15:41:20', '2024-01-15 15:41:20'),
-(20, 93, 'Recibiste una solicitud para jugar en awwafwa', 'unread', '2024-01-15 15:52:44', '2024-01-15 15:52:44'),
-(21, 103, 'Han cancelado una solicitud en awwafwaffw', 'unread', '2024-01-15 15:53:07', '2024-01-15 15:53:07'),
-(22, 93, 'Recibiste una solicitud para jugar en awwafwa', 'unread', '2024-01-15 15:55:09', '2024-01-15 15:55:09'),
-(23, 93, 'Recibiste una solicitud para jugar en awwafwa', 'unread', '2024-01-15 15:57:55', '2024-01-15 15:57:55'),
-(24, 93, 'Recibiste una solicitud para jugar en awwafwa', 'unread', '2024-01-15 16:01:37', '2024-01-15 16:01:37'),
-(25, 103, 'Su solicitud para Teste mobile ha sido acepta', 'unread', '2024-01-15 16:03:23', '2024-01-15 16:03:23'),
-(26, 103, 'Su solicitud para Teste mobile ha sido rechaz', 'unread', '2024-01-15 16:15:06', '2024-01-15 16:15:06');
+INSERT INTO `notifications` (`id_notification`, `id_user`, `message`, `status`, `updatedAt`, `createdAt`, `deleted`) VALUES
+(7, 103, 'test', 'unread', '2024-01-21 00:47:27', '2024-01-02 20:54:48', 0),
+(8, 103, 'test update 2', 'unread', '2024-01-21 00:47:27', '2024-01-08 17:08:04', 0),
+(10, 103, 'Recibiste una solicitud para jugar.', 'unread', '2024-01-21 00:47:27', '2024-01-08 19:02:58', 0),
+(11, 103, 'Recibiste una solicitud para jugar en test', 'unread', '2024-01-21 00:47:27', '2024-01-08 19:04:19', 0),
+(12, 103, 'Su solicitud para test ha sido aceptada', 'unread', '2024-01-21 00:47:27', '2024-01-08 19:29:09', 0),
+(13, 103, 'Su solicitud para test ha sido rechazada', 'unread', '2024-01-21 00:47:27', '2024-01-08 19:29:32', 0),
+(14, 93, 'Recibiste una solicitud para jugar en awwafwa', 'unread', '2024-01-21 00:41:13', '2024-01-15 15:06:12', 0),
+(15, 103, 'Recibiste una solicitud para jugar en Teste m', 'unread', '2024-01-21 00:47:27', '2024-01-15 15:10:06', 0),
+(16, 103, 'Su solicitud para Teste mobile ha sido acepta', 'unread', '2024-01-21 00:47:27', '2024-01-15 15:24:16', 0),
+(17, 103, 'Su solicitud para Teste mobile ha sido rechaz', 'unread', '2024-01-21 00:47:27', '2024-01-15 15:25:02', 0),
+(18, 103, 'Su solicitud para Teste mobile ha sido rechaz', 'unread', '2024-01-21 00:47:27', '2024-01-15 15:26:09', 0),
+(19, 103, 'Han cancelado una solicitud en awwafwaffw', 'unread', '2024-01-21 00:47:27', '2024-01-15 15:41:20', 0),
+(20, 93, 'Recibiste una solicitud para jugar en awwafwa', 'unread', '2024-01-21 00:41:13', '2024-01-15 15:52:44', 0),
+(21, 103, 'Han cancelado una solicitud en awwafwaffw', 'unread', '2024-01-21 00:47:27', '2024-01-15 15:53:07', 0),
+(22, 93, 'Recibiste una solicitud para jugar en awwafwa', 'unread', '2024-01-21 00:41:13', '2024-01-15 15:55:09', 0),
+(23, 93, 'Recibiste una solicitud para jugar en awwafwa', 'unread', '2024-01-21 00:41:13', '2024-01-15 15:57:55', 0),
+(24, 93, 'Recibiste una solicitud para jugar en awwafwa', 'unread', '2024-01-21 00:41:13', '2024-01-15 16:01:37', 0),
+(25, 103, 'Su solicitud para Teste mobile ha sido acepta', 'unread', '2024-01-21 00:47:27', '2024-01-15 16:03:23', 0),
+(26, 103, 'Su solicitud para Teste mobile ha sido rechaz', 'unread', '2024-01-21 00:47:27', '2024-01-15 16:15:06', 0);
 
 -- --------------------------------------------------------
 
@@ -433,7 +434,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `description`, `img`, `role`) VALUES
 (93, 'luke', 'luke@gmail.com', '$2a$10$wOCtMtYGPg4/n6Np1YCSTutqTyttsrNWzQoM2y89L58gkRKltu3bO', NULL, 'profiles/file-1704817454676.png', 2),
-(103, 'david2', 'david@gmail.com', '$2a$10$UQYtnf8uldFUnDGneacMiOBP9m6TT5jyoLwfAoW9xRHGcltUIDoiy', 'test', 'profiles/default.png', 1),
+(103, 'david2', 'david@gmail.com', '$2a$10$UQYtnf8uldFUnDGneacMiOBP9m6TT5jyoLwfAoW9xRHGcltUIDoiy', 'test', 'profiles/default.png', 2),
 (182, 'leoDV', 'leoDV@gmail.com', '$2a$10$L4u.jbWS/ZGjxYQq0lvsTeXMJHoBMV/4WerH5ax.eTiCAPShyikYa', NULL, 'profiles/file-1679960143954.png', 2),
 (235, 'test', 'test@gmail.com', '$2a$10$8BljRKtBokHVp.lrq28w5uJ4SN.iK6UQY5aZfJb3xP690LoYFQGea', '', 'profiles/default.png', 2),
 (238, 'tar', 'testAuthroutes@gmail.com', '$2a$10$fSX4uk1wv7Ld/bs1Gsp0aujt95.2SKBLZJDwznV1rKP6Eu5YY9cnW', '', 'profiles/default.png', 2),

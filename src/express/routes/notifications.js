@@ -65,7 +65,7 @@ async function bulkUpdate(req, res) {
     if (updatedRows > 0) {
         res.status(200).json({ message: 'Bulk update successful' });
     } else {
-        res.status(404).send('No notifications found for bulk update');
+        res.status(200).send({ message: 'No notifications found for bulk update' });
     }
 }
 

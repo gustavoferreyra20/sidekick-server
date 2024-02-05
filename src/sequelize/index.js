@@ -3,9 +3,15 @@ const { Sequelize } = require('sequelize');
 // In a real app, you should keep the database connection URL as an environment variable.
 // But for this example, we will just use a local SQLite database.
 // const sequelize = new Sequelize(process.env.DB_CONNECTION_URL);
-const sequelize = new Sequelize('sidekickdb', 'root', '', {
-	host: 'localhost',
-	dialect: 'mariadb'/* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
+const sequelize = new Sequelize(process.env.POSTGRES_DATABASE, process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
+	host: process.env.POSTGRES_HOST,
+	dialect: 'postgres', /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
+	dialectOptions: {
+		ssl: {
+		  require: true,
+		  rejectUnauthorized: false, // Use only in development environment; it disables SSL certificate validation
+		},
+	  },
 });
 
 const modelDefiners = [

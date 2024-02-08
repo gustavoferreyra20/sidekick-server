@@ -8,7 +8,7 @@ const sequelize = new Sequelize(process.env.POSTGRES_DATABASE, process.env.POSTG
 	dialect: 'postgres', /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
 	dialectOptions: {
 		ssl: {
-		  require: true,
+		  require: false,
 		  rejectUnauthorized: false, // Use only in development environment; it disables SSL certificate validation
 		},
 	  },

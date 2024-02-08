@@ -36,7 +36,7 @@ async function init() {
 	console.log(`Internal IP addresses: ${addresses.join(', ')}`);
 
 	// starting the server
-	app.listen(PORT, IP_ADDRESS, () => {
+	app.listen(PORT, () => {
 		console.log(`Express server started at ${IP_ADDRESS}:${PORT}. Try some routes, such as '/api/games'.`);
 	});
 }

@@ -2,7 +2,6 @@ const app = require('./src/express/app');
 const sequelize = require('./src/sequelize');
 const dotenv = require('dotenv').config();
 const PORT = process.env.PORT;
-const IP_ADDRESS = process.env.IP_ADDRESS; // Force ip_address
 
 async function assertDatabaseConnectionOk() {
 	console.log(`Checking database connection...`);
@@ -37,7 +36,7 @@ async function init() {
 
 	// starting the server
 	app.listen(PORT, () => {
-		console.log(`Express server started at ${IP_ADDRESS}:${PORT}. Try some routes, such as '/api/games'.`);
+		console.log(`Express server started at port: ${PORT}. Try some routes, such as '/api/games'.`);
 	});
 }
 

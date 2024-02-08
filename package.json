@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index",
-    "vercel-build": "nodemon src/index"
+    "dev": "nodemon src/index"
   },
   "keywords": [],
   "author": "",

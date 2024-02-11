@@ -55,9 +55,7 @@ async function update(req, res) {
 
 
 	if (adminStatus) {
-		const { name, description, role, img } = userData;
-
-		await user.update({ name, description, role, img });
+		await user.update(userData);
 		res.status(200).json({ message: 'Updated successfully' });
 	} else if (user.id_user == currentUser.id_user) {
 		const { name, description, password, img } = userData;

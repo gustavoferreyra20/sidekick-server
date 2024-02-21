@@ -122,6 +122,7 @@ async function apply(req, res) {
 
 		const notificationData = {
 			id_user: post.id_user,
+			title: `Recibiste una solicitud`,
 			message: `Recibiste una solicitud para jugar en ${post.title}`
 		};
 
@@ -160,6 +161,7 @@ async function updateApplication(req, res) {
 
 	const notificationData = {
 		id_user: application.id_user,
+		title: (status == "accepted") ? `Su solicitud aceptada` : `Su solicitud rechazada`,
 		message: (status == "accepted") ? `Su solicitud para ${post.title} ha sido aceptada` : `Su solicitud para ${post.title} ha sido rechazada`
 	};
 
@@ -225,6 +227,7 @@ async function cancelApplication(req, res) {
 
 	const notificationData = {
 		id_user: application.id_user,
+		title: `Solicitud cancelada`,
 		message: `Han cancelado una solicitud en ${post.title}`
 	};
 

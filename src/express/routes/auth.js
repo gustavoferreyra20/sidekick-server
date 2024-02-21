@@ -1,7 +1,8 @@
 const { models } = require('../../sequelize/index');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const generateRandomString = require('../utils/generateRandomString')
+const generateRandomString = require('../utils/generateRandomString');
+const sendEmail = require('../utils/sendEmail');
 
 async function validate(req, res) {
     const { token } = req.body;
@@ -55,9 +56,9 @@ async function resetPassword(req, res) {
         await user.update({ password: newPassword });
 
         // Send the new password by email
-        //await sendEmail(email, 'Password Reset', `Your new password is: ${newPassword}`);
+        await sendEmail(user.email, "Recuperar contraseña", `Tu nueva contraseña es: ${newPassword}`)
 
-        return res.status(200).json({ message: 'Password reset successful. Check your email for the new password.', password: newPassword });
+        return res.status(200).json({ message: 'Password reset successful. Check your email for the new password.'});
     } catch (error) {
         console.error('Error resetting password:', error);
         return res.status(500).json({ message: 'Internal server error' });
@@ -76,7 +77,7 @@ async function register(req, res) {
         res.status(200).json(userWithoutPassword);
     } catch (error) {
         if (error.name === 'SequelizeUniqueConstraintError') {
-            res.status(400).json({ error: 'Email is already in use' });
+            res.status(409).json({ error: 'Email is already in use' });
         } else if (error.name === 'SequelizeValidationError') {
             res.status(400).json({ error: 'Invalid email format' });
         }

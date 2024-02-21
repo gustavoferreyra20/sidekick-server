@@ -8,6 +8,7 @@ module.exports = (sequelize) => {
     sequelize.define('notifications', {
         id_notification: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
         id_user: DataTypes.INTEGER,
+        title: DataTypes.STRING,
         message: DataTypes.STRING,
         status: {
             type: DataTypes.STRING,

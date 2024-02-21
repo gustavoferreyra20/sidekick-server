@@ -23,29 +23,12 @@ async function getAll(req, res) {
 		values.push(postData.id_mode);
 	}
 
+
 	const [results, metadata] = await sequelize.query(`
-	SELECT
-	p.*,
-	u.name AS "userName",
-	u.img AS "userImg",
-	g.name AS "gameName",
-	g.img AS "gameImg",
-	m.name AS "mode",
-	pf.name AS "platform",
-	ROUND(COALESCE(AVG(r.abilityScore), 0)) AS "abilityScore",
-	ROUND(COALESCE(AVG(r.karmaScore), 0)) AS "karmaScore"
-  FROM
-	posts p
-	INNER JOIN users u ON p.id_user = u.id_user
-	INNER JOIN games g ON p.id_game = g.id_game
-	INNER JOIN modes m ON p.id_mode = m.id_mode
-	INNER JOIN platforms pf ON p.id_platform = pf.id_platform
-	LEFT JOIN reviews r ON p.id_post = r.id_post -- Change the join condition here
-	WHERE
-	  1=1 ${whereClause}
-	GROUP BY
-	p.id_post, u.name, u.img, g.name, g.img, m.name, pf.name;
-  `, { replacements: values });
+	SELECT p.*, u.name AS userName, u.img AS userImg, g.name AS gameName, g.img AS gameImg, m.name AS mode, pf.name AS platform, ROUND(IFNULL(AVG(r.abilityScore), 0)) AS abilityScore, ROUND(IFNULL(AVG(r.karmaScore), 0)) AS karmaScore FROM posts p 
+	INNER JOIN users u ON p.id_user = u.id_user INNER JOIN games g ON p.id_game = g.id_game 
+	INNER JOIN modes m ON p.id_mode = m.id_mode INNER JOIN platforms pf ON p.id_platform = pf.id_platform 
+	LEFT JOIN reviews r ON p.id_user = r.id_user WHERE 1=1 ${whereClause} GROUP BY p.id_post`, { replacements: values });
 	res.status(200).json(results);
 };
 
@@ -139,6 +122,7 @@ async function apply(req, res) {
 
 		const notificationData = {
 			id_user: post.id_user,
+			title: `Recibiste una solicitud`,
 			message: `Recibiste una solicitud para jugar en ${post.title}`
 		};
 
@@ -177,6 +161,7 @@ async function updateApplication(req, res) {
 
 	const notificationData = {
 		id_user: application.id_user,
+		title: (status == "accepted") ? `Su solicitud aceptada` : `Su solicitud rechazada`,
 		message: (status == "accepted") ? `Su solicitud para ${post.title} ha sido aceptada` : `Su solicitud para ${post.title} ha sido rechazada`
 	};
 
@@ -242,6 +227,7 @@ async function cancelApplication(req, res) {
 
 	const notificationData = {
 		id_user: application.id_user,
+		title: `Solicitud cancelada`,
 		message: `Han cancelado una solicitud en ${post.title}`
 	};
 

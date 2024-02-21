@@ -2,7 +2,6 @@ const { models } = require('../../sequelize/index');
 const dotenv = require('dotenv').config();
 var Sequelize = require("sequelize");
 const isAdmin = require('../utils/isAdmin');
-const bcryptjs = require('bcryptjs');
 
 models.users.belongsToMany(models.contact_inf, { through: 'users_contact_inf', foreignKey: 'id_user' });
 models.users.belongsToMany(models.posts, { through: 'applications', foreignKey: 'id_user' });
@@ -55,7 +54,9 @@ async function update(req, res) {
 
 
 	if (adminStatus) {
-		await user.update(userData);
+		const { name, description, role, img } = userData;
+
+		await user.update({ name, description, role, img });
 		res.status(200).json({ message: 'Updated successfully' });
 	} else if (user.id_user == currentUser.id_user) {
 		const { name, description, password, img } = userData;
@@ -356,26 +357,6 @@ async function removeContact_inf(req, res) {
 
 };
 
-async function checkPassword(req, res) {
-	const userId = req.params.id;
-	const user = await models.users.findByPk(userId);
-	const currentUser = req.auth;
-	const { password } = req.body;
-
-	if (!user) {
-		return res.status(404).json({ error: 'User not found' });
-	}
-
-	if (userId != currentUser.id_user) {
-		return res.status(401).json({ error: 'Unauthorized' });
-	}
-
-	if (bcryptjs.compareSync(password, user.password)) {
-		return res.status(200).json({ match: true });
-	} else {
-		return res.status(200).json({ match: false });
-	}
-};
 
 module.exports = {
 	getAll,
@@ -393,6 +374,5 @@ module.exports = {
 	updateContact_inf,
 	updateNotification,
 	useReward,
-	removeContact_inf,
-	checkPassword
+	removeContact_inf
 };

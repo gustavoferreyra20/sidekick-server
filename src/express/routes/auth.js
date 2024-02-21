@@ -1,8 +1,7 @@
 const { models } = require('../../sequelize/index');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const generateRandomString = require('../utils/generateRandomString');
-const sendEmail = require('../utils/sendEmail');
+
 
 async function validate(req, res) {
     const { token } = req.body;
@@ -13,7 +12,7 @@ async function validate(req, res) {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        //const decoded = jwt.verify(token, process.env.JWT_SECRET);
         res.status(200).json({ message: 'Token is valid' });
     } catch (error) {
         res.status(401).json({ error: 'Token is invalid or has expired' });
@@ -41,30 +40,6 @@ async function login(req, res) {
     }
 }
 
-async function resetPassword(req, res) {
-    const { email } = req.body;
-
-    try {
-        const user = await models.users.findOne({ where: { email: email } });
-
-        if (user === null) {
-            return res.status(200).json();
-        }
-
-        const newPassword = generateRandomString(8);
-
-        await user.update({ password: newPassword });
-
-        // Send the new password by email
-        await sendEmail(user.email, "Recuperar contraseña", `Tu nueva contraseña es: ${newPassword}`)
-
-        return res.status(200).json({ message: 'Password reset successful. Check your email for the new password.'});
-    } catch (error) {
-        console.error('Error resetting password:', error);
-        return res.status(500).json({ message: 'Internal server error' });
-    }
-}
-
 async function register(req, res) {
     const userData = req.body;
 
@@ -77,7 +52,7 @@ async function register(req, res) {
         res.status(200).json(userWithoutPassword);
     } catch (error) {
         if (error.name === 'SequelizeUniqueConstraintError') {
-            res.status(409).json({ error: 'Email is already in use' });
+            res.status(400).json({ error: 'Email is already in use' });
         } else if (error.name === 'SequelizeValidationError') {
             res.status(400).json({ error: 'Invalid email format' });
         }
@@ -111,7 +86,6 @@ async function addContactInf(req, res) {
 module.exports = {
     validate,
     login,
-    resetPassword,
     register,
     addContactInf
 };

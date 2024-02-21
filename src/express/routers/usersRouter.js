@@ -11,7 +11,6 @@ router.get('/:id/reviews', handleAsyncErrors(users.getReviews));
 router.get('/:id/rewards', handleAsyncErrors(users.getRewards));
 router.get('/:id/stats', handleAsyncErrors(users.getStats));
 router.get('/:id/notifications', handleAsyncErrors(users.getNotifications));
-router.post('/:id/checkPassword', handleAsyncErrors(users.checkPassword));
 router.post('/:id/reviews', handleAsyncErrors(users.addReview));
 router.post('/:id/rewards/:id_reward', handleAsyncErrors(users.addReward));
 router.put('/:id/contact_inf/:id_contact_inf', handleAsyncErrors(users.updateContact_inf));

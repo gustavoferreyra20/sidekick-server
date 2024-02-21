@@ -38,7 +38,7 @@ app.use(express.json());
 
 app.use('/api/images', imagesRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/contact_inf', contact_infRouter);
+app.use('/api/contact_inf', auth, contact_infRouter);
 app.use('/api/games', auth, gamesRouter);
 app.use('/api/modes', auth, modesRouter);
 app.use('/api/platforms', auth, platformsRouter);

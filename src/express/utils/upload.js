@@ -2,11 +2,17 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const destinationDirectory = path.join(__dirname, '/tmp/img/profiles');
+const destinationDirectory = path.join('/tmp/img/profiles');
 
 // Create the destination directory if it doesn't exist
 if (!fs.existsSync(destinationDirectory)) {
-    fs.mkdirSync(destinationDirectory, { recursive: true });
+    try {
+        fs.mkdirSync(destinationDirectory, { recursive: true });
+        console.log('Destination directory created');
+    } catch (error) {
+        console.error('Error creating destination directory:', error);
+        // Handle error appropriately
+    }
 }
 
 const storage = multer.diskStorage({

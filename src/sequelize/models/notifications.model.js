@@ -18,12 +18,7 @@ module.exports = (sequelize) => {
         deleted: { type: DataTypes.BOOLEAN, defaultValue: false }
     }, {
         freezeTableName: true,
-        timestamps: false,
-        defaultScope: {
-            where: {
-                deleted: false
-            }
-        }
+        timestamps: false
     });
 };
 

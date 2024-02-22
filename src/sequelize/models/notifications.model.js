@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
         timestamps: false,
         defaultScope: {
             where: {
-                deleted: 0
+                deleted: false
             }
         }
     });

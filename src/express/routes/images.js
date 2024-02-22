@@ -6,7 +6,16 @@ models.games.belongsToMany(models.platforms, { through: 'platforms_games', forei
 
 async function getSingle(req, res) {
     const filepath = req.params[0];
-    const imagePath = path.join(__dirname, '../img', filepath);
+    let imagePath;
+
+    // Check if filepath starts with "profiles"
+    if (filepath.startsWith('profiles')) {
+        // Construct imagePath with the specified directory structure
+        imagePath = path.join('tmp/img', filepath);
+    } else {
+        // Construct imagePath with the default directory structure
+        imagePath = path.join(__dirname, '../img', filepath);
+    }
 
     // Check if the file exists
     fs.access(imagePath, fs.constants.F_OK, (err) => {

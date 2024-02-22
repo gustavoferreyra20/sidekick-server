@@ -13,15 +13,7 @@ async function createMp(req, res) {
                     unit_price: req.body.price
                 }
             ],
-            back_urls: {
-                // declaramos las urls de redireccionamiento
-                success: `${process.env.SERVER}/payments/success`,
-                // url a la que va a redireccionar si sale todo bien
-                pending: `${process.env.SERVER}/payments/pending`,
-                // url a la que va a redireccionar si decide pagar en efectivo por ejemplo
-                failure: `${process.env.SERVER}/payments/error`
-                // url a la que va a redireccionar si falla el pago
-            },
+            back_urls: {},
             notification_url: `${process.env.SERVER}/payments/webhook`,
         };
 
@@ -36,7 +28,7 @@ async function createMp(req, res) {
             }
         );
 
-        res.json({ init_point: response.data.init_point });
+        res.json(response.data);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Payment processing failed' });

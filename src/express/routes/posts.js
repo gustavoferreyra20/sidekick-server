@@ -141,7 +141,8 @@ async function apply(req, res) {
 		const notificationData = {
 			id_user: post.id_user,
 			title: `Recibiste una solicitud`,
-			message: `Recibiste una solicitud para jugar en ${post.title}`
+			message: `Recibiste una solicitud para jugar en ${post.title}`,
+			deleted: false
 		};
 
 		await models.notifications.create(notificationData);

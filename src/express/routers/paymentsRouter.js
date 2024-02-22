@@ -5,5 +5,6 @@ const payments = require('../routes/payments');
 
 // Routes under the '/api/payments' path
 router.post('/mp', handleAsyncErrors(payments.createMp));
+router.post('/webhook', handleAsyncErrors(payments.receivePayment));
 
 module.exports = router;

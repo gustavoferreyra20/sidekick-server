@@ -45,7 +45,7 @@ app.use('/api/platforms', auth, platformsRouter);
 app.use('/api/posts', auth, postsRouter);
 app.use('/api/rewards', auth, rewardsRouter);
 app.use('/api/reviews', auth, reviewsRouter);
-app.use('/api/payments', auth, paymentsRouter);
+app.use('/api/payments', paymentsRouter);
 app.use('/api/notifications', auth, notificationsRouter);
 app.use('/api/users', auth, usersRouter);
 

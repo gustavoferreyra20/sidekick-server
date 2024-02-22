@@ -15,7 +15,7 @@ module.exports = (sequelize) => {
             allowNull: true,
             defaultValue: "unread"
         },
-        deleted: { type: DataTypes.BOOLEAN, defaultValue: false }
+        deleted: { type: DataTypes.BOOLEAN, defaultValue: 0 }
     }, {
         freezeTableName: true,
         timestamps: false,

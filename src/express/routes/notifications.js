@@ -11,12 +11,7 @@ async function getAll(req, res) {
         const notifications = await models.notifications.findAll();
         res.status(200).json(notifications);
     } else {
-        const notifications = await models.notifications.findAll({
-            where: {
-                id_user: currentUser.id_user,
-                deleted: false
-            }
-        });
+        const notifications = await models.notifications.findAll({ where: { id_user: currentUser.id_user } });
         res.status(200).json(notifications);
     }
 }

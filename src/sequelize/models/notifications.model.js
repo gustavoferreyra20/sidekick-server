@@ -10,6 +10,8 @@ module.exports = (sequelize) => {
         id_user: DataTypes.INTEGER,
         title: DataTypes.STRING,
         message: DataTypes.STRING,
+        createdat: DataTypes.TIME,
+        updatedat: DataTypes.TIME,
         status: {
             type: DataTypes.STRING,
             allowNull: true,

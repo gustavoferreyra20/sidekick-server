@@ -2,7 +2,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const destinationDirectory = path.join(__dirname, '../img/profiles');
+const destinationDirectory = path.join(__dirname, '../../tmp/img/profiles');
 
 // Create the destination directory if it doesn't exist
 if (!fs.existsSync(destinationDirectory)) {

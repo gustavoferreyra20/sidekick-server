@@ -50,27 +50,7 @@ async function receivePayment(req, res) {
 
         const notification = req.body;
 
-        // Process the notification
-        if (notification.action === 'payment.created') {
-            // Handle payment created event
-            // This event is triggered when a payment is created
-
-            // You may want to update your database or perform other actions here
-            // For example, mark the corresponding order as pending
-
-            console.log('Payment created:', notification.data);
-        } else if (notification.action === 'payment.updated') {
-            // Handle payment updated event
-            // This event is triggered when the payment status is updated
-
-            // Check if the payment status is approved
-            if (notification.data.status === 'approved') {
-                // Payment was successful, update your database or perform other actions
-                // For example, mark the corresponding order as paid
-
-                console.log('Payment approved:', notification.data);
-            }
-        }
+        console.log(req.body)
 
         // Respond with a 200 OK to acknowledge receipt of the notification
         res.status(200).end();

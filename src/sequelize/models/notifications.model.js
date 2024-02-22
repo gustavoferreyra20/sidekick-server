@@ -10,8 +10,6 @@ module.exports = (sequelize) => {
         id_user: DataTypes.INTEGER,
         title: DataTypes.STRING,
         message: DataTypes.STRING,
-        createdat: DataTypes.TIME,
-        updatedat: DataTypes.TIME,
         status: {
             type: DataTypes.STRING,
             allowNull: true,
@@ -20,7 +18,7 @@ module.exports = (sequelize) => {
         deleted: { type: DataTypes.BOOLEAN, defaultValue: false }
     }, {
         freezeTableName: true,
-        timestamps: true,
+        timestamps: false,
         defaultScope: {
             where: {
                 deleted: false

@@ -15,14 +15,14 @@ async function createMp(req, res) {
             ],
             back_urls: {
                 // declaramos las urls de redireccionamiento
-                success: `${process.env.server}/payments/success`,
+                success: `/success`,
                 // url a la que va a redireccionar si sale todo bien
-                pending: `${process.env.server}/payments/pending`,
+                pending: `/pending`,
                 // url a la que va a redireccionar si decide pagar en efectivo por ejemplo
-                failure: `${process.env.server}/payments/error`
+                failure: `/error`
                 // url a la que va a redireccionar si falla el pago
             },
-            notification_url: `${process.env.server}/payments/webhook`,
+
         };
 
         const response = await axios.post(

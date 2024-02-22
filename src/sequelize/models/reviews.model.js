@@ -7,11 +7,11 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
 	sequelize.define('reviews', {
 		id_review: {type:DataTypes.INTEGER, autoIncrement: true, primaryKey:true},
-		id_writerUser: DataTypes.INTEGER,
+		id_writeruser: DataTypes.INTEGER,
         id_user: DataTypes.INTEGER,
         id_post	: DataTypes.INTEGER,
-        abilityScore: DataTypes.INTEGER,
-        karmaScore: DataTypes.INTEGER,
+        abilityscore: DataTypes.INTEGER,
+        karmascore: DataTypes.INTEGER,
         comment: DataTypes.STRING,
 }, {
     freezeTableName: true,

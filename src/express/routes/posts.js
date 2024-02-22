@@ -33,8 +33,8 @@ async function getAll(req, res) {
 	g.img AS "gameImg",
 	m.name AS "mode",
 	pf.name AS "platform",
-	ROUND(COALESCE(AVG(r.abilityScore), 0)) AS "abilityScore",
-	ROUND(COALESCE(AVG(r.karmaScore), 0)) AS "karmaScore"
+	ROUND(COALESCE(AVG(r.abilityscore), 0)) AS "abilityscore",
+	ROUND(COALESCE(AVG(r.karmascore), 0)) AS "karmascore"
   FROM
 	posts p
 	INNER JOIN users u ON p.id_user = u.id_user
@@ -145,7 +145,7 @@ async function apply(req, res) {
 		};
 
 		await models.notifications.create(notificationData);
-		await updateActualUsers(postId);
+		await updateactualusers(postId);
 
 		res.status(200).json(post);
 	} catch (error) {
@@ -175,7 +175,7 @@ async function updateApplication(req, res) {
 
 	await application.save();
 
-	await updateActualUsers(application.id_post, status);
+	await updateactualusers(application.id_post, status);
 
 	const notificationData = {
 		id_user: application.id_user,
@@ -188,10 +188,10 @@ async function updateApplication(req, res) {
 	res.status(200).json(application);
 };
 
-async function updateActualUsers(id_post) {
+async function updateactualusers(id_post) {
 	const post = await models.posts.findByPk(id_post);
 
-	const actualUsers = await models.users.count({
+	const actualusers = await models.users.count({
 		include: [{
 			model: models.posts,
 			where: {
@@ -208,7 +208,7 @@ async function updateActualUsers(id_post) {
 		}]
 	});
 
-	post.actualUsers = actualUsers;
+	post.actualusers = actualusers;
 
 	await post.save();
 }
@@ -241,7 +241,7 @@ async function cancelApplication(req, res) {
 
 	await user.removePosts(post);
 
-	await updateActualUsers(application.id_post);
+	await updateactualusers(application.id_post);
 
 	const notificationData = {
 		id_user: application.id_user,

@@ -11,8 +11,8 @@ module.exports = (sequelize) => {
         id_game: DataTypes.INTEGER,
         id_platform: DataTypes.INTEGER,
         id_mode: DataTypes.INTEGER,
-        requiredUsers: DataTypes.INTEGER,
-        actualUsers: DataTypes.INTEGER,
+        requiredusers : DataTypes.INTEGER,
+        actualusers: DataTypes.INTEGER,
         title: DataTypes.STRING,
         description: DataTypes.STRING,
         date: DataTypes.TIME,
@@ -22,7 +22,7 @@ module.exports = (sequelize) => {
         timestamps: false,
         defaultScope: {
             where: {
-                deleted: false
+                deleted: 0
             }
         }
     });

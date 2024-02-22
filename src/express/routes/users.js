@@ -86,7 +86,7 @@ async function addReview(req, res) {
 	const user = await models.users.findByPk(userId);
 
 	const reviewData = req.body;
-	reviewData.id_writerUser = currentUser.id_user;
+	reviewData.id_writeruser = currentUser.id_user;
 
 	const createdReview = await user.createReview(reviewData);
 
@@ -212,7 +212,7 @@ async function getStats(req, res) {
 		return res.status(404).json({ error: 'User not found' });
 	}
 
-	const stats = await models.reviews.findAll({ attributes: [[Sequelize.fn('AVG', Sequelize.col('abilityScore')), 'abilityScore'], [Sequelize.fn('AVG', Sequelize.col('karmaScore')), 'karmaScore']], where: { id_user: userId } });
+	const stats = await models.reviews.findAll({ attributes: [[Sequelize.fn('AVG', Sequelize.col('abilityscore')), 'abilityscore'], [Sequelize.fn('AVG', Sequelize.col('karmascore')), 'karmascore']], where: { id_user: userId } });
 
 	if (stats[0]) {
 		res.status(200).json(stats);

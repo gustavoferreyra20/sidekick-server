@@ -775,7 +775,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id_game\": 0,\r\n    \"id_platform\": 0,\r\n    \"id_mode\": 0,\r\n    \"requiredUsers\": 0,\r\n    \"actualUsers\": 0,\r\n    \"title\": \"\",\r\n    \"description\": \"\"\r\n}",
+							"raw": "{\r\n    \"id_game\": 0,\r\n    \"id_platform\": 0,\r\n    \"id_mode\": 0,\r\n    \"requiredusers \": 0,\r\n    \"actualusers\": 0,\r\n    \"title\": \"\",\r\n    \"description\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1005,7 +1005,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id_user\": 0,\r\n    \"id_post\": 0,\r\n    \"abilityScore\": 0,\r\n    \"karmaScore\": 0,\r\n    \"reward\": 1, //optional\r\n    \"comment\": \"\"\r\n}",
+							"raw": "{\r\n    \"id_user\": 0,\r\n    \"id_post\": 0,\r\n    \"abilityscore\": 0,\r\n    \"karmascore\": 0,\r\n    \"reward\": 1, //optional\r\n    \"comment\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1499,7 +1499,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"abilityScore\": 70,\r\n     \"comment\": \"test api\", \r\n     \"id_post\": 38, \r\n     \"id_user\": 103, \r\n      \"karmaScore\": 23, \r\n      \"reward\": null\r\n      }",
+							"raw": "{\r\n    \"abilityscore\": 70,\r\n     \"comment\": \"test api\", \r\n     \"id_post\": 38, \r\n     \"id_user\": 103, \r\n      \"karmascore\": 23, \r\n      \"reward\": null\r\n      }",
 							"options": {
 								"raw": {
 									"language": "json"

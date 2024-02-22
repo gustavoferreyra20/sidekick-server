@@ -1,7 +1,7 @@
 const { models } = require('../../sequelize/index');
 const isAdmin = require('../utils/isAdmin');
 
-models.reviews.belongsTo(models.users, { foreignKey: 'id_writerUser' });
+models.reviews.belongsTo(models.users, { foreignKey: 'id_writeruser' });
 models.reviews.belongsToMany(models.rewards, { through: 'reviews_rewards', foreignKey: 'id_review' });
 
 async function getAll(req, res) {
@@ -39,7 +39,7 @@ async function create(req, res) {
 	let reviewData = (req.body);
 	const currentUser = req.auth;
 
-	reviewData.id_writerUser = currentUser.id_user;
+	reviewData.id_writeruser = currentUser.id_user;
 	const review = await models.reviews.create(reviewData);
 	if (reviewData.reward != undefined) {
 
@@ -60,7 +60,7 @@ async function update(req, res) {
 	const review = await models.reviews.findOne({
 		where: {
 			id_review: reviewId,
-			id_writerUser: currentUser.id_user
+			id_writeruser: currentUser.id_user
 		},
 	})
 

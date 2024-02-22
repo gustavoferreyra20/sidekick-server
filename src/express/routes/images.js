@@ -9,7 +9,7 @@ async function getSingle(req, res) {
     let imagePath;
 
     // Check if filepath starts with "profiles"
-    if (filepath.startsWith('profiles')) {
+    if (filepath.startsWith('profiles/file')) {
         // Construct imagePath with the specified directory structure
         imagePath = path.join('/tmp/img', filepath);
     } else {

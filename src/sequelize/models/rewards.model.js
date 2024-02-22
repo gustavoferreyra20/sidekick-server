@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
 		id_reward: {type:DataTypes.INTEGER, autoIncrement: true, primaryKey:true},
 		name: DataTypes.STRING,
         description: DataTypes.STRING,
-        price: DataTypes.DECIMAL,
+        price: DataTypes.DOUBLE,
         img: DataTypes.TIME,
 }, {
     freezeTableName: true,

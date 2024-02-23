@@ -9,22 +9,47 @@ async function getSingle(req, res) {
     let imagePath;
 
     // Check if filepath starts with "profiles"
-    if (filepath.startsWith('profiles/file')) {
+    if (filepath.startsWith('profiles/')) {
         // Construct imagePath with the specified directory structure
         imagePath = path.join('/tmp/img', filepath);
+
+        // Check if the file exists
+        fs.access(imagePath, fs.constants.F_OK, (err) => {
+            if (err) {
+                // If file doesn't exist, set imagePath to the default profile image
+                imagePath = path.join(__dirname, '../img/profiles/default.png');
+
+                fs.access(imagePath, fs.constants.F_OK, (err) => {
+                    if (err) {
+
+                        // If default profile image doesn't exist, return 404
+                        return res.status(404).send('404 - Not found');
+                    }
+
+                    // If default profile image exists, send it
+                    res.sendFile(imagePath);
+                });
+                return; // Return to avoid sending the response multiple times
+            }
+
+            // If the requested image file exists, send it
+            res.sendFile(imagePath);
+        });
     } else {
         // Construct imagePath with the default directory structure
         imagePath = path.join(__dirname, '../img', filepath);
+
+        // Check if the file exists
+        fs.access(imagePath, fs.constants.F_OK, (err) => {
+            if (err) {
+                // If file doesn't exist, return 404
+                return res.status(404).send('404 - Not found');
+            }
+
+            // If the requested image file exists, send it
+            res.sendFile(imagePath);
+        });
     }
-
-    // Check if the file exists
-    fs.access(imagePath, fs.constants.F_OK, (err) => {
-        if (err) {
-            return res.status(404).send('404 - Not found', filepath);
-        }
-
-        res.sendFile(imagePath);
-    });
 }
 
 async function uploadProfileImage(req, res) {

@@ -44,6 +44,8 @@ async function getAll(req, res) {
 	LEFT JOIN reviews r ON p.id_post = r.id_post -- Change the join condition here
 	WHERE
 	  1=1 ${whereClause}
+	  AND
+	  deleted = false
 	GROUP BY
 	p.id_post, u.name, u.img, g.name, g.img, m.name, pf.name;
   `, { replacements: values });

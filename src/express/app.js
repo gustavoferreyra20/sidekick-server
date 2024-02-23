@@ -47,6 +47,6 @@ app.use('/api/rewards', auth, rewardsRouter);
 app.use('/api/reviews', auth, reviewsRouter);
 app.use('/api/payments', paymentsRouter);
 app.use('/api/notifications', auth, notificationsRouter);
-app.use('/api/users', auth, usersRouter);
+app.use('/api/users', usersRouter);
 
 module.exports = app;

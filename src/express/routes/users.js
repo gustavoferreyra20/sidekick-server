@@ -23,8 +23,7 @@ async function getAll(req, res) {
 
 async function getSingle(req, res) {
 	const userId = req.params.id;
-	const adminStatus = await isAdmin(req);
-	const currentUser = req.auth;
+
 	const user = await models.users.findByPk(userId, {
 		attributes: { exclude: ['password'] },
 	});
@@ -33,13 +32,7 @@ async function getSingle(req, res) {
 		return res.status(404).send('404 - Not found');
 	}
 
-	if (adminStatus) {
-		res.status(200).json(user);
-	} else if (user.id_user == currentUser.id_user) {
-		res.status(200).json(user);
-	} else {
-		res.status(401).json({ error: 'Unauthorized' });
-	}
+	res.status(200).json(user);
 }
 
 async function update(req, res) {

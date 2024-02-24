@@ -47,7 +47,9 @@ async function getAll(req, res) {
 	  AND
 	  deleted = false
 	GROUP BY
-	p.id_post, u.name, u.img, g.name, g.img, m.name, pf.name;
+	p.id_post, u.name, u.img, g.name, g.img, m.name, pf.name
+	ORDER BY
+	p.date DESC;
   `, { replacements: values });
 	res.status(200).json(results);
 };

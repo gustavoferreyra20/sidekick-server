@@ -8,10 +8,15 @@ async function getAll(req, res) {
     const currentUser = req.auth;
 
     if (adminStatus) {
-        const notifications = await models.notifications.findAll();
+        const notifications = await models.notifications.findAll({
+            order: [['createdat', 'DESC']]
+        });
         res.status(200).json(notifications);
     } else {
-        const notifications = await models.notifications.findAll({ where: { id_user: currentUser.id_user } });
+        const notifications = await models.notifications.findAll({
+            where: { id_user: currentUser.id_user },
+            order: [['createdat', 'DESC']]
+        });
         res.status(200).json(notifications);
     }
 }

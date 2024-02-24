@@ -21,19 +21,18 @@ async function getSingle(req, res) {
 
                 fs.access(imagePath, fs.constants.F_OK, (err) => {
                     if (err) {
-
                         // If default profile image doesn't exist, return 404
                         return res.status(404).send('404 - Not found');
                     }
 
                     // If default profile image exists, send it
-                    res.sendFile(imagePath);
+                    res.sendFile(path.resolve(imagePath)); // Use path.resolve() to get absolute path
                 });
                 return; // Return to avoid sending the response multiple times
             }
 
             // If the requested image file exists, send it
-            res.sendFile(imagePath);
+            res.sendFile(path.resolve(imagePath)); // Use path.resolve() to get absolute path
         });
     } else {
         // Construct imagePath with the default directory structure

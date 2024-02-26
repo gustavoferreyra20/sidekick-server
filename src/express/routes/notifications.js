@@ -1,7 +1,7 @@
 const { models } = require('../../sequelize/index');
 const isAdmin = require('../utils/isAdmin');
 const { Op } = require('sequelize');
-const sendEmail = require('../utils/sendEmail');
+const sendNotifications = require('../utils/sendNotifications');
 
 async function getAll(req, res) {
     const adminStatus = await isAdmin(req);
@@ -43,7 +43,7 @@ async function create(req, res) {
     const user = await models.users.findByPk(notificationData.id_user);
 
     const notification = await models.notifications.create(notificationData);
-    sendEmail(user.email, notificationData.title, notificationData.message);
+    sendNotifications(user.email, notificationData.title, notificationData.message);
     res.status(200).json(notification);
 }
 

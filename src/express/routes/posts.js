@@ -2,7 +2,7 @@ const { models } = require('../../sequelize/index');
 const Op = require('sequelize').Op;
 const sequelize = require("../../sequelize/index");
 const isAdmin = require('../utils/isAdmin');
-const sendEmail = require('../utils/sendEmail');
+const sendNotifications = require('../utils/sendNotifications');
 
 models.posts.belongsToMany(models.users, { through: 'applications', foreignKey: 'id_post' });
 
@@ -153,7 +153,7 @@ async function apply(req, res) {
 
 		await models.notifications.create(notificationData);
 		await updateactualusers(postId);
-		await sendEmail(owner.email, notificationData.title, notificationData.message);
+		await sendNotifications(owner.email, notificationData.title, notificationData.message);
 
 		res.status(200).json(post);
 	} catch (error) {

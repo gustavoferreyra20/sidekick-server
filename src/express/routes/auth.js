@@ -2,7 +2,7 @@ const { models } = require('../../sequelize/index');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const generateRandomString = require('../utils/generateRandomString');
-const sendEmail = require('../utils/sendEmail');
+const sendNotifications = require('../utils/sendNotifications');
 
 async function validate(req, res) {
     const { token } = req.body;
@@ -56,7 +56,7 @@ async function resetPassword(req, res) {
         await user.update({ password: newPassword });
 
         // Send the new password by email
-        await sendEmail(user.email, "Recuperar contraseña", `Tu nueva contraseña es: ${newPassword}`)
+        await sendNotifications(user.email, "Recuperar contraseña", `Tu nueva contraseña es: ${newPassword}`)
 
         return res.status(200).json({ message: 'Password reset successful. Check your email for the new password.'});
     } catch (error) {

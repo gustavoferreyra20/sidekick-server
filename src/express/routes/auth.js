@@ -3,6 +3,7 @@ const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const generateRandomString = require('../utils/generateRandomString');
 const sendNotifications = require('../utils/sendNotifications');
+const sequelize = require("../../sequelize/index");
 
 async function validate(req, res) {
     const { token } = req.body;
@@ -58,7 +59,7 @@ async function resetPassword(req, res) {
         // Send the new password by email
         await sendNotifications(user.email, "Recuperar contraseña", `Tu nueva contraseña es: ${newPassword}`)
 
-        return res.status(200).json({ message: 'Password reset successful. Check your email for the new password.'});
+        return res.status(200).json({ message: 'Password reset successful. Check your email for the new password.' });
     } catch (error) {
         console.error('Error resetting password:', error);
         return res.status(500).json({ message: 'Internal server error' });
@@ -108,10 +109,38 @@ async function addContactInf(req, res) {
     res.status(200).json({ message: 'Contact information added successfully' });
 }
 
+async function storeToken(req, res) {
+    const { id_user, token } = req.body;
+
+    try {
+        const query = `
+            INSERT INTO tokens (id_user, token)
+            VALUES ($id_user, $token)
+            ON CONFLICT (id_user) DO UPDATE
+            SET token = $token
+            RETURNING *
+        `;
+        const result = await sequelize.query(query, {
+            bind: {
+                id_user: id_user,
+                token: token
+            },
+            type: sequelize.QueryTypes.INSERT
+        });
+
+        // If token is successfully stored, send a success response
+        res.status(200).json({ message: 'Token stored successfully', data: result[0] });
+    } catch (error) {
+        // If an error occurs, send an error response
+        console.error('Error storing token:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
 module.exports = {
     validate,
     login,
     resetPassword,
     register,
-    addContactInf
+    addContactInf,
+    storeToken
 };

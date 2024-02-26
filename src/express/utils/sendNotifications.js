@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 const axios = require('axios');
+const sequelize = require("../../sequelize/index");
 
 async function sendNotifications(to, subject, text) {
     try {
@@ -20,19 +21,28 @@ async function sendNotifications(to, subject, text) {
         };
 
         const emailInfo = await transporter.sendMail(mailOptions);
-        console.log("Email sent:", emailInfo.response);
-
         // Sending notification
-        const notificationInfo = await axios.post('https://app.nativenotify.com/api/notification', {
-            appId: 19862,
-            appToken: process.env.APP_TOKEN,
-            title: subject,
-            body: text,
-            dateSent: new Date().toLocaleString(), // Use current date and time
+        const query = `
+        SELECT t.*
+        FROM tokens t
+        JOIN users u ON u.id_user = CAST(t.id_user AS INT)
+        WHERE u.email = 'apk@gmail.com';
+    `;
+        const [userWithToken] = await sequelize.query(query, {
+            bind: {
+                email: to,
+            },
+            type: sequelize.QueryTypes.SELECT
         });
-        console.log('Notification sent successfully:', notificationInfo.data);
 
-        return { email: emailInfo.response, notification: notificationInfo.data };
+        if (userWithToken && userWithToken.token) {
+            const response = await sendPushNotification(userWithToken.token);
+            return { email: emailInfo.response, notification: response };
+        } else {
+            console.log('No token found for the user:', to);
+            return { email: emailInfo.response };
+        }
+
     } catch (error) {
         console.error("Error occurred while sending notifications:", error);
         throw error;
@@ -40,3 +50,27 @@ async function sendNotifications(to, subject, text) {
 }
 
 module.exports = sendNotifications;
+
+async function sendPushNotification(expoPushToken, title, text) {
+    try {
+        const message = {
+            to: expoPushToken,
+            sound: 'default',
+            title: title,
+            body: text
+        };
+
+        const response = await axios.post('https://exp.host/--/api/v2/push/send', message, {
+            headers: {
+                Accept: 'application/json',
+                'Accept-encoding': 'gzip, deflate',
+                'Content-Type': 'application/json',
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error sending push notification:', error);
+        throw error; // Re-throw the error to be handled by the caller
+    }
+}

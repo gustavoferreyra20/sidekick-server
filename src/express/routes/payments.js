@@ -42,7 +42,7 @@ async function receivePayment(req, res) {
 
         const notification = req.body;
 
-        console.log(req.body)
+        console.log(req)
 
         // Respond with a 200 OK to acknowledge receipt of the notification
         res.status(200).end();

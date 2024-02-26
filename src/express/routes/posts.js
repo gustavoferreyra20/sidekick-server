@@ -2,6 +2,7 @@ const { models } = require('../../sequelize/index');
 const Op = require('sequelize').Op;
 const sequelize = require("../../sequelize/index");
 const isAdmin = require('../utils/isAdmin');
+const sendEmail = require('../utils/sendEmail');
 
 models.posts.belongsToMany(models.users, { through: 'applications', foreignKey: 'id_post' });
 
@@ -135,6 +136,7 @@ async function apply(req, res) {
 		const id_user = currentUser.id_user;
 
 		const user = await models.users.findByPk(id_user);
+		const owner = await models.users.findByPk(post.id_user);
 
 		if (!user) {
 			return res.status(404).json({ error: 'Users information not found' });
@@ -151,6 +153,7 @@ async function apply(req, res) {
 
 		await models.notifications.create(notificationData);
 		await updateactualusers(postId);
+		await sendEmail(owner.email, notificationData.title, notificationData.message);
 
 		res.status(200).json(post);
 	} catch (error) {
@@ -206,7 +209,7 @@ async function updateactualusers(id_post) {
 				where: {
 					[Op.or]: [
 						{ status: 'accepted' },
-						{ status: 'reviewed' }
+						{ status: 'complete' }
 					]
 				}
 			}

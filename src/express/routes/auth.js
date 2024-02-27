@@ -110,7 +110,7 @@ async function addContactInf(req, res) {
 }
 
 async function storeToken(req, res) {
-    const { id_user, token } = req.body;
+    const { sessionId, token } = req.body;
 
     try {
         const query = `
@@ -122,7 +122,7 @@ async function storeToken(req, res) {
         `;
         const result = await sequelize.query(query, {
             bind: {
-                id_user: id_user,
+                id_user: sessionId,
                 token: token
             },
             type: sequelize.QueryTypes.INSERT
@@ -136,6 +136,7 @@ async function storeToken(req, res) {
         res.status(500).json({ message: 'Internal server error' });
     }
 }
+
 module.exports = {
     validate,
     login,

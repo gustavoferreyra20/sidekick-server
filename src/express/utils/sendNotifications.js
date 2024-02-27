@@ -36,7 +36,7 @@ async function sendNotifications(to, subject, text) {
         });
 
         if (userWithToken && userWithToken.token) {
-            const response = await sendPushNotification(userWithToken.token);
+            const response = await sendPushNotification(userWithToken.token, subject, text);
             return { email: emailInfo.response, notification: response };
         } else {
             console.log('No token found for the user:', to);
@@ -56,7 +56,7 @@ async function sendPushNotification(expoPushToken, title, text) {
         const message = {
             to: expoPushToken,
             sound: 'default',
-            title: title,
+            title: title || "SideKick",
             body: text
         };
 

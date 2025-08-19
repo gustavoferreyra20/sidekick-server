@@ -27,7 +27,7 @@
     "parser": "^0.1.4",
     "pg": "^8.11.3",
     "resend": "^3.2.0",
-    "sequelize": "^6.21.5"
+    "sequelize": "^6.37.7"
   },
   "devDependencies": {
     "nodemon": "^3.0.3"

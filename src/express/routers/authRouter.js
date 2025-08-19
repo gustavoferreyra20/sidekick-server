@@ -3,7 +3,7 @@ const router = express.Router();
 const { handleAsyncErrors } = require('../middleware/errorHandler');
 const auth = require('../routes/auth');
 
-// Routes under the '/api/auth' path
+// Routes under the '/sidekick/auth' path
 router.post('/validate', handleAsyncErrors(auth.validate));
 router.post('/login', handleAsyncErrors(auth.login));
 router.post('/resetPassword', handleAsyncErrors(auth.resetPassword));

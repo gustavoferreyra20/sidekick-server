@@ -60,7 +60,7 @@ async function sendPushNotification(expoPushToken, title, text) {
             body: text
         };
 
-        const response = await axios.post('https://exp.host/--/api/v2/push/send', message, {
+        const response = await axios.post('https://exp.host/--/sidekick/v2/push/send', message, {
             headers: {
                 Accept: 'application/json',
                 'Accept-encoding': 'gzip, deflate',

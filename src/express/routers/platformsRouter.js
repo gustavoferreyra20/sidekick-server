@@ -3,7 +3,7 @@ const router = express.Router();
 const { handleAsyncErrors } = require('../middleware/errorHandler');
 const platforms = require('../routes/platforms');
 
-// Routes under the '/api/platforms' path
+// Routes under the '/sidekick/platforms' path
 router.get('/', handleAsyncErrors(platforms.getAll));
 router.post('/', handleAsyncErrors(platforms.create));
 router.get('/:id', handleAsyncErrors(platforms.getSingle));

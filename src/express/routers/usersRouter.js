@@ -4,7 +4,7 @@ const { handleAsyncErrors } = require('../middleware/errorHandler');
 const { auth } = require('../middleware/auth');
 const users = require('../routes/users');
 
-// Routes under the '/api/users' path
+// Routes under the '/sidekick/users' path
 router.get('/', auth, handleAsyncErrors(users.getAll));
 router.get('/:id/applications', auth, handleAsyncErrors(users.getApplications));
 router.get('/:id/contact_inf', auth, handleAsyncErrors(users.getContact_inf));

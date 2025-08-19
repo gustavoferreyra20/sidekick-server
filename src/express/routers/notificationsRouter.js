@@ -3,7 +3,7 @@ const router = express.Router();
 const { handleAsyncErrors } = require('../middleware/errorHandler');
 const notifications = require('../routes/notifications');
 
-// Routes under the '/api/notifications' path
+// Routes under the '/sidekick/notifications' path
 router.get('/', handleAsyncErrors(notifications.getAll));
 router.post('/', handleAsyncErrors(notifications.create));
 router.put('/', handleAsyncErrors(notifications.bulkUpdate));

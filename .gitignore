@@ -3,3 +3,5 @@ node_modules
 .env
 src/express/img/profiles/*
 !src/express/img/profiles/default.png
+.vercel
+.env*.local

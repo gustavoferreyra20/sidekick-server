@@ -28,7 +28,7 @@ module.exports = (sequelize) => {
         img: {
             type: DataTypes.STRING,
             allowNull: true,
-            defaultValue: "profiles/default.png"
+            defaultValue: process.env.DEFAULT_PROFILE_PIC_URL
         },
     }, {
         freezeTableName: true,

@@ -5,3 +5,9 @@ src/express/img/profiles/*
 !src/express/img/profiles/default.png
 .vercel
 .env*.local
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr

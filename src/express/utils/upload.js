@@ -1,30 +1,22 @@
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
 
-const destinationDirectory = path.join('/tmp/img/profiles');
+// Use memory storage for Vercel Blob uploads (stores file in buffer)
+const storage = multer.memoryStorage();
 
-// Create the destination directory if it doesn't exist
-if (!fs.existsSync(destinationDirectory)) {
-    try {
-        fs.mkdirSync(destinationDirectory, { recursive: true });
-        console.log('Destination directory created');
-    } catch (error) {
-        console.error('Error creating destination directory:', error);
-        // Handle error appropriately
-    }
-}
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, destinationDirectory);
+const upload = multer({ 
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB limit
     },
-    filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + '.png');
+    fileFilter: (req, file, cb) => {
+        // Accept only image files
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true);
+        } else {
+            cb(new Error('Only image files are allowed!'), false);
+        }
     }
 });
-
-const upload = multer({ storage: storage });
 
 module.exports = {
     upload: upload,

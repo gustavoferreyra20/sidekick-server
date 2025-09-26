@@ -10,5 +10,6 @@ router.post('/resetPassword', handleAsyncErrors(auth.resetPassword));
 router.post('/register', handleAsyncErrors(auth.register));
 router.post('/token', handleAsyncErrors(auth.storeToken));
 router.post('/:id/contact_inf/:id_contact_inf', handleAsyncErrors(auth.addContactInf));
+router.get('/activate-account', handleAsyncErrors(auth.activateAccount));
 
 module.exports = router;

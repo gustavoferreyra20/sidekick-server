@@ -30,6 +30,15 @@ module.exports = (sequelize) => {
             allowNull: true,
             defaultValue: process.env.DEFAULT_PROFILE_PIC_URL
         },
+        enabled: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: true
+        },
+        activation_token: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        }
     }, {
         freezeTableName: true,
         timestamps: false,

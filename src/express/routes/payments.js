@@ -5,16 +5,19 @@ async function createMp(req, res) {
         const body = {
             items: [
                 {
-                    title: req.body.name,
-                    description: req.body.description,
-                    picture_url: 'http://www.myapp.com/myimage.jpg',
-                    category_id: 'reward',
-                    quantity: 1,
-                    unit_price: req.body.price
-                }
-            ],
-            back_urls: {},
+                        id: req.body.id_reward,
+                        title: req.body.name,
+                        description: req.body.description,
+                        picture_url: 'https://sidekick-server-nine.vercel.app/api/images/' + req.body.img,
+                        category_id: 'reward',
+                        quantity: 1,
+                        unit_price: req.body.price
+                    }                ],
             notification_url: `${process.env.SERVER}/payments/webhook`,
+            metadata: {
+                id_user: req.body.id_user,
+            },
+
         };
 
         const response = await axios.post(

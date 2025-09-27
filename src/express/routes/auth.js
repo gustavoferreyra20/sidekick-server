@@ -25,27 +25,27 @@ async function validate(req, res) {
 
 async function login(req, res) {
     const { email, password } = req.body;
-    const user = await models.users.findOne({
-        where: { email },
-    });
 
-    if (!user) {
-        res.status(404).json({ error: 'Incorrect email or password' });
-        return;
+    const user = await models.users.findOne({ where: { email } });
+
+    if (!user || !bcryptjs.compareSync(password, user.password)) {
+        return res.status(401).json({ error: 'Incorrect email or password' });
     }
 
     if (!user.enabled) {
         return res.status(403).json({ error: 'Account is disabled' });
     }
 
-    if (bcryptjs.compareSync(password, user.password)) {
-        const userWithoutPassword = { ...user.toJSON() };
-        delete userWithoutPassword.password;
-        const token = jwt.sign(userWithoutPassword, process.env.JWT_SECRET, { expiresIn: process.env.JWT_TIME_EXPIRES });
-        res.status(200).json({ token: token, id: userWithoutPassword.id_user });
-    } else {
-        res.status(401).json({ error: 'Incorrect email or password' });
-    }
+    const userWithoutPassword = { ...user.toJSON() };
+    delete userWithoutPassword.password;
+
+    const token = jwt.sign(
+      userWithoutPassword,
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_TIME_EXPIRES }
+    );
+
+    res.status(200).json({ token: token, id: userWithoutPassword.id_user });
 }
 
 async function resetPassword(req, res) {
@@ -84,7 +84,7 @@ async function register(req, res) {
             activation_token: token,
         }, { transaction: t });
 
-        const activationLink = `${process.env.FRONTEND_URL}/activate.php?token=${token}`;
+        const activationLink = `${process.env.FRONTEND_URL}/api/activate.php?token=${token}`;
         const html = activationEmailTemplate(user.name, activationLink);
 
         await sendEmail(user.email, "Activa tu cuenta SideKick", html);

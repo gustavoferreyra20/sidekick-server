@@ -84,7 +84,7 @@ async function register(req, res) {
             activation_token: token,
         }, { transaction: t });
 
-        const activationLink = `${process.env.FRONTEND_URL}/activate.php?token=${token}`;
+        const activationLink = `${process.env.FRONTEND_URL}/api/activate.php?token=${token}`;
         const html = activationEmailTemplate(user.name, activationLink);
 
         await sendEmail(user.email, "Activa tu cuenta SideKick", html);

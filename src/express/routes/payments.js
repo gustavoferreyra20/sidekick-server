@@ -42,15 +42,15 @@ async function validateAndProcessPayment(body) {
     try {
         // Validate that the body contains the required structure
         if (!body || typeof body !== 'object') {
-            throw new Error('Invalid webhook body: body is missing or not an object');
+            return;
         }
         
         if (!body.resource) {
-            throw new Error('Invalid webhook body: resource is missing');
+            return;
         }
         
         if (body.topic !== 'payment') {
-            throw new Error(`Invalid webhook body: expected topic 'payment', got '${body.topic}'`);
+            return;
         }
         
         console.log('Webhook validation successful:', { resource: body.resource, topic: body.topic });
@@ -62,7 +62,8 @@ async function validateAndProcessPayment(body) {
         return paymentData;
     } catch (error) {
         console.error('Error in validateAndProcessPayment:', error.message);
-        throw error;
+        // Don't throw error, just log it and return
+        return;
     }
 }
 

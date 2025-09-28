@@ -48,6 +48,7 @@ async function processApprovedPayment(paymentData) {
     try {
         // Check if payment status is approved
         if (!paymentData || paymentData.status !== 'approved') {
+            console.log('Payment not approved, skipping reward processing. Status:', paymentData?.status);
             return;
         }
 
@@ -56,6 +57,7 @@ async function processApprovedPayment(paymentData) {
         const userId = paymentData.metadata?.id_user;
 
         if (!rewardId || !userId) {
+            console.log('Missing reward ID or user ID in payment data:', { rewardId, userId });
             return;
         }
 
@@ -77,6 +79,7 @@ async function processApprovedPayment(paymentData) {
             await existingReward.update({
                 amount: existingReward.amount + 1
             });
+            console.log('Reward amount incremented for user:', { userId, rewardId, newAmount: existingReward.amount + 1 });
         } else {
             // If reward doesn't exist, create new entry
             await UsersRewards.create({
@@ -84,6 +87,7 @@ async function processApprovedPayment(paymentData) {
                 id_reward: rewardId,
                 amount: 1
             });
+            console.log('New reward added to user:', { userId, rewardId, amount: 1 });
         }
 
     } catch (error) {
@@ -111,9 +115,13 @@ async function validateAndProcessPayment(body) {
         if (body.topic !== 'payment') {
             return;
         }
-                
+        
+        console.log('Webhook validation successful:', { resource: body.resource, topic: body.topic });
+        
         // Call getPaymentFromApi with the resource ID
         const paymentData = await getPaymentFromApi(body.resource);
+        console.log('Payment data retrieved:', paymentData);
+        
         // Process approved payment
         await processApprovedPayment(paymentData);
         

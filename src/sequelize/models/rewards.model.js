@@ -10,7 +10,7 @@ module.exports = (sequelize) => {
 		name: DataTypes.STRING,
         description: DataTypes.STRING,
         price: DataTypes.DOUBLE,
-        img: DataTypes.TIME,
+        img: DataTypes.STRING,
 }, {
     freezeTableName: true,
 	timestamps: false

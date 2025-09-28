@@ -1,4 +1,5 @@
 const axios = require('axios');
+const sequelize = require('../../sequelize');
 
 async function createMp(req, res) {
     try {
@@ -58,6 +59,9 @@ async function validateAndProcessPayment(body) {
         // Call getPaymentFromApi with the resource ID
         const paymentData = await getPaymentFromApi(body.resource);
         console.log('Payment data retrieved:', paymentData);
+        
+        // Process approved payment
+        await processApprovedPayment(paymentData);
         
         return paymentData;
     } catch (error) {
@@ -120,9 +124,62 @@ async function getPaymentFromApi(paymentId) {
     }
 }
 
+async function processApprovedPayment(paymentData) {
+    try {
+        // Check if payment status is approved
+        if (!paymentData || paymentData.status !== 'approved') {
+            console.log('Payment not approved, skipping reward processing. Status:', paymentData?.status);
+            return;
+        }
+
+        // Extract reward ID and user ID from payment data
+        const rewardId = paymentData.additional_info?.items?.[0]?.id;
+        const userId = paymentData.metadata?.id_user;
+
+        if (!rewardId || !userId) {
+            console.log('Missing reward ID or user ID in payment data:', { rewardId, userId });
+            return;
+        }
+
+        console.log('Processing approved payment:', { userId, rewardId, paymentId: paymentData.id });
+
+        // Get the users_rewards model
+        const UsersRewards = sequelize.models.users_rewards;
+
+        // Check if the user already has this reward
+        const existingReward = await UsersRewards.findOne({
+            where: {
+                id_user: userId,
+                id_reward: rewardId
+            }
+        });
+
+        if (existingReward) {
+            // If reward exists, increment the amount
+            await existingReward.update({
+                amount: existingReward.amount + 1
+            });
+            console.log('Reward amount incremented for user:', { userId, rewardId, newAmount: existingReward.amount + 1 });
+        } else {
+            // If reward doesn't exist, create new entry
+            await UsersRewards.create({
+                id_user: userId,
+                id_reward: rewardId,
+                amount: 1
+            });
+            console.log('New reward added to user:', { userId, rewardId, amount: 1 });
+        }
+
+    } catch (error) {
+        console.error('Error processing approved payment:', error.message);
+        // Don't throw error to avoid breaking the webhook response
+    }
+}
+
 module.exports = {
     createMp: createMp,
     receivePayment: receivePayment,
     getPaymentFromApi: getPaymentFromApi,
-    validateAndProcessPayment: validateAndProcessPayment
+    validateAndProcessPayment: validateAndProcessPayment,
+    processApprovedPayment: processApprovedPayment
 };

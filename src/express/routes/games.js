@@ -1,5 +1,9 @@
-const { models } = require('../../sequelize/index');
+const sequelize = require('../../sequelize/index');
 const isAdmin = require('../utils/isAdmin');
+const igdbService = require('../services/igdbService');
+
+// Access models from sequelize.models
+const models = sequelize.models;
 
 models.games.belongsToMany(models.platforms, { through: 'platforms_games', foreignKey: 'id_game' })
 
@@ -85,6 +89,75 @@ async function getPlatforms(req, res) {
 	res.status(200).json(platforms);
 };
 
+async function getIGDBGames(req, res) {
+	console.log('IGDB Games endpoint called');
+	try {
+		const { 
+			limit = 20, 
+			offset = 0, 
+			sortBy = 'rating', 
+			sortOrder = 'desc' 
+		} = req.query;
+		
+		// Parse and validate parameters
+		const parsedLimit = parseInt(limit);
+		const parsedOffset = parseInt(offset);
+		
+		if (isNaN(parsedLimit) || isNaN(parsedOffset)) {
+			return res.status(400).json({ 
+				error: 'Invalid parameters. Limit and offset must be numbers.' 
+			});
+		}
+
+		// Use IGDB service to get multiplayer games
+		const games = await igdbService.getMultiplayerGames({
+			limit: parsedLimit,
+			offset: parsedOffset,
+			sortBy: sortBy,
+			sortOrder: sortOrder
+		});
+		
+		res.status(200).json({
+			games,
+			pagination: {
+				limit: parsedLimit,
+				offset: parsedOffset,
+				count: games.length
+			}
+		});
+
+	} catch (error) {
+		console.error('IGDB API Error:', error);
+		
+		// Handle specific error types
+		if (error.message.includes('credentials not configured')) {
+			return res.status(500).json({ 
+				error: 'IGDB service configuration error',
+				message: error.message 
+			});
+		}
+		
+		if (error.message.includes('Limit must be') || error.message.includes('Offset must be')) {
+			return res.status(400).json({ 
+				error: 'Invalid parameters',
+				message: error.message 
+			});
+		}
+		
+		if (error.message.includes('IGDB API error')) {
+			return res.status(502).json({ 
+				error: 'External API error',
+				message: error.message 
+			});
+		}
+
+		res.status(500).json({ 
+			error: 'Internal server error', 
+			message: error.message 
+		});
+	}
+}
+
 module.exports = {
 	getAll: getAll,
 	getSingle: getSingle,
@@ -92,4 +165,5 @@ module.exports = {
 	update: update,
 	removeSingle: removeSingle,
 	getPlatforms: getPlatforms,
+	getIGDBGames: getIGDBGames,
 };

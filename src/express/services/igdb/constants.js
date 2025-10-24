@@ -25,9 +25,7 @@ const SORT_FIELD_MAPPING = {
   'release_date': 'first_release_date',
   'first_release_date': 'first_release_date',
   'aggregated_rating': 'aggregated_rating',
-  'follows': 'follows',
   'hypes': 'hypes',
-  'popularity': 'follows', // Map popularity to follows
   'created_at': 'created_at',
   'updated_at': 'updated_at'
 };

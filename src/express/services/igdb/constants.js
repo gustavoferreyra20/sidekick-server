@@ -39,7 +39,7 @@ const DEFAULT_GAME_FIELDS = [
   'summary', 
   'rating', 
   'platforms.name', 
-  'cover.url', 
+  'cover.image_id',
   'game_modes'
 ];
 

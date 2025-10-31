@@ -68,73 +68,93 @@ class IGDBService {
       gameModes = MULTIPLAYER_MODES,
       fields,
       sortBy = IGDB_CONFIG.DEFAULT_SORT_FIELD,
-      sortOrder = IGDB_CONFIG.DEFAULT_SORT_ORDER
+      sortOrder = IGDB_CONFIG.DEFAULT_SORT_ORDER,
+      ...restOptions
     } = options;
 
-    const query = IGDBQueryBuilder.create()
-      .fields(fields)
-      .gameModes(gameModes)
-      .sort(sortBy, sortOrder)
-      .limit(limit)
-      .offset(offset)
-      .build();
-
-    return await this.makeRequest('games', query);
+    return await this.getGames({
+      gameModes,
+      fields,
+      limit,
+      offset,
+      sortBy,
+      sortOrder,
+      ...restOptions
+    });
   }
 
   /**
-   * Search games by name
-   * @param {string} searchTerm - Search term
+   * Search games by ID or name
    * @param {Object} options - Query options
+   * @param {number} options.id - Game ID (nullable)
+   * @param {string} options.name - Game name (nullable)
+   * @param {number} options.limit - Results limit (default: 1)
    * @returns {Promise<Array>} Array of games
    */
-  async searchGames(searchTerm, options = {}) {
-    const { limit, offset, fields } = options;
+  async searchGames(options = {}) {
+    const { 
+      id, 
+      name, 
+      limit = 1,
+      fields = 'name, summary, rating, platforms.name, cover.image_id, game_modes',
+      ...restOptions 
+    } = options;
 
-    let query = IGDBQueryBuilder.create()
-      .fields(fields)
-      .limit(limit)
-      .offset(offset);
-
-    // Add search manually since it's not part of the standard query builder
-    const builtQuery = query.build();
-    const finalQuery = builtQuery.replace(
-      /^fields ([^;]+);/, 
-      `fields $1;\nsearch "${searchTerm}";`
-    );
-
-    return await this.makeRequest('games', finalQuery);
+    return await this.getGames({
+      id,
+      name,
+      fields,
+      limit,
+      ...restOptions
+    });
   }
 
   /**
-   * Get games by specific criteria using query builder
+   * Get games by specific criteria - unified method for all game queries
    * @param {Object} options - Query options
+   * @param {number} options.id - Game ID (nullable)
+   * @param {string} options.name - Game name (nullable) 
+   * @param {Array} options.gameModes - Game modes to filter by (nullable)
+   * @param {Array} options.whereConditions - Additional where conditions (nullable)
+   * @param {string|Array} options.fields - Fields to return
+   * @param {number} options.limit - Results limit
+   * @param {number} options.offset - Results offset
+   * @param {string} options.sortBy - Sort field
+   * @param {string} options.sortOrder - Sort order (asc/desc)
    * @returns {Promise<Array>} Array of games
    */
   async getGames(options = {}) {
     const { 
-      limit, 
-      offset, 
+      id,
+      name,
+      gameModes,
       whereConditions = [], 
       fields,
+      limit,
+      offset,
       sortBy,
       sortOrder 
     } = options;
 
-    let queryBuilder = IGDBQueryBuilder.create()
+    // Build query using method chaining and filter out undefined values
+    const queryBuilder = IGDBQueryBuilder.create()
       .fields(fields)
       .limit(limit)
       .offset(offset);
 
-    // Add custom where conditions
-    whereConditions.forEach(condition => {
-      queryBuilder.where(condition);
-    });
+    // Build conditions array and filter out falsy values
+    const allConditions = [
+      id && `id = ${id}`,
+      name && `name ~ *"${name}"*`,
+      ...whereConditions
+    ].filter(Boolean);
 
-    // Add sorting if specified
-    if (sortBy) {
-      queryBuilder.sort(sortBy, sortOrder);
-    }
+    // Add all conditions at once
+    allConditions.forEach(condition => queryBuilder.where(condition));
+
+    // Add game modes and sorting using optional chaining style
+    gameModes && queryBuilder.gameModes(gameModes);
+    sortBy && queryBuilder.sort(sortBy, sortOrder);
 
     const query = queryBuilder.build();
     return await this.makeRequest('games', query);

@@ -40,7 +40,7 @@ const DEFAULT_GAME_FIELDS = [
   'rating', 
   'platforms.name', 
   'cover.image_id',
-  'game_modes'
+  'game_modes.name'
 ];
 
 // Multiplayer game modes (multiplayer + cooperative)

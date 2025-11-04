@@ -96,7 +96,7 @@ class IGDBService {
       id, 
       name, 
       limit = 1,
-      fields = 'name, summary, rating, platforms.name, cover.image_id, game_modes',
+      fields = 'name, summary, rating, platforms.name, cover.image_id, game_modes.name',
       ...restOptions 
     } = options;
 

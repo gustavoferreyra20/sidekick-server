@@ -3,11 +3,12 @@ const Op = require('sequelize').Op;
 const sequelize = require("../../sequelize/index");
 const isAdmin = require('../utils/isAdmin');
 const sendNotifications = require('../utils/sendNotifications');
+const igdbService = require("../services/igdbService");
 
 models.posts.belongsToMany(models.users, { through: 'applications', foreignKey: 'id_post' });
 
 async function getAll(req, res) {
-	let postData = (req.query);
+	let postData = req.query;
 	let whereClause = '';
 	let values = [];
 
@@ -24,36 +25,51 @@ async function getAll(req, res) {
 		values.push(postData.id_mode);
 	}
 
+	const [results] = await sequelize.query(`
+		SELECT
+			p.*,
+			u.name AS "userName",
+			u.img AS "userImg",
+			ROUND(COALESCE(AVG(r.abilityscore), 0)) AS "abilityscore",
+			ROUND(COALESCE(AVG(r.karmascore), 0)) AS "karmascore"
+		FROM posts p
+					 INNER JOIN users u ON p.id_user = u.id_user
+					 LEFT JOIN reviews r ON p.id_post = r.id_post
+		WHERE 1=1 ${whereClause}
+		  AND deleted = false
+		GROUP BY p.id_post, u.name, u.img
+		ORDER BY p.date DESC;
+	`, { replacements: values });
 
-	const [results, metadata] = await sequelize.query(`
-	SELECT
-	p.*,
-	u.name AS "userName",
-	u.img AS "userImg",
-	g.name AS "gameName",
-	g.img AS "gameImg",
-	m.name AS "mode",
-	pf.name AS "platform",
-	ROUND(COALESCE(AVG(r.abilityscore), 0)) AS "abilityscore",
-	ROUND(COALESCE(AVG(r.karmascore), 0)) AS "karmascore"
-  FROM
-	posts p
-	INNER JOIN users u ON p.id_user = u.id_user
-	INNER JOIN games g ON p.id_game = g.id_game
-	INNER JOIN modes m ON p.id_mode = m.id_mode
-	INNER JOIN platforms pf ON p.id_platform = pf.id_platform
-	LEFT JOIN reviews r ON p.id_post = r.id_post -- Change the join condition here
-	WHERE
-	  1=1 ${whereClause}
-	  AND
-	  deleted = false
-	GROUP BY
-	p.id_post, u.name, u.img, g.name, g.img, m.name, pf.name
-	ORDER BY
-	p.date DESC;
-  `, { replacements: values });
-	res.status(200).json(results);
-};
+	const tasks = results.map(async (post) => {
+
+		const gameData = await igdbService.searchGames({
+			id: post.id_game,
+			name: null,
+			limit: 1
+		});
+
+		const game = gameData?.[0];
+
+		if (game) {
+			post.gameName = game.name || null;
+
+			const platform = game.platforms?.find(p => p.id === post.id_platform);
+			post.platformName = platform?.name || null;
+
+			const mode = game.game_modes?.find(m => m.id === post.id_mode);
+			post.modeName = mode?.name || null;
+
+			post.coverImage = game.cover?.image_id || null;
+		}
+
+		return post;
+	});
+
+	await Promise.all(tasks);
+
+	return res.status(200).json(results);
+}
 
 async function getSingle(req, res) {
 	const postId = req.params.id;

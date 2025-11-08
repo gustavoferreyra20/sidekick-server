@@ -4,43 +4,24 @@ const sequelize = require("../../sequelize/index");
 
 async function sendNotifications(to, subject, text) {
     try {
-        // Sending email
-        const transporter = nodemailer.createTransport({
-            service: "Gmail",
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            }
-        });
-
-        const mailOptions = {
-            from: "SideKick",
-            to: to,
-            subject: subject,
-            text: text
-        };
-
-        const emailInfo = await transporter.sendMail(mailOptions);
-        // Sending notification
+        // Buscar token del usuario
         const query = `
-        SELECT t.*
-        FROM tokens t
-        JOIN users u ON u.id_user = CAST(t.id_user AS INT)
-        WHERE u.email = 'apk@gmail.com';
-    `;
+            SELECT t.*
+            FROM tokens t
+            JOIN users u ON u.id_user = CAST(t.id_user AS INT)
+            WHERE u.email = :email;
+        `;
         const [userWithToken] = await sequelize.query(query, {
-            bind: {
-                email: to,
-            },
+            replacements: { email: to },
             type: sequelize.QueryTypes.SELECT
         });
 
         if (userWithToken && userWithToken.token) {
             const response = await sendPushNotification(userWithToken.token, subject, text);
-            return { email: emailInfo.response, notification: response };
+            return { notification: response };
         } else {
             console.log('No token found for the user:', to);
-            return { email: emailInfo.response };
+            return {};
         }
 
     } catch (error) {
@@ -48,8 +29,6 @@ async function sendNotifications(to, subject, text) {
         throw error;
     }
 }
-
-module.exports = sendNotifications;
 
 async function sendPushNotification(expoPushToken, title, text) {
     try {
@@ -71,6 +50,8 @@ async function sendPushNotification(expoPushToken, title, text) {
         return response.data;
     } catch (error) {
         console.error('Error sending push notification:', error);
-        throw error; // Re-throw the error to be handled by the caller
+        throw error;
     }
 }
+
+module.exports = sendNotifications;

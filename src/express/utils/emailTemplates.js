@@ -91,4 +91,51 @@ function resetPasswordEmailTemplate(name, newPassword) {
   `;
 }
 
-module.exports = { activationEmailTemplate, resetPasswordEmailTemplate };
+function joinRoomRequestEmailTemplate(userName, requesterName, roomName) {
+  return `
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+      <meta charset="UTF-8">
+      <title>Solicitud para unirte a tu sala</title>
+    </head>
+    <body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f4f4f4 !important; color:#f0f0f0 !important;">
+      <table align="center" width="100%" cellpadding="0" cellspacing="0" 
+        style="max-width:600px; background-color:#1c1c1c !important; border-radius:8px; overflow:hidden; box-shadow:0 0 10px rgba(0,0,0,0.2);">
+
+        <tr>
+          <td style="background-color:#28a745 !important; color:#ffffff !important; text-align:center; padding:20px; font-size:24px; font-weight:bold;">
+            SideKick
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:30px; font-size:16px; line-height:1.5;">
+            <p style="color:#f0f0f0 !important; margin:0 0 15px !important;">
+              Hola <span style="color:#f0f0f0 !important;">${userName}</span>,
+            </p>
+            <p style="color:#f0f0f0 !important; margin:0 0 15px !important;">
+              <span style="color:#f0f0f0 !important;">${requesterName}</span> ha solicitado unirse a tu sala <strong style="color:#f0f0f0 !important;">${roomName}</strong>.
+            </p>
+            <p style="color:#f0f0f0 !important; margin:0 0 15px !important;">
+              Por favor revisa la solicitud desde la aplicación.
+            </p>
+            <p style="color:#f0f0f0 !important; margin:0 !important;">
+              ¡Gracias!<br/><span style="color:#f0f0f0 !important;">El equipo de SideKick</span>
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="background-color:#111111 !important; color:#aaaaaa !important; text-align:center; padding:15px; font-size:12px;">
+            © ${new Date().getFullYear()} SideKick. Todos los derechos reservados.
+          </td>
+        </tr>
+
+      </table>
+    </body>
+    </html>
+  `;
+}
+
+module.exports = { activationEmailTemplate, resetPasswordEmailTemplate, joinRoomRequestEmailTemplate};

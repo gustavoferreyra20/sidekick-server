@@ -4,6 +4,8 @@ const sequelize = require("../../sequelize/index");
 const isAdmin = require('../utils/isAdmin');
 const sendNotifications = require('../utils/sendNotifications');
 const igdbService = require("../services/igdbService");
+const sendEmail = require("../utils/sendEmail");
+const {joinRoomRequestEmailTemplate} = require("../utils/emailTemplates");
 
 models.posts.belongsToMany(models.users, { through: 'applications', foreignKey: 'id_post' });
 
@@ -159,6 +161,13 @@ async function apply(req, res) {
 		}
 
 		await post.addUser(user);
+
+		const html = joinRoomRequestEmailTemplate(
+			owner.name,
+			user.name,
+			post.title
+		);
+		await sendEmail(owner.email, "Nueva solicitud para unirte a tu sala", html);
 
 		const notificationData = {
 			id_user: post.id_user,

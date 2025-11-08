@@ -18,6 +18,10 @@ const GAME_MODES = {
   MMO: 5
 };
 
+const GAME_TYPES = {
+  MAIN_GAME: 0
+};
+
 // Valid sort fields mapping (user-friendly name -> IGDB field name)
 const SORT_FIELD_MAPPING = {
   'rating': 'rating',
@@ -45,10 +49,12 @@ const DEFAULT_GAME_FIELDS = [
 
 // Multiplayer game modes (multiplayer + cooperative)
 const MULTIPLAYER_MODES = [GAME_MODES.MULTIPLAYER, GAME_MODES.COOPERATIVE];
+const VALID_GAME_TYPE = GAME_TYPES.MAIN_GAME;
 
 module.exports = {
   IGDB_CONFIG,
   GAME_MODES,
+  VALID_GAME_TYPE,
   SORT_FIELD_MAPPING,
   SORT_ORDERS,
   DEFAULT_GAME_FIELDS,

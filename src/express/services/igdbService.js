@@ -1,6 +1,6 @@
 const axios = require('axios');
 const IGDBQueryBuilder = require('./igdb/queryBuilder');
-const { IGDB_CONFIG, MULTIPLAYER_MODES } = require('./igdb/constants');
+const { IGDB_CONFIG, MULTIPLAYER_MODES, VALID_GAME_TYPE } = require('./igdb/constants');
 
 class IGDBService {
   constructor() {
@@ -66,6 +66,7 @@ class IGDBService {
       limit = IGDB_CONFIG.DEFAULT_LIMIT,
       offset = IGDB_CONFIG.DEFAULT_OFFSET,
       gameModes = MULTIPLAYER_MODES,
+      gameType = VALID_GAME_TYPE,
       fields,
       sortBy = IGDB_CONFIG.DEFAULT_SORT_FIELD,
       sortOrder = IGDB_CONFIG.DEFAULT_SORT_ORDER,
@@ -74,6 +75,7 @@ class IGDBService {
 
     return await this.getGames({
       gameModes,
+      gameType,
       fields,
       limit,
       offset,
@@ -128,6 +130,7 @@ class IGDBService {
       id,
       name,
       gameModes,
+      gameType,
       whereConditions = [], 
       fields,
       limit,
@@ -154,9 +157,13 @@ class IGDBService {
 
     // Add game modes and sorting using optional chaining style
     gameModes && queryBuilder.gameModes(gameModes);
+    if (gameType !== undefined && gameType !== null) {
+      queryBuilder.gameType(gameType);
+    }
     sortBy && queryBuilder.sort(sortBy, sortOrder);
 
     const query = queryBuilder.build();
+    console.log(query)
     return await this.makeRequest('games', query);
   }
 

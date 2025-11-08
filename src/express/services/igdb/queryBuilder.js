@@ -54,6 +54,13 @@ class IGDBQueryBuilder {
     return this;
   }
 
+  gameType(type) {
+    if (type !== undefined && type !== null) {
+      this._whereConditions.push(`game_type = ${type}`);
+    }
+    return this;
+  }
+
   /**
    * Add sorting
    * @param {string} field - Field to sort by

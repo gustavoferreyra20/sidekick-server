@@ -179,6 +179,49 @@ class IGDBService {
     const result = await this.makeRequest('games', query);
     return result.count || 0;
   }
+
+  /**
+   * Get platforms by specific criteria
+   * @param {Object} options - Query options
+   * @param {number} options.id - Platform ID (nullable)
+   * @param {string} options.name - Platform name (nullable) 
+   * @param {number} options.limit - Results limit
+   * @returns {Promise<Array>} Array of platforms
+   */
+  async searchPlatforms(options = {}) {
+    const {
+      id,
+      name,
+      limit = IGDB_CONFIG.DEFAULT_LIMIT
+    } = options;
+
+    const fields = 'abbreviation,alternative_name,category,checksum,created_at,generation,name,platform_family,platform_logo,platform_type,slug,summary,updated_at,url,versions,websites';
+    let query = `fields ${fields};`;
+    
+    // Build where conditions based on provided parameters
+    const conditions = [];
+    
+    if (id) {
+      conditions.push(`id = ${id}`);
+    }
+    
+    if (name) {
+      conditions.push(`name ~ *"${name}"*`);
+    }
+    
+    // Add where clause if any conditions exist
+    if (conditions.length > 0) {
+      query += ` where ${conditions.join(' & ')};`;
+    }
+    
+    if (limit) {
+      query += ` limit ${limit};`;
+    }
+
+    console.log('Platform query:', query);
+    return await this.makeRequest('platforms', query);
+  }
+
 }
 
 module.exports = new IGDBService();

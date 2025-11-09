@@ -157,8 +157,28 @@ async function getGames(req, res) {
 	}
 }
 
+/**
+ * Search platforms by ID or name
+ */
+async function searchPlatforms(req, res) {
+	try {
+		const { id, name, limit } = req.query;
+		const options = {};
+		
+		if (id) options.id = parseInt(id);
+		if (name) options.name = name;
+		if (limit) options.limit = parseInt(limit);
+		
+		const platforms = await igdbService.searchPlatforms(options);
+		res.status(200).json(platforms);
+	} catch (error) {
+		return handleIGDBError(error, res, 'IGDB Get Platforms Error:');
+	}
+}
+
 module.exports = {
 	getMultiplayerGames,
 	searchGames,
-	getGames
+	getGames,
+	searchPlatforms
 };

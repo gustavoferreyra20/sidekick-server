@@ -149,7 +149,7 @@ class IGDBService {
     const allConditions = [
       id && `id = ${id}`,
       name && `name ~ *"${name}"*`,
-      'platforms != null',  // Ensure games have platforms
+      'platforms != null',
       ...whereConditions
     ].filter(Boolean);
 

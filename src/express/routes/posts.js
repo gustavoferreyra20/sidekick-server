@@ -27,6 +27,11 @@ async function getAll(req, res) {
 		values.push(postData.id_mode);
 	}
 
+	if (postData.id_user) {
+		whereClause += ' AND p.id_user = ?';
+		values.push(postData.id_user);
+	}
+
 	const [results] = await sequelize.query(`
 		SELECT
 			p.*,
@@ -289,6 +294,12 @@ async function cancelApplication(req, res) {
 
 };
 
+async function getByUser(req, res) {
+	req.query = req.query || {};
+	req.query.id_user = req.params.id_user;
+	return getAll(req, res);
+}
+
 module.exports = {
 	getAll: getAll,
 	getSingle: getSingle,
@@ -298,4 +309,5 @@ module.exports = {
 	removeSingle: removeSingle,
 	cancelApplication: cancelApplication,
 	apply: apply,
+	getByUser: getByUser,
 };

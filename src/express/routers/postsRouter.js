@@ -12,5 +12,6 @@ router.delete('/:id/applications/:id_application', handleAsyncErrors(posts.cance
 router.get('/:id', handleAsyncErrors(posts.getSingle));
 router.put('/:id', handleAsyncErrors(posts.update));
 router.delete('/:id', handleAsyncErrors(posts.removeSingle));
+router.get('/user/:id_user', handleAsyncErrors(posts.getByUser));
 
 module.exports = router;

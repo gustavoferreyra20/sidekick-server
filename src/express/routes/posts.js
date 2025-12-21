@@ -9,47 +9,48 @@ const {joinRoomRequestEmailTemplate} = require("../utils/emailTemplates");
 
 models.posts.belongsToMany(models.users, { through: 'applications', foreignKey: 'id_post' });
 
-async function getAll(req, res) {
-	let postData = req.query;
+async function fetchPosts(filters = {}) {
 	let whereClause = '';
 	let values = [];
 
-	if (postData.id_game) {
-		whereClause += ' AND p.id_game = ?';
-		values.push(postData.id_game);
+	if (filters.id_post) {
+		whereClause += ' AND p.id_post = ?';
+		values.push(filters.id_post);
 	}
-	if (postData.id_platform) {
-		whereClause += ' AND p.id_platform = ?';
-		values.push(postData.id_platform);
-	}
-	if (postData.id_mode) {
-		whereClause += ' AND p.id_mode = ?';
-		values.push(postData.id_mode);
-	}
-
-	if (postData.id_user) {
+	if (filters.id_user) {
 		whereClause += ' AND p.id_user = ?';
-		values.push(postData.id_user);
+		values.push(filters.id_user);
+	}
+	if (filters.id_game) {
+		whereClause += ' AND p.id_game = ?';
+		values.push(filters.id_game);
+	}
+	if (filters.id_platform) {
+		whereClause += ' AND p.id_platform = ?';
+		values.push(filters.id_platform);
+	}
+	if (filters.id_mode) {
+		whereClause += ' AND p.id_mode = ?';
+		values.push(filters.id_mode);
 	}
 
 	const [results] = await sequelize.query(`
-		SELECT
-			p.*,
-			u.name AS "userName",
-			u.img AS "userImg",
-			ROUND(COALESCE(AVG(r.abilityscore), 0)) AS "abilityscore",
-			ROUND(COALESCE(AVG(r.karmascore), 0)) AS "karmascore"
-		FROM posts p
-					 INNER JOIN users u ON p.id_user = u.id_user
-					 LEFT JOIN reviews r ON p.id_post = r.id_post
-		WHERE 1=1 ${whereClause}
-		  AND deleted = false
-		GROUP BY p.id_post, u.name, u.img
-		ORDER BY p.date DESC;
-	`, { replacements: values });
+    SELECT
+      p.*,
+      u.name AS "userName",
+      u.img AS "userImg",
+      ROUND(COALESCE(AVG(r.abilityscore), 0)) AS "abilityscore",
+      ROUND(COALESCE(AVG(r.karmascore), 0)) AS "karmascore"
+    FROM posts p
+      INNER JOIN users u ON p.id_user = u.id_user
+      LEFT JOIN reviews r ON p.id_post = r.id_post
+    WHERE 1=1 ${whereClause}
+      AND deleted = false
+    GROUP BY p.id_post, u.name, u.img
+    ORDER BY p.date DESC;
+  `, { replacements: values });
 
 	const tasks = results.map(async (post) => {
-
 		const gameData = await igdbService.searchGames({
 			id: post.id_game,
 			name: null,
@@ -75,19 +76,25 @@ async function getAll(req, res) {
 
 	await Promise.all(tasks);
 
+	return results;
+}
+
+async function getAll(req, res) {
+	const results = await fetchPosts(req.query || {});
 	return res.status(200).json(results);
 }
 
 async function getSingle(req, res) {
 	const postId = req.params.id;
-	const post = await models.posts.findByPk(postId);
 
-	if (post) {
-		res.status(200).json(post);
-	} else {
-		res.status(404).send('404 - Not found');
+	const results = await fetchPosts({ id_post: postId });
+
+	if (!results || results.length === 0) {
+		return res.status(404).send('404 - Not found');
 	}
-};
+
+	return res.status(200).json(results[0]);
+}
 
 async function create(req, res) {
 	const currentUser = req.auth;
@@ -295,9 +302,8 @@ async function cancelApplication(req, res) {
 };
 
 async function getByUser(req, res) {
-	req.query = req.query || {};
-	req.query.id_user = req.params.id_user;
-	return getAll(req, res);
+	const results = await fetchPosts({ ...req.query, id_user: req.params.id_user });
+	return res.status(200).json(results);
 }
 
 module.exports = {

@@ -116,15 +116,21 @@ async function update(req, res) {
 			id_post: postId,
 			id_user: currentUser.id_user
 		},
-	})
+	});
 
 	if (!post) {
 		return res.status(404).send('404 - Not found');
 	}
 
-	const { title, description } = postData;
+	const { title, description, id_platform, id_mode, requiredusers } = postData;
 
-	await post.update({ title, description });
+	await post.update({
+		title,
+		description,
+		id_platform,
+		id_mode,
+		requiredusers
+	});
 
 	res.status(200).json({ message: 'Updated successfully' });
 }

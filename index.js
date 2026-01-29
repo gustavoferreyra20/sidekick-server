@@ -1,7 +1,11 @@
 const app = require('./src/express/app');
 const sequelize = require('./src/sequelize');
-const dotenv = require('dotenv').config();
+require('dotenv').config();
 const PORT = process.env.PORT;
+const { registerSocketHandlers } = require("./src/socket/chat.socket");
+const http = require('http');
+const { Server } = require("socket.io");
+const os = require('os'); // Module to get local IP
 
 async function assertDatabaseConnectionOk() {
 	console.log(`Checking database connection...`);
@@ -14,8 +18,6 @@ async function assertDatabaseConnectionOk() {
 		process.exit(1);
 	}
 }
-
-const os = require('os'); // Module to get local IP 
 
 async function init() {
 	await assertDatabaseConnectionOk();
@@ -34,9 +36,16 @@ async function init() {
 	console.log(`Starting SideKick on port ${PORT}...`);
 	console.log(`Internal IP addresses: ${addresses.join(', ')}`);
 
-	// starting the server
-	app.listen(PORT, () => {
-		console.log(`Express server started at port: ${PORT}. Try some routes, such as '/api/games'.`);
+	const server = http.createServer(app);
+
+	const io = new Server(server, {
+		cors: { origin: "*" }
+	});
+
+	registerSocketHandlers({ io, sequelize });
+
+	server.listen(PORT, () => {
+		console.log(`Express server started at port: ${PORT}`);
 	});
 }
 

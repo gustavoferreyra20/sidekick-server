@@ -18,6 +18,7 @@ const paymentsRouter = require('./routers/paymentsRouter');
 const notificationsRouter = require('./routers/notificationsRouter');
 const usersRouter = require('./routers/usersRouter');
 const imagesRouter = require('./routers/imagesRouter');
+const chatRouter = require('./routers/chatRouter');
 
 // defining the Express app
 const app = express();
@@ -48,5 +49,6 @@ app.use('/api/reviews', auth, reviewsRouter);
 app.use('/api/payments', paymentsRouter);
 app.use('/api/notifications', auth, notificationsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/chat', chatRouter);
 
 module.exports = app;

@@ -184,6 +184,35 @@ async function getReviews(req, res) {
 	res.status(200).json(usersPosts);
 }
 
+/**
+ * Get the last 5 reviews for a specific user
+ * @param {number} userId - The ID of the user
+ * @returns {Array} Array of the user's last 5 reviews with comments only
+ */
+async function getUserLastReviews(userId) {
+	const user = await models.users.findByPk(userId);
+
+	if (!user) {
+		throw new Error('User not found');
+	}
+
+	const userReviews = await user.getReviews({
+		where: {
+			comment: {
+				[Sequelize.Op.and]: [
+					{ [Sequelize.Op.ne]: null },
+					{ [Sequelize.Op.ne]: '' }
+				]
+			}
+		},
+		attributes: ['comment'],
+		order: [['createdAt', 'DESC']],
+		limit: 5
+	});
+
+	return userReviews;
+}
+
 async function getRewards(req, res) {
 	const userId = req.params.id;
 	const user = await models.users.findByPk(userId);
@@ -380,6 +409,7 @@ module.exports = {
 	getApplications,
 	getContact_inf,
 	getReviews,
+	getUserLastReviews,
 	getRewards,
 	getStats,
 	getNotifications,

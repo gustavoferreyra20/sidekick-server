@@ -31,7 +31,8 @@ const modelDefiners = [
 	require('./models/users_contact_inf.model'),
 	require('./models/notifications.model'),
 	require('./models/roles.model'),
-	require('./models/chat_messages.model')
+	require('./models/chat_messages.model'),
+	require('./models/user_ai_review.model')
 
 	// Add more models here...
 	// require('./models/item'),

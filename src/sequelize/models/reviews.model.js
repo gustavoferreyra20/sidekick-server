@@ -15,6 +15,6 @@ module.exports = (sequelize) => {
         comment: DataTypes.STRING,
 }, {
     freezeTableName: true,
-	timestamps: false
+	timestamps: true
 	});
 };

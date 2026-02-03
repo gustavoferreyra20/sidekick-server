@@ -1,5 +1,6 @@
 const { models } = require('../../sequelize/index');
 const isAdmin = require('../utils/isAdmin');
+const { updateAIReview } = require('../services/reviewService');
 
 models.reviews.belongsTo(models.users, { foreignKey: 'id_writeruser' });
 models.reviews.belongsToMany(models.rewards, { through: 'reviews_rewards', foreignKey: 'id_review' });
@@ -49,6 +50,9 @@ async function create(req, res) {
 			console.error(e);
 		}
 	}
+	
+	updateAIReview(reviewData.id_user);
+	
 	res.status(200).json(review);
 
 };

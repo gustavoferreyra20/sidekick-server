@@ -1,9 +1,41 @@
 /**
  * Service for handling review-related operations
  */
-const { getUserLastReviews } = require('../routes/users');
 const { generateReviewFromComments } = require('./genAIService');
 const { models } = require('../../sequelize/index');
+var Sequelize = require("sequelize");
+
+// Set up associations
+models.users.hasMany(models.reviews, { foreignKey: 'id_user' });
+
+/**
+ * Get the last 5 reviews with comments for a user
+ * @param {number} userId - The ID of the user
+ * @returns {Array} Array of reviews with comments
+ */
+async function getUserLastReviews(userId) {
+	const user = await models.users.findByPk(userId);
+
+	if (!user) {
+		throw new Error('User not found');
+	}
+
+	const userReviews = await user.getReviews({
+		where: {
+			comment: {
+				[Sequelize.Op.and]: [
+					{ [Sequelize.Op.ne]: null },
+					{ [Sequelize.Op.ne]: '' }
+				]
+			}
+		},
+		attributes: ['comment'],
+		order: [['createdAt', 'DESC']],
+		limit: 5
+	});
+
+	return userReviews;
+}
 
 /**
  * Calls Google Gemini API to generate an AI review
@@ -45,7 +77,7 @@ async function updateAIReview(userId) {
                 console.log(`AI review generation skipped for user ${userId} - feature disabled`);
                 return;
             }
-            
+
             // Generate AI review using GenAI service
             const aiGeneratedReview = await generateAIReview(lastReviews);
             
@@ -64,7 +96,7 @@ async function updateAIReview(userId) {
             }
             
         } else {
-            console.log('No reviews with comments found for AI analysis');
+            console.log('No reviews with comments found for AI analysis for user ID:', userId);
         }
         
     } catch (error) {
@@ -75,5 +107,6 @@ async function updateAIReview(userId) {
 
 module.exports = {
     updateAIReview,
-    generateAIReview
+    generateAIReview,
+    getUserLastReviews
 };

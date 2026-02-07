@@ -3,6 +3,7 @@ const dotenv = require('dotenv').config();
 var Sequelize = require("sequelize");
 const isAdmin = require('../utils/isAdmin');
 const bcryptjs = require('bcryptjs');
+const { updateAIReview } = require('../services/reviewService');
 
 models.users.belongsToMany(models.contact_inf, { through: 'users_contact_inf', foreignKey: 'id_user' });
 models.users.belongsToMany(models.posts, { through: 'applications', foreignKey: 'id_user' });
@@ -100,6 +101,9 @@ async function addReview(req, res) {
 	reviewData.id_writeruser = currentUser.id_user;
 
 	const createdReview = await user.createReview(reviewData);
+
+	console.log('New review created for user ID:', userId, 'by writer user ID:', currentUser.id_user);
+	updateAIReview(userId);
 
 	res.status(201).json({ message: 'Review created successfully', reviewId: createdReview.dataValues.id_review });
 }
@@ -207,30 +211,6 @@ async function getReviews(req, res) {
  * @param {number} userId - The ID of the user
  * @returns {Array} Array of the user's last 5 reviews with comments only
  */
-async function getUserLastReviews(userId) {
-	const user = await models.users.findByPk(userId);
-
-	if (!user) {
-		throw new Error('User not found');
-	}
-
-	const userReviews = await user.getReviews({
-		where: {
-			comment: {
-				[Sequelize.Op.and]: [
-					{ [Sequelize.Op.ne]: null },
-					{ [Sequelize.Op.ne]: '' }
-				]
-			}
-		},
-		attributes: ['comment'],
-		order: [['createdAt', 'DESC']],
-		limit: 5
-	});
-
-	return userReviews;
-}
-
 async function getRewards(req, res) {
 	const userId = req.params.id;
 	const user = await models.users.findByPk(userId);
@@ -463,7 +443,6 @@ module.exports = {
 	getApplications,
 	getContact_inf,
 	getReviews,
-	getUserLastReviews,
 	getRewards,
 	getStats,
 	getNotifications,

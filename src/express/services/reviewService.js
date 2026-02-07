@@ -40,9 +40,9 @@ async function updateAIReview(userId) {
                 where: { id_user: userId }
             });
             
-            // Only generate AI review if user has show set to true
-            if (!userAIReviewSetting || !userAIReviewSetting.show) {
-                console.log(`AI review generation skipped for user ${userId} - feature disabled or not configured`);
+            // Only skip AI review generation if user has explicitly disabled it
+            if (userAIReviewSetting && !userAIReviewSetting.show) {
+                console.log(`AI review generation skipped for user ${userId} - feature disabled`);
                 return;
             }
             

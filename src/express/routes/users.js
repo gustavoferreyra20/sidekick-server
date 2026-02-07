@@ -52,9 +52,26 @@ async function update(req, res) {
 		await user.update(userData);
 		res.status(200).json({ message: 'Updated successfully' });
 	} else if (user.id_user == currentUser.id_user) {
-		const { name, description, password, img } = userData;
+		const { name, description, password, img, show } = userData;
 
 		await user.update({ name, description, password, img });
+		
+		if (show !== undefined) {
+			let userAIReview = await models.user_ai_review.findOne({
+				where: { id_user: userId }
+			});
+			
+			if (userAIReview) {
+				await userAIReview.update({ show });
+			} else {
+				await models.user_ai_review.create({
+					id_user: userId,
+					ai_review: null,
+					show: show
+				});
+			}
+		}
+		
 		res.status(200).json({ message: 'Updated successfully' });
 	} else {
 		res.status(401).json({ error: 'Unauthorized' });
@@ -418,6 +435,10 @@ async function getAIReview(req, res) {
 
 		if (!userAIReview) {
 			return res.status(404).json({ error: 'No AI review found for this user' });
+		}
+
+		if (!userAIReview.ai_review) {
+			return res.status(404).json({ error: 'AI review content not available for this user' });
 		}
 
 		res.status(200).json({

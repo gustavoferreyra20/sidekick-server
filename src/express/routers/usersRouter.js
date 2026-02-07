@@ -12,6 +12,7 @@ router.get('/:id/reviews', auth, handleAsyncErrors(users.getReviews));
 router.get('/:id/rewards', auth, handleAsyncErrors(users.getRewards));
 router.get('/:id/stats', auth, handleAsyncErrors(users.getStats));
 router.get('/:id/notifications', auth, handleAsyncErrors(users.getNotifications));
+router.get('/:id/ai-review', auth, handleAsyncErrors(users.getAIReview));
 router.post('/:id/checkPassword', auth, handleAsyncErrors(users.checkPassword));
 router.post('/:id/reviews', auth, handleAsyncErrors(users.addReview));
 router.post('/:id/rewards/:id_reward', auth, handleAsyncErrors(users.addReward));

@@ -9,6 +9,7 @@ models.users.belongsToMany(models.posts, { through: 'applications', foreignKey: 
 models.users.hasMany(models.reviews, { foreignKey: 'id_user' });
 models.users.hasMany(models.notifications, { foreignKey: 'id_user' });
 models.users.belongsToMany(models.rewards, { through: 'users_rewards', foreignKey: 'id_user' });
+models.users.hasOne(models.user_ai_review, { foreignKey: 'id_user' });
 
 async function getAll(req, res) {
 	const adminStatus = await isAdmin(req);
@@ -399,6 +400,38 @@ async function checkPassword(req, res) {
 	}
 };
 
+async function getAIReview(req, res) {
+	const userId = req.params.id;
+	
+	try {
+		// Find the user first to ensure they exist
+		const user = await models.users.findByPk(userId);
+		
+		if (!user) {
+			return res.status(404).json({ error: 'User not found' });
+		}
+
+		// Find the AI review for this user
+		const userAIReview = await models.user_ai_review.findOne({
+			where: { id_user: userId }
+		});
+
+		if (!userAIReview) {
+			return res.status(404).json({ error: 'No AI review found for this user' });
+		}
+
+		res.status(200).json({
+			id_user: userAIReview.id_user,
+			ai_review: userAIReview.ai_review,
+			show: userAIReview.show
+		});
+		
+	} catch (error) {
+		console.error('Error fetching AI review:', error);
+		res.status(500).json({ error: 'Internal server error' });
+	}
+};
+
 module.exports = {
 	getAll,
 	getSingle,
@@ -417,5 +450,6 @@ module.exports = {
 	updateNotification,
 	useReward,
 	removeContact_inf,
-	checkPassword
+	checkPassword,
+	getAIReview
 };

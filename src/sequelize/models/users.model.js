@@ -33,7 +33,7 @@ module.exports = (sequelize) => {
         enabled: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-            defaultValue: true
+            defaultValue: false
         },
         activation_token: {
             type: DataTypes.STRING,
